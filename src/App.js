@@ -1,10 +1,8 @@
-
+import SingIn from "./Components/SignIn"
 
 function App() {
   return (
-    <div className="App">
-      Hotel
-    </div>
+    <SingIn/>
   );
 }
 
