@@ -1,11 +1,11 @@
-
+import { render } from '@testing-library/react';
+import AdminMenu from './Components/menu_admin'
 
 function App() {
-  return (
-    <div className="App">
-      Hotel
-    </div>
-  );
+    render()
+    return (
+        AdminMenu()
+    )
 }
 
 export default App;
