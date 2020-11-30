@@ -43,8 +43,9 @@ class Listar extends React.Component {
                                         </div>
 
                                         <div class="flex justify-end">
-                                            <button class="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3" type="submit">save changes</button>
+                                            <button class="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3" type="submit">Guardar Cambios</button>
                                         </div>
+                                        <p class="text-right mt-4 text-xs text-gray-500  hover:text-black">Al darle click a Guardar cambios, actualizaremos tus datos  </p>
                                     </div>
                                 </div>
                             </form>
