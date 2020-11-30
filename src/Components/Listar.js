@@ -5,7 +5,7 @@ class Listar extends React.Component {
     }
     render() {
         return (
-            <body background="https://get.wallhere.com/photo/sea-bay-beach-Tourism-hotel-swimming-pool-resort-lagoon-pier-Caribbean-vacation-estate-leisure-ocean-186672.jpg" >
+            <body background="https://www.todopaisajes.com/1920x1080/hotel-en-la-playa.jpg" >
                 <div class=" grid min-h-screen place-items-center">
                     <div class=" container mx-auto">
                         <div class="bg-white inputs w-full max-w-2xl p-6 mx-auto">
