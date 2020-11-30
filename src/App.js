@@ -1,9 +1,9 @@
-
+import Landing from './Components/LandingPage';
 
 function App() {
   return (
     <div className="App">
-      Hotel
+      <Landing />
     </div>
   );
 }
