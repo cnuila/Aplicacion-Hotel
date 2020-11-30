@@ -1,3 +1,4 @@
+import React from "react";
 class Listar extends React.Component {
     constructor() {
         super()

@@ -1,8 +1,8 @@
-import SingIn from "./Components/SignIn"
+import Listar from "./Components/Listar"
 
 function App() {
   return (
-    <SingIn/>
+    <Listar/>
   );
 }
 
