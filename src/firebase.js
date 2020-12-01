@@ -16,3 +16,4 @@ const fb=firebase.initializeApp(firebaseConfig);
 
 export default fb;
 export const db = firebase.firestore(fb);
+export const auth = fb.auth();
