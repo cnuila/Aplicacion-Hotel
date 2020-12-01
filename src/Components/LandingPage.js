@@ -2,6 +2,7 @@ import React from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import Iframe from 'react-iframe';
+import Navbar from './Navbar';
 
 import img_carousel_1 from '../imagenes/ban222.jpg';
 import img_carousel_2 from '../imagenes/ban3.jpg';
@@ -21,6 +22,9 @@ import img_instagram from '../imagenes/instagram.png';
 export default function Landing(){
     return (
         <div>
+            <div>
+                <Navbar />
+            </div>
             <Carousel>
                 <div>
                     <img src={img_carousel_1} alt="Primera imagen"/>
