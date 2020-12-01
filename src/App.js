@@ -1,8 +1,8 @@
-import SingIn from "./Components/SignIn"
+import LogIn from "./Components/LogIn"
 
 function App() {
   return (
-    <SingIn/>
+    <LogIn/>
   );
 }
 
