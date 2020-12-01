@@ -1,9 +1,10 @@
-
+import React from 'react'
+import Servicios from "./Components/Servicios"
 
 function App() {
   return (
     <div className="App">
-      Hotel
+      <Servicios />
     </div>
   );
 }
