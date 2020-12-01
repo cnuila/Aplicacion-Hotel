@@ -14,7 +14,7 @@ class Servicios extends Component{
 
     render(){
         return (
-            <div class="space-y-4">
+            <div class="space-y-4 divide-y-2 divide-gray-400">
                 <div class="grid grid-cols-1 sm:grid-cols-2 sm:px-8 sm:py-12 sm:gap-x-8 md:py-16">
                     <div class="relative z-10 col-start-1 row-start-1 px-4 pt-40 pb-3 bg-gradient-to-t from-black sm:bg-none">
                         <p class="text-sm font-medium text-white sm:mb-1 sm:text-gray-500">Habitaciones</p>
@@ -42,9 +42,9 @@ class Servicios extends Component{
                         <p class="flex items-center text-black text-sm font-medium">
                             <img src={pro} alt="" class="w-6 h-6 rounded-full mr-2 bg-gray-100"/>
                         Hotel Posada del Angel
-                        </p>
+                        </p> 
 
-                        <button type="button" class="bg-violet-100 text-violet-700 text-base font-semibold px-6 py-2 rounded-lg">Reservar</button>
+                        <button type="button" class="bg-green-500 hover:bg-green-700 text-white text-base font-semibold px-6 py-2 rounded-lg">Reservar</button>
                     </div>
 
                     <div class="col-start-1 row-start-1 flex sm:col-start-2 sm:row-span-3">
@@ -94,7 +94,7 @@ class Servicios extends Component{
                         Hotel Posada del Angel
                         </p>
 
-                        <button type="button" class="bg-violet-100 text-violet-700 text-base font-semibold px-6 py-2 rounded-lg">Mas detalles</button>
+                        <button type="button" class="bg-green-500 hover:bg-green-700 text-white text-base font-semibold px-6 py-2 rounded-lg">Mas detalles</button>
                     </div>
 
                     <div class="col-start-1 row-start-1 flex sm:col-start-2 sm:row-span-3">
@@ -143,7 +143,7 @@ class Servicios extends Component{
                         Hotel Posada del Angel
                         </p>
 
-                        <button type="button" class="bg-violet-100 text-violet-700 text-base font-semibold px-6 py-2 rounded-lg">Mas Detalles</button>
+                        <button type="button" class="bg-green-500 hover:bg-green-700 text-white text-base font-semibold px-6 py-2 rounded-lg">Mas Detalles</button>
                     </div>
 
                     <div class="col-start-1 row-start-1 flex sm:col-start-2 sm:row-span-3">
@@ -162,7 +162,7 @@ class Servicios extends Component{
                         </div>
                     </div>
                 </div>
-
+                <div class="space-y-4 "/>
             </div>
         );
     }
