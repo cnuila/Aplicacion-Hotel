@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
-import AdminMenu from './Components/menu_admin'
+import AdminHome from './Components/admin_inicio'
 
 function App() {
     render()
     return (
-        AdminMenu()
+        AdminHome()
     )
 }
 

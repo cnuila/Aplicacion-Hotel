@@ -1,11 +1,17 @@
 import * as React from 'react'
 
-const AdminMenu=function() {
+import { useMediaQuery } from 'react-responsive'
+
+const AdminHome=function() {
   const [isClosed, setClosed] = React.useState(false)
+
+  const isStatic = useMediaQuery({
+    query: '(min-width: 640px)',
+  })
 
   return (
     <div className="flex bg-gray-100">
-      {!isClosed && (
+      {(isStatic || !isClosed) && (
         <aside
           aria-hidden={isClosed}
           className="bg-white w-64 min-h-screen flex flex-col"
@@ -18,7 +24,7 @@ const AdminMenu=function() {
             <nav>
               <ul>
                 <li className="p-3">
-                  <a href=""> Inicio </a>
+                  <a href="" > Inicio </a>
                 </li>
                 <li className="p-3">
                   <a href=""> Clientes </a>
@@ -37,7 +43,7 @@ const AdminMenu=function() {
 
       <main className="flex-grow flex flex-col min-h-screen">
         <header className="bg-white border-b h-10 flex items-center justify-center">
-          {isClosed ? (
+          {!isStatic && (isClosed ? (
             <button
               tabIndex="1"
               className="w-10 p-1"
@@ -76,7 +82,7 @@ const AdminMenu=function() {
                 <path d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
-          )}
+          ))}
 
           <div className="flex flex-grow items-center justify-between px-3">
             <h1 className="text-lg">Inicio</h1>
@@ -88,4 +94,5 @@ const AdminMenu=function() {
   )
 }
 
-export default AdminMenu;
+export default AdminHome;
+
