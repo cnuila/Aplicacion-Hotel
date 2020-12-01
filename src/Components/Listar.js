@@ -1,11 +1,12 @@
 import React from "react";
+import imagen from "./piscina.jpg"
 class Listar extends React.Component {
     constructor() {
         super()
     }
     render() {
         return (
-            <body background="https://www.todopaisajes.com/1920x1080/hotel-en-la-playa.jpg" >
+            <body background={imagen} >
                 <div class=" grid min-h-screen place-items-center">
                     <div class=" container mx-auto">
                         <div class="bg-white inputs w-full max-w-2xl p-6 mx-auto">
