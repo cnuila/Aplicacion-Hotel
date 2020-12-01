@@ -1,6 +1,6 @@
 import React from 'react'
 import {db} from "../firebase"
-import imagen from "../imagen.jpg"
+import imagen from "./ImagenFondo2.jpg"
 
 class SingIn extends React.Component {
     constructor(props) {
@@ -157,8 +157,10 @@ if (espacios) {
     
     render() {
         return (
-            //<body background="https://get.wallhere.com/photo/sea-bay-beach-Tourism-hotel-swimming-pool-resort-lagoon-pier-Caribbean-vacation-estate-leisure-ocean-186672.jpg" >
+            //<body background="https://scontent.ftgu1-1.fna.fbcdn.net/v/t1.0-9/104181902_10157399492806724_8294953661876225000_o.jpg?_nc_cat=106&ccb=2&_nc_sid=730e14&_nc_eui2=AeEEou_0423Aiq6dtRu13DttUSYYPRRfMA9RJhg9FF8wD08Drbpu5wZgHygu_4qYIHViFY6HimWDUa4lDDOZFYy3&_nc_ohc=fScc_TOxxQ8AX8OiH1a&_nc_ht=scontent.ftgu1-1.fna&oh=2473f66cfae5fc9eeb4380a8ba59983c&oe=5FEA1EC9" >
+             
             <body background={imagen} >
+               
                 <form onSubmit={this.handleSubmit}>
                     <div className="grid min-h-screen place-items-center" >
                         <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-5/12">
