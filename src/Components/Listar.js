@@ -15,12 +15,12 @@ class Listar extends React.Component {
                                 <div class='flex flex-wrap -mx-3 mb-6'>
                                     <div class='w-full md:w-full px-3 mb-6'>
                                         <label class='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' for='grid-text-1'>Identidad</label>
-                                        <input   name="Identidad" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500'  type='text' placeholder='ID' required>
+                                        <input name="Identidad" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' placeholder='ID' required>
                                         </input>
                                     </div>
                                     <div class='w-full md:w-full px-3 mb-6'>
                                         <label class='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' for='grid-text-1'>Email</label>
-                                        <input  name="Email" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500'  type='text' placeholder='email' required>
+                                        <input name="Email" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' placeholder='email' required>
                                         </input>
                                     </div>
                                     <div class='w-full md:w-full px-3 mb-6 '>
@@ -33,12 +33,12 @@ class Listar extends React.Component {
                                         <div class="flex items-center justify-between mt-4">
                                             <div class='w-full md:w-1/2 px-3 mb-6'>
                                                 <label class='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >Nombre</label>
-                                                <input  name="Nombre" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' required>
+                                                <input name="Nombre" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' required>
                                                 </input>
                                             </div>
                                             <div class='w-full md:w-1/2 px-3 mb-6'>
                                                 <label class='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >Apellido</label>
-                                                <input  name="Apellido" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' required>
+                                                <input name="Apellido" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' required>
                                                 </input>
                                             </div>
                                         </div>
@@ -53,8 +53,12 @@ class Listar extends React.Component {
                         </div>
                     </div>
                 </div>
+
             </body>
+
         );
+
     }
+
 }
 export default Listar;
