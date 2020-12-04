@@ -10,10 +10,10 @@
        rgba(18, 26, 43, 0.801), rgba(18, 26, 43, 0.80) ),
        url('https://cafeversatil.com/bricoydeco/wp-content/uploads/2016/08/01-7.jpg');
     }
-  
-      .image-cover  {
-        height:260px;
-      }
+
+    .image-cover  {
+      height:260px;
+    }
     /*
     -remove the classes below if you have the 'group-hover'property added in your tailwind config file
     -also remove the class from the html template

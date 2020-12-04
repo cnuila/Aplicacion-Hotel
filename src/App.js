@@ -5,7 +5,7 @@ import Servicio from "./Components/Servicios"
 function App() {
   return (
     <div className="App">
-      <Prototipo />
+      <Servicio />
     </div>
   );
 }

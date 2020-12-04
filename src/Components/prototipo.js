@@ -11,7 +11,7 @@ class prototipo extends Component{
     render(){
         return (            
             <div class="bg-gray-900">
-                <Carousel infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
+                <Carousel autoPlay={2} infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
                     <div>
                         <img alt="" src={hotel}/>
                     </div>
@@ -26,9 +26,9 @@ class prototipo extends Component{
                     </div>
                 </Carousel>
 
-                <div class="py-4 bg-white"/>
+                <div class="py-4"/>
 
-                <div class="md:container md:mx-auto bg-white">
+                <div class="md:container md:mx-auto">
                     <div class="grid md:grid-cols-3 gap-x-2">
                         <div class="py-4">
                             <div class="h-96 shadow-lg group container rounded-md bg-white max-w-sm flex justify-center items-center  mx-auto content-div">
@@ -64,7 +64,7 @@ class prototipo extends Component{
                                 </div>
                             </div>
                             <div class="py-8 px-4 rounded-b-md fd-cl group-hover:opacity-25">
-                                <span class="block text-center text-lg text-black font-bold tracking-wide">Sencilla</span>
+                                <span class="block text-center text-lg text-white font-bold tracking-wide">Sencilla</span>
                             </div>
                         </div>
 
@@ -102,7 +102,7 @@ class prototipo extends Component{
                                 </div>
                             </div>
                             <div class="py-8 px-4 rounded-b-md fd-cl group-hover:opacity-25">
-                                <span class="block text-center text-lg text-black font-bold tracking-wide">Doble</span>
+                                <span class="block text-center text-lg text-white font-bold tracking-wide">Doble</span>
                             </div>
                         </div>
 
@@ -143,7 +143,7 @@ class prototipo extends Component{
                                 </div>
                             </div>
                             <div class="py-8 px-4 rounded-b-md fd-cl group-hover:opacity-25">
-                                <span class="block text-center text-lg text-black font-bold tracking-wide">Triple</span>
+                                <span class="block text-center text-lg text-white font-bold tracking-wide">Triple</span>
                             </div>
                         </div>
                     </div>
