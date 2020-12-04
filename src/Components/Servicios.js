@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Prototipo from "./prototipo"
 import hotel from "../hotel.jpg"
 import hotel1 from "../hotel1.jpg"
 import hotel2 from "../hotel2.jpg"
@@ -44,7 +45,7 @@ class Servicios extends Component{
                         Hotel Posada del Angel
                         </p> 
 
-                        <button type="button" class="bg-green-500 hover:bg-green-700 text-white text-base font-semibold px-6 py-2 rounded-lg">Reservar</button>
+                        <button type="button" class="bg-green-500 hover:bg-green-700 text-white text-base font-semibold px-6 py-2 rounded-lg focus:outline-none focus:shadow-outline">Reservar</button>
                     </div>
 
                     <div class="col-start-1 row-start-1 flex sm:col-start-2 sm:row-span-3">
@@ -94,7 +95,7 @@ class Servicios extends Component{
                         Hotel Posada del Angel
                         </p>
 
-                        <button type="button" class="bg-green-500 hover:bg-green-700 text-white text-base font-semibold px-6 py-2 rounded-lg">Mas detalles</button>
+                        <button type="button" class="bg-green-500 hover:bg-green-700 text-white text-base font-semibold px-6 py-2 rounded-lg focus:outline-none focus:shadow-outline">Mas detalles</button>
                     </div>
 
                     <div class="col-start-1 row-start-1 flex sm:col-start-2 sm:row-span-3">
@@ -143,7 +144,7 @@ class Servicios extends Component{
                         Hotel Posada del Angel
                         </p>
 
-                        <button type="button" class="bg-green-500 hover:bg-green-700 text-white text-base font-semibold px-6 py-2 rounded-lg">Mas Detalles</button>
+                        <button type="button" class="bg-green-500 hover:bg-green-700 text-white text-base font-semibold px-6 py-2 rounded-lg focus:outline-none focus:shadow-outline">Mas Detalles</button>
                     </div>
 
                     <div class="col-start-1 row-start-1 flex sm:col-start-2 sm:row-span-3">

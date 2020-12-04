@@ -1,10 +1,11 @@
 import React from 'react'
-import Servicios from "./Components/Servicios"
+import Prototipo from "./Components/prototipo"
+import Servicio from "./Components/Servicios"
 
 function App() {
   return (
     <div className="App">
-      <Servicios />
+      <Prototipo />
     </div>
   );
 }
