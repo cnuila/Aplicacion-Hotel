@@ -25,7 +25,7 @@ export default function Landing(){
             <div>
                 <Navbar />
             </div>
-            <Carousel>
+            <Carousel autoPlay={2} infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
                 <div>
                     <img src={img_carousel_1} alt="Primera imagen"/>
                 </div>
