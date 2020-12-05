@@ -1,8 +1,13 @@
 import * as React from 'react'
-
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import { useMediaQuery } from 'react-responsive'
 
-const AdminHome=function() {
+const AdminMenu=function() {
   const [isClosed, setClosed] = React.useState(false)
 
   const isStatic = useMediaQuery({
@@ -10,37 +15,39 @@ const AdminHome=function() {
   })
 
   return (
-    <div className="flex bg-gray-100">
+    <Router>
+      <div className="flex bg-gray-100">
       {(isStatic || !isClosed) && (
         <aside
           aria-hidden={isClosed}
           className="bg-white w-64 min-h-screen flex flex-col"
         >
           <div className="bg-white border-r border-b px-4 h-10 flex items-center justify-between">
-            <span className="text-blue py-2">Administracion</span>
+            <span className="text-blue py-2">Menu</span>
           </div>
 
           <div className="border-r py-4 flex-grow relative">
             <nav>
               <ul>
-                <li className="p-3">
-                  <a href="" > Inicio </a>
+                <li className="p-3" >
+                  <Link to="/Admin/Inicio" className="btn btn-primary">Inicio</Link>
+                </li>
+                <li className="p-3" >
+                  <Link to="/Admin/Clientes" className="btn btn-primary">Clientes</Link>
                 </li>
                 <li className="p-3">
-                  <a href=""> Clientes </a>
+                  <Link to="/Admin/Restaurante" className="btn btn-primary">Restaurante</Link>
                 </li>
                 <li className="p-3">
-                  <a href=""> Restaurante </a>
-                </li>
-                <li className="p-3">
-                  <a href=""> Servicios </a>
+                  <Link to="/Admin/Servicios" className="btn btn-primary">Servicios</Link>
                 </li>
               </ul>
             </nav>
+            
           </div>
         </aside>
       )}
-
+      
       <main className="flex-grow flex flex-col min-h-screen">
         <header className="bg-white border-b h-10 flex items-center justify-center">
           {!isStatic && (isClosed ? (
@@ -85,14 +92,71 @@ const AdminHome=function() {
           ))}
 
           <div className="flex flex-grow items-center justify-between px-3">
-            <h1 className="text-lg">Inicio</h1>
+            <h1 className="text-lg">Administración</h1>
             <button className="text-blue-700 underline">Salir de Sesion</button>
           </div>
         </header>
+        
+        <Switch>
+              <Route path="/Admin/Inicio">
+                <Inicio/>
+              </Route>
+              <Route path="/Admin/Clientes">
+                <Clientes/>
+              </Route>
+              <Route path="/Admin/Restaurante">
+                <Restaurante/>
+              </Route>
+              <Route path="/Admin/Servicios">
+                <Servicios/>
+              </Route>
+            </Switch>
       </main>
+    </div>
+    
+    </Router>
+  )
+}
+
+function Inicio(){
+  return(
+    <div>
+      <h1>
+      this is home
+      </h1>
     </div>
   )
 }
 
-export default AdminHome;
+function Clientes(){
+  return(
+    <div>
+      <h1>
+      this is clients
+      </h1>
+    </div>
+  )
+}
+
+function Restaurante(){
+  return(
+    <div>
+      <h1>
+      this is restaurant
+      </h1>
+    </div>
+  )
+}
+
+function Servicios(){
+  return(
+    <div>
+      <h1>
+      this is services
+      </h1>
+    </div>
+  )
+}
+
+export default AdminMenu;
 
