@@ -43,7 +43,7 @@ class prototipo extends Component{
                                         <div class="object p-4 mt-4 shadow-xl">
                                             <div class="max-w-sm rounded">
                                                 <div class="px-6 py-4">
-                                                    <div class="font-bold text-xl mb-2">Habitacion Sencilla</div>
+                                                    <div class="font-bold text-xl mb-2">Habitación Sencilla</div>
                                                     <p class="text-gray-700 text-base">
                                                         1 Cama King
                                                     </p>
@@ -76,12 +76,12 @@ class prototipo extends Component{
 
                                 <div class="absolute opacity-0 fd-sh group-hover:opacity-100"> 
                                     <div class="pt-8 text-center">
-                                        <button class="text-center rounded-lg p-4 bg-white  text-gray-700 font-bold text-lg cursor-pointer button">Ver mas</button>
+                                        <button class="text-center rounded-lg p-4 bg-white  text-gray-700 font-bold text-lg cursor-pointer button">Ver más</button>
                                         
                                         <div class="object p-4 mt-4 shadow-xl">
                                             <div class="max-w-sm rounded">
                                                 <div class="px-6 py-4">
-                                                    <div class="font-bold text-xl mb-2">Habitacion Doble</div>
+                                                    <div class="font-bold text-xl mb-2">Habitación Doble</div>
                                                     <p class="text-gray-700 text-base">
                                                         2 Camas Matrimoniales
                                                     </p>
@@ -114,12 +114,12 @@ class prototipo extends Component{
 
                                 <div class="absolute opacity-0 fd-sh group-hover:opacity-100"> 
                                     <div class="pt-8 text-center">
-                                        <button class="text-center rounded-lg p-4 bg-white  text-gray-700 font-bold text-lg cursor-pointer button">Ver mas</button>
+                                        <button class="text-center rounded-lg p-4 bg-white  text-gray-700 font-bold text-lg cursor-pointer button">Ver más</button>
                                         
                                         <div class="object p-4 mt-4 shadow-xl">
                                             <div class="max-w-sm rounded">
                                                 <div class="px-6 py-4">
-                                                    <div class="font-bold text-xl mb-2">Habitacion Triple</div>
+                                                    <div class="font-bold text-xl mb-2">Habitación Triple</div>
                                                     <p class="text-gray-700 text-base">
                                                         2 Camas Matrimoniales
                                                     </p>
@@ -152,7 +152,7 @@ class prototipo extends Component{
                 <div class="container flex flex-wrap pt-4 pb-10 m-auto mt-6 md:mt-15 lg:px-12 xl:px-16">
                     <div class="w-full px-0 lg:px-4">
                         <h2 class="px-12 text-base font-bold text-center md:text-2xl text-white">
-                            Escoge tu habitacion
+                            Escoge tu habitación
                         </h2>
                         <p class="py-1 text-sm text-center text-white mb-10">
                             "Es malos modales hacer esperar unas vacaciones"
