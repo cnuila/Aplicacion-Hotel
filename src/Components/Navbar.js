@@ -1,4 +1,5 @@
 import React from 'react'
+import menuIcon from '../assets/Hamburger_icon.png'
 
 export default function Navbar() {
     return(
