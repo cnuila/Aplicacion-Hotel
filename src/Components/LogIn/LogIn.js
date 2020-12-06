@@ -1,8 +1,8 @@
 import firebase from 'firebase'
-import { auth } from '../firebase'
+import { auth } from '../../firebase'
 import React, { useCallback, useContext } from 'react'
 import { Redirect } from "react-router";
-import { AuthContext } from "./Rutas Privadas/Auth"
+import { AuthContext } from "../Rutas Privadas/Auth"
 export default function LogIn({ history }) {
 
     const authGoogle = () => {

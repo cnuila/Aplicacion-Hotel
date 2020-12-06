@@ -1,5 +1,5 @@
 import React from 'react'
-import { db } from "../firebase"
+import { db } from "../../firebase"
 import imagen from "./ImagenFondo2.jpg"
 import InputMask from "react-input-mask";
 class SingIn extends React.Component {
