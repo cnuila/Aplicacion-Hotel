@@ -3,7 +3,7 @@ import React from 'react'
 export default function Lista(props) {
     return (
         <div className="max-h-screen">
-            <div className="grid grid-cols-3 max-h-screen bg-gray-100">
+            <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
 
                 <div className="col-span-1 flex flex-col max-h-screen min-h-screen rounded-l-sm p-2 overflow-y-auto divide-y divide-gray-500 divide-opacity-50">
                     <div className="bg-gray-300 sticky top-0 opacity-95 rounded-t-md mx-1 mt-1 p-3 text-center font-bold text-lg">
