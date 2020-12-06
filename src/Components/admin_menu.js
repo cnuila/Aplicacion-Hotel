@@ -22,24 +22,24 @@ const AdminMenu=function() {
           aria-hidden={isClosed}
           className="bg-white w-64 min-h-screen flex flex-col"
         >
-          <div className="bg-white border-r border-b px-4 h-10 flex items-center justify-between">
+          <div className="bg-green-600 text-white font-bold border-r border-b px-4 h-10 flex items-center justify-between">
             <span className="text-blue py-2">Menu</span>
           </div>
 
-          <div className="border-r py-4 flex-grow relative">
+          <div className="bg-gray-900 border-r py-4 flex-grow relative">
             <nav>
               <ul>
-                <li className="p-3" >
-                  <Link to="/Admin/Inicio" className="btn btn-primary">Inicio</Link>
+                <li className="p-3 hover:bg-blue-900" >
+                  <Link to="/Admin/Inicio" className="btn btn-primary text-white">Inicio</Link>
                 </li>
-                <li className="p-3" >
-                  <Link to="/Admin/Clientes" className="btn btn-primary">Clientes</Link>
+                <li className="p-3 hover:bg-blue-900" >
+                  <Link to="/Admin/Clientes" className="btn btn-primary text-white">Clientes</Link>
                 </li>
-                <li className="p-3">
-                  <Link to="/Admin/Restaurante" className="btn btn-primary">Restaurante</Link>
+                <li className="p-3 hover:bg-blue-900">
+                  <Link to="/Admin/Restaurante" className="btn btn-primary text-white">Restaurante</Link>
                 </li>
-                <li className="p-3">
-                  <Link to="/Admin/Servicios" className="btn btn-primary">Servicios</Link>
+                <li className="p-3 hover:bg-blue-900">
+                  <Link to="/Admin/Servicios" className="btn btn-primary text-white">Servicios</Link>
                 </li>
               </ul>
             </nav>
@@ -49,7 +49,7 @@ const AdminMenu=function() {
       )}
       
       <main className="flex-grow flex flex-col min-h-screen">
-        <header className="bg-white border-b h-10 flex items-center justify-center">
+        <header className="bg-green-600 border-b h-10 flex items-center justify-center">
           {!isStatic && (isClosed ? (
             <button
               tabIndex="1"
@@ -65,7 +65,7 @@ const AdminMenu=function() {
                 strokeLinejoin="round"
                 strokeWidth="2"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
+                stroke="white"
               >
                 <path d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
@@ -84,7 +84,7 @@ const AdminMenu=function() {
                 strokeLinejoin="round"
                 strokeWidth="2"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
+                stroke="white"
               >
                 <path d="M6 18L18 6M6 6l12 12"></path>
               </svg>
@@ -92,7 +92,7 @@ const AdminMenu=function() {
           ))}
 
           <div className="flex flex-grow items-center justify-between px-3">
-            <h1 className="text-lg">Administración</h1>
+            <h1 className="text-lg text-white font-bold">Administración</h1>
             <button className="text-blue-700 underline">Salir de Sesion</button>
           </div>
         </header>
