@@ -6,6 +6,7 @@ import {
   Link
 } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive'
+import ListaClientes from './Administración/ListaClientes'
 
 const AdminMenu=function() {
   const [isClosed, setClosed] = React.useState(false)
@@ -130,11 +131,7 @@ function Inicio(){
 
 function Clientes(){
   return(
-    <div>
-      <h1>
-      this is clients
-      </h1>
-    </div>
+    <ListaClientes/>
   )
 }
 
