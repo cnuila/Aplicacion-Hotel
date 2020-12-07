@@ -18,6 +18,7 @@ export default function Navbar() {
         <>
             <header class="lg:px-16 px-6 bg-white flex flex-wrap items-center lg:py-0 py-2">
                 <div class="flex-1 flex justify-between items-center">
+
                     <a href="./">Hotel</a>
                     <label for="menu-toggle" class="pointer-cursor lg:hidden block">Menu</label>
                     <input type="checkbox" class="hidden" id="menu-toggle" />
@@ -30,6 +31,9 @@ export default function Navbar() {
                                 </li>
                                 <li>
                                     <Link to="/signup" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">Registrate</Link>
+                                </li>
+                                <li>
+                                    <Link to="/servicios" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">Servicios</Link>
                                 </li>
                                 <li>
                                     <Link to="/administracion" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">Admin</Link>
