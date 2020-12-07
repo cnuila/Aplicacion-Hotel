@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import hotel1 from "../hotel1.jpg"
+import hotel1 from "./hotel1.jpg"
 import firebase from "../../firebase"
 
 class RecuperarContra extends Component{

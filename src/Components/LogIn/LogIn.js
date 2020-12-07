@@ -3,6 +3,8 @@ import { auth } from '../../firebase'
 import React, { useCallback, useContext } from 'react'
 import { Redirect } from "react-router";
 import { AuthContext } from "../Rutas Privadas/Auth"
+import { Link } from 'react-router-dom';
+
 export default function LogIn({ history }) {
 
     const authGoogle = () => {
@@ -73,7 +75,7 @@ export default function LogIn({ history }) {
 
                             <div className="flex flex-row-reverse mt-4">
                                 <div>
-                                    <p className="text-right text-xs text-gray-500 cursor-pointer hover:text-black"> ¿Olvidaste tu contraseña?</p>
+                                    <Link to="/recuperarContra" className="text-right text-xs text-gray-500 cursor-pointer hover:text-black"> ¿Olvidaste tu contraseña?</Link>
                                 </div>
                             </div>
 
@@ -100,19 +102,6 @@ export default function LogIn({ history }) {
                     </div>
                 </div>
             </div>
-
-
-            <div className="flex bg-gray-600 m-3 h-12 w-52 shadow-lg rounded cursor-pointer" onClick={cerrarSesion}>
-                <div className="self-center mx-1 p-4 text-center text-sm font-semibold text-white">
-                    Cerrar Sesión
-                </div>
-            </div>
-            <div className="flex bg-gray-600 m-3 h-12 w-52 shadow-lg rounded cursor-pointer" onClick={usuarioActual}>
-                <div className="self-center mx-1 p-4 text-center text-sm font-semibold text-white">
-                    Usuario Actual
-                </div>
-            </div>
-
         </>
     )
 }

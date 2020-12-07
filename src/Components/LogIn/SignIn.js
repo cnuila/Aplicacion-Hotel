@@ -1,7 +1,9 @@
 import React from 'react'
 import { db } from "../../firebase"
-import imagen from "./ImagenFondo2.jpg"
+import imagen from "../ImagenFondo2.jpg"
 import InputMask from "react-input-mask";
+import { Link } from 'react-router-dom';
+
 class SingIn extends React.Component {
     constructor(props) {
         super(props)
@@ -190,7 +192,7 @@ class SingIn extends React.Component {
                                 <label for="password2" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Confirma Contraseña</label>
                                 <input id="password2" type="password" minlengt="8" onChange={this.handleconfirma} name="password2" placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <input value="Registrate" type="submit"   className="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" />
-                                <p className="flex justify-between inline-block mt-4 text-xs text-gray-500 cursor-pointer hover:text-black"> ¿Ya estás registrado?</p>
+                                <Link to="./login" className="flex justify-between inline-block mt-4 text-xs text-gray-500 cursor-pointer hover:text-black"> ¿Ya estás registrado?</Link>
                             </div>
                         </div>
                     </div>

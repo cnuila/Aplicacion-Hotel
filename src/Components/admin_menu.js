@@ -31,9 +31,6 @@ const AdminMenu=function() {
             <nav>
               <ul>
                 <li className="p-3 hover:bg-blue-900" >
-                  <Link to="/Admin/Inicio" className="btn btn-primary text-white">Inicio</Link>
-                </li>
-                <li className="p-3 hover:bg-blue-900" >
                   <Link to="/Admin/Clientes" className="btn btn-primary text-white">Clientes</Link>
                 </li>
                 <li className="p-3 hover:bg-blue-900">
@@ -99,9 +96,6 @@ const AdminMenu=function() {
         </header>
         
         <Switch>
-              <Route path="/Admin/Inicio">
-                <Inicio/>
-              </Route>
               <Route path="/Admin/Clientes">
                 <Clientes/>
               </Route>
@@ -119,20 +113,8 @@ const AdminMenu=function() {
   )
 }
 
-function Inicio(){
-  return(
-    <div>
-      <h1>
-      this is home
-      </h1>
-    </div>
-  )
-}
-
 function Clientes(){
-  return(
-    <ListaClientes/>
-  )
+  return <ListaClientes/>;
 }
 
 function Restaurante(){
