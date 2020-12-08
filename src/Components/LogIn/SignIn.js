@@ -1,5 +1,5 @@
 import React from 'react'
-import { db } from "../../firebase"
+import { db, auth } from "../../firebase"
 import imagen from "../ImagenFondo2.jpg"
 import InputMask from "react-input-mask";
 import { Link } from 'react-router-dom';
@@ -154,6 +154,20 @@ class SingIn extends React.Component {
         }).then(() => {
             console.log("Agregado a la base de datos ")
         });
+
+        let email = this.state.email
+        let password = this.state.password
+
+        auth.createUserWithEmailAndPassword(email, password)
+        .then((user) => {
+            console.log("Agrego a la base auth")
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorMessage)
+        });
+
     }
 
 
@@ -170,11 +184,11 @@ class SingIn extends React.Component {
                                 <div className="flex justify-between gap-3">
                                     <span className="w-1/2">
                                         <label for="Nombre" className="block text-xs font-semibold text-gray-600 uppercase">Nombre</label>
-                                        <InputMask mask="aaaaaaaaaaaaa"  id="Nombre"  type="text" onChange={this.handleNombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                        <InputMask mask=""  id="Nombre"  type="text" onChange={this.handleNombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     </span>
                                     <span className="w-1/2">
                                         <label for="Apellido" className="block text-xs font-semibold text-gray-600 uppercase">Apellido</label>
-                                        <InputMask mask="aaaaaaaaaaaaa" id="Apellido" type="text" onChange={this.handleApellido} name="Apellido" placeholder="Perez" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                        <InputMask mask="" id="Apellido" type="text" onChange={this.handleApellido} name="Apellido" placeholder="Perez" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     </span>
 
                                 </div>
@@ -186,7 +200,7 @@ class SingIn extends React.Component {
                                     />
 
                                 <label for="email" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">E-mail</label>
-                                <input id="email" type="email" name="email"  minlengt="12" honChange={this.handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                <input id="email" type="email" name="email"  minlengt="12" onChange={this.handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Contraseña</label>
                                 <input id="password" type="password" minlengt="8" name="password" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <label for="password2" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Confirma Contraseña</label>
