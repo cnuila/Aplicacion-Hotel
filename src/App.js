@@ -9,6 +9,7 @@ import Habitaciones from './Components/prototipo'
 import Restaurante from './Components/RestaurantePrincipal'
 import { AuthProvider } from './Components/Rutas Privadas/Auth';
 import PrivateRoute from "./Components/Rutas Privadas/RutaPrivada"
+import Conferencias from "./Components/Conferencias"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/servicios" component={Servicos} />
         <Route path="/habitaciones" component={Habitaciones} />
         <Route path="/restaurante" component={Restaurante} />
+        <Route path="/conferencias" component={Conferencias}/>
       </Switch>
     </Router>
   );

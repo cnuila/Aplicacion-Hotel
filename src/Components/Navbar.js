@@ -18,7 +18,7 @@ export default function Navbar() {
         <>
             <header class="lg:px-16 px-6 bg-white flex flex-wrap items-center lg:py-0 py-2">
                 <div class="flex-1 flex justify-between items-center">
-                    <a href="./">Hotel</a>
+                <Link to="/">Hotel Posada del Ángel</Link>
                 </div>
                 
                 <label for="menu-toggle" class="cursor-pointer lg:hidden block">
@@ -37,6 +37,9 @@ export default function Navbar() {
                             </li>
                             <li>
                                 <Link to="/servicios" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">Servicios</Link>
+                            </li>
+                            <li>
+                                <Link to="/conferencias" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">Conferencias</Link>
                             </li>
                             <li>
                                 <Link to="/administracion" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">Admin</Link>

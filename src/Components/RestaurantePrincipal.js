@@ -4,9 +4,12 @@ import { Carousel } from 'react-responsive-carousel';
 
 import img_restaurante_1 from '../imagenes/restaurante1.jpg'
 import img_restaurante_2 from '../imagenes/restaurante2.jpg'
+import Navbar from './Navbar';
 
 export default function RestaurantePrincipal(){
     return(
+        <div>
+            <Navbar/>
         <div class="bg-gray-900">
             <div class="md:container mx-auto p-2">
                 <h1 class="mt-1 text-yellow-300 text-4xl text-center font-semibold">Restaurante</h1>
@@ -59,6 +62,7 @@ export default function RestaurantePrincipal(){
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     )
 }
