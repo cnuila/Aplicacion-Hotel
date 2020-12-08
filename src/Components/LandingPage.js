@@ -87,7 +87,7 @@ export default function Landing(){
                         </p>
                         <div class="flex justify-center">
                             <button class="mt-5 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
-                                MÁS INFORMACIÓN
+                                <Link to ="/conferencias">MÁS INFORMACIÓN</Link>
                             </button>
                         </div> 
                     </div>

@@ -39,9 +39,6 @@ export default function Navbar() {
                                 <Link to="/servicios" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">Servicios</Link>
                             </li>
                             <li>
-                                <Link to="/conferencias" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">Conferencias</Link>
-                            </li>
-                            <li>
                                 <Link to="/administracion" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">Admin</Link>
                             </li>
                             <li>
