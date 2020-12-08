@@ -21,7 +21,9 @@ export default function Navbar() {
                     <a href="./">Hotel</a>
                 </div>
                 
-                <label for="menu-toggle" class="pointer-cursor lg:hidden block">Menu</label>
+                <label for="menu-toggle" class="cursor-pointer lg:hidden block">
+                    <img src={menuIcon} class = "fill-current text-gray-900 w-10 h-10" alt = "Menu"></img>
+                </label>
                 <input type="checkbox" class="hidden" id="menu-toggle" />
                 
                  <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="menu">
