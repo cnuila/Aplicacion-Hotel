@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
-import hotel from "../hotel.jpg"
-import hotel1 from "../hotel1.jpg"
-import hotel2 from "../hotel2.jpg"
-import pool from "../pool.jpg"
+import hotel from "../imagenes/hotel.jpg"
+import hotel1 from "../imagenes/hotel1.jpg"
+import hotel2 from "../imagenes/hotel2.jpg"
+import pool from "../imagenes/pool.jpg"
 
 class prototipo extends Component{
 
     render(){
         return (            
             <div class="bg-gray-900">
+                <div class="md:container mx-auto p-2">
+                    <h1 class="mt-1 text-yellow-300 text-4xl text-center font-semibold">Habitaciones</h1>
+                    <h1 class="mt-7 mb-7 text-white text-xl text-center font-semibold">"Es malos modales hacer esperar unas vacaciones"</h1>
+                </div>
+
                 <Carousel autoPlay={2} infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
                     <div>
                         <img alt="" src={hotel}/>
