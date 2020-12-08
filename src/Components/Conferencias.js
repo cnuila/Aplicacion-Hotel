@@ -12,8 +12,8 @@ class Conferencias extends Component{
                     <div class="flex flex-col w-80 space-y-3 justify-between">
                         <div class = "text-2xl font-semibold">Nombre de la sala</div>
                         <div class="">
-                            Una pequeña descripción de la sala
-                            de conferencias.
+                            Capacidad de 15 personas
+                            con distancamiento social.
                         </div>
                         <div class = "text-gray-400">Extra información</div>
                     </div>
@@ -24,8 +24,8 @@ class Conferencias extends Component{
                     <div class="flex flex-col w-80 space-y-3 justify-between">
                         <div class = "text-2xl font-semibold">Nombre de la sala</div>
                         <div class="">
-                            Una pequeña descripción de la sala
-                            de conferencias.
+                            Capacidad de 45 personas
+                            con distancamiento social.
                         </div>
                         <div class = "text-gray-400">Extra información</div>
                     </div>
@@ -36,8 +36,8 @@ class Conferencias extends Component{
                     <div class="flex flex-col w-80 space-y-3 justify-between">
                         <div class = "text-2xl font-semibold">Nombre de la sala</div>
                         <div class="">
-                            Una pequeña descripción de la sala
-                            de conferencias.
+                            Capacidad de 80 personas
+                            con distancamiento social.
                         </div>
                         <div class = "text-gray-400">Extra información</div>
                     </div>
