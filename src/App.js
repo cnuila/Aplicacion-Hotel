@@ -11,6 +11,7 @@ import Restaurante from './Components/RestaurantePrincipal'
 import { AuthProvider } from './Components/Rutas Privadas/Auth';
 import PrivateRoute from "./Components/Rutas Privadas/RutaPrivada"
 import Conferencias from "./Components/Conferencias"
+import RecuperarContra from './Components/LogIn/RecuperarContra';
 
 function App() {
   return (
