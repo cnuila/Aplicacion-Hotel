@@ -214,7 +214,7 @@ class SingIn extends React.Component {
                                 <label for="email" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">E-mail</label>
                                 <input id="email" type="email" name="email"  minlengt="12" onChange={this.handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Contraseña</label>
-                                <InputMask mask="***************" id="password" type="password" minlengt="8" name="password" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                <input  id="password" type="password" minlengt="8" name="password" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <input value="Registrate" type="submit"   className="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" />
                                 <Link to="./login" className="flex justify-between inline-block mt-4 text-xs text-gray-500 cursor-pointer hover:text-black"> ¿Ya estás registrado?</Link>
                             </div>
