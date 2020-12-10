@@ -18,7 +18,8 @@ class SingIn extends React.Component {
         Identidad: '',
         email: '',
         password: '',
-        password2: ''
+        password2: '',
+        Telefono: ''
     }
 
     handleInputChange(target) {
@@ -70,6 +71,12 @@ class SingIn extends React.Component {
         console.log(event.target.value)
         this.setState({
             email: event.target.value
+        })
+    }
+    handleTele = (event) => {
+        console.log(event.target.value)
+        this.setState({
+            Telefono: event.target.value
         })
     }
     /*function validar_clave(contrasenna)
@@ -184,17 +191,22 @@ class SingIn extends React.Component {
                                 <div className="flex justify-between gap-3">
                                     <span className="w-1/2">
                                         <label for="Nombre" className="block text-xs font-semibold text-gray-600 uppercase">Nombre</label>
-                                        <InputMask mask=""  id="Nombre"  type="text" onChange={this.handleNombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                        <InputMask mask="aaaaaaaaaaaaaaa"  id="Nombre"  type="text" onChange={this.handleNombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     </span>
                                     <span className="w-1/2">
                                         <label for="Apellido" className="block text-xs font-semibold text-gray-600 uppercase">Apellido</label>
-                                        <InputMask mask="" id="Apellido" type="text" onChange={this.handleApellido} name="Apellido" placeholder="Perez" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                        <InputMask mask="aaaaaaaaaaaaaaa" id="Apellido" type="text" onChange={this.handleApellido} name="Apellido" placeholder="Perez" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     </span>
-
+                                
                                 </div>
+                                <label for="Telefono" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Telefono</label>
+                                <InputMask mask="9999-9999"id="Telefono"type="text" onChange={this.handleTele} name="Identidad" placeholder="0000-0000-00000" maskPlaceholder="-"//placeholder="0000-0000-0000" 
+                                    autoComplete="cc-number"
+                                    className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required 
+                                    />
 
                                 <label for="Identidad" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Identidad</label>
-                                <InputMask mask="9999-9999-99999"id="Identidad"type="text" onChange={this.handleId} name="Identidad" placeholder="0000-0000-00000" maskPlaceholder="-"//placeholder="0000-0000-0000" 
+                                <InputMask mask="***************"id="Identidad"type="text" onChange={this.handleId} name="Identidad" placeholder="0000-0000-00000" maskPlaceholder="-"//placeholder="0000-0000-0000" 
                                     autoComplete="cc-number"
                                     className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required 
                                     />
@@ -202,9 +214,7 @@ class SingIn extends React.Component {
                                 <label for="email" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">E-mail</label>
                                 <input id="email" type="email" name="email"  minlengt="12" onChange={this.handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Contraseña</label>
-                                <input id="password" type="password" minlengt="8" name="password" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                                <label for="password2" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Confirma Contraseña</label>
-                                <input id="password2" type="password" minlengt="8" onChange={this.handleconfirma} name="password2" placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                <InputMask mask="***************" id="password" type="password" minlengt="8" name="password" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <input value="Registrate" type="submit"   className="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" />
                                 <Link to="./login" className="flex justify-between inline-block mt-4 text-xs text-gray-500 cursor-pointer hover:text-black"> ¿Ya estás registrado?</Link>
                             </div>
