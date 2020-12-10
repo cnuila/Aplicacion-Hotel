@@ -1,10 +1,35 @@
 import React from "react";
 import imagen from "./ImagenFondo2.jpg"
 import InputMask from "react-input-mask";
+import { db } from "../firebase"
 class Listar extends React.Component {
     constructor() {
         super()
+        this.state={
+            Nombre:'',
+            Apellido:'',
+            Identidad:'',
+            Email:''
+        }
     }
+
+    componentDidMount(){
+        this.Consulta()
+    }
+
+    Consulta = async ()=>{
+        const query= await db.collection("Usuarios").where("Identidad", "==", "0801-1999-19890").get();
+        query.forEach(doc =>{
+            this.setState({
+                Nombre:doc.data().Nombre,
+                Apellido:doc.data().Apellido,
+                Identidad:doc.data().Identidad,
+                Email:doc.data().Email
+            })
+        })
+    }
+
+
     render() {
         return (
             <body background={imagen} >
@@ -16,11 +41,11 @@ class Listar extends React.Component {
                                 <div class='flex flex-wrap -mx-3 mb-6'>
                                     <div class='w-full md:w-full px-3 mb-6'>
                                         <label class='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' for='grid-text-1'>Identidad</label>
-                                        <InputMask mask="9999-9999-99999" name="Identidad" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' placeholder='ID' required/>
+                                        <InputMask mask="" value={this.state.Identidad} name="Identidad" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' placeholder='ID' required/>
                                     </div>
                                     <div class='w-full md:w-full px-3 mb-6'>
                                         <label class='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' for='grid-text-1'>Email</label>
-                                        <input name="Email" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' placeholder='email' required>
+                                        <input name="Email" value={this.state.Email} class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' placeholder='email' required>
                                         </input>
                                     </div>
                                     <div class='w-full md:w-full px-3 mb-6 '>
@@ -33,12 +58,12 @@ class Listar extends React.Component {
                                         <div class="flex items-center justify-between mt-4">
                                             <div class='w-full md:w-1/2 px-3 mb-6'>
                                                 <label class='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >Nombre</label>
-                                                <InputMask mask="aaaaaaaaaaaaa"  name="Nombre" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' required />
+                                                <InputMask mask=""  value={this.state.Nombre} name="Nombre" class='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' required />
                                                 
                                             </div>
                                             <div class='w-full md:w-1/2 px-3 mb-6'>
                                                 <label class='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >Apellido</label>
-                                                <InputMask mask="aaaaaaaaaaaaa" name="Apellido" class='appearance-none block w-full bg-white text-grnpm install react-input-maskay-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' required/>
+                                                <InputMask mask="" name="Apellido" value={this.state.Apellido} class='appearance-none block w-full bg-white text-grnpm install react-input-maskay-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' type='text' required/>
                                                
                                             </div>
                                         </div>
