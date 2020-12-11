@@ -19,7 +19,8 @@ class SingIn extends React.Component {
         email: '',
         password: '',
         password2: '',
-        Telefono: ''
+        Telefono: '',
+        
     }
 
     handleInputChange(target) {
@@ -31,23 +32,22 @@ class SingIn extends React.Component {
         // })
         console.log(name + " " + valor)
     }
-
-
     handleNombre = (event) => {
         console.log(event.target.value)
+        var Nom = event.target.value
+        Nom =Nom.replaceAll("_", "")
         this.setState({
-            Nombre: event.target.value
+            Nombre: event.target.value,
         })
-
-
     }
     handleApellido = (event) => {
         console.log(event.target.value)
+        var Ape = event.target.value
+        Ape = Ape.replaceAll("_", "")
+        Ape = Ape.replaceAll(" ", "")
         this.setState({
-            Apellido: event.target.value
+            Apellido: Ape,
         })
-
-
     }
     handlecontra = (event) => {
         console.log(event.target.value)
@@ -63,20 +63,26 @@ class SingIn extends React.Component {
     }
     handleId = (event) => {
         console.log(event.target.value)
+        var ID = event.target.value;
+        ID = ID.replaceAll("_", "")
+        ID = ID.replaceAll("-", "")
         this.setState({
-            Identidad: event.target.value
+            Identidad: ID
         })
     }
     handleemail = (event) => {
         console.log(event.target.value)
+
         this.setState({
             email: event.target.value
         })
     }
     handleTele = (event) => {
         console.log(event.target.value)
+        var tele = event.target.value;
+        tele = tele.replaceAll("_", "")
         this.setState({
-            Telefono: event.target.value
+            Telefono: tele
         })
     }
     /*function validar_clave(contrasenna)
@@ -151,13 +157,17 @@ class SingIn extends React.Component {
 
 
     handleSubmit = (event) => {
+
         event.preventDefault()
+
         db.collection("Usuarios").doc(this.state.Identidad).set({
             Identidad: this.state.Identidad,
             Nombre: this.state.Nombre,
             Apellido: this.state.Apellido,
             Contrasena: this.state.password,
-            Email: this.state.email
+            Email: this.state.email,
+            Telefono: this.state.Telefono,
+
         }).then(() => {
             console.log("Agregado a la base de datos ")
         });
@@ -166,14 +176,14 @@ class SingIn extends React.Component {
         let password = this.state.password
 
         auth.createUserWithEmailAndPassword(email, password)
-        .then((user) => {
-            console.log("Agrego a la base auth")
-        })
-        .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log(errorMessage)
-        });
+            .then((user) => {
+                console.log("Agrego a la base auth")
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorMessage)
+            });
 
     }
 
@@ -191,35 +201,35 @@ class SingIn extends React.Component {
                                 <div className="flex justify-between gap-3">
                                     <span className="w-1/2">
                                         <label for="Nombre" className="block text-xs font-semibold text-gray-600 uppercase">Nombre</label>
-                                        <InputMask mask="aaaaaaaaaaaaaaa"  id="Nombre"  type="text" onChange={this.handleNombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                        <input type="name" id="Nombre" disableUnderline onChange={this.handleNombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     </span>
                                     <span className="w-1/2">
                                         <label for="Apellido" className="block text-xs font-semibold text-gray-600 uppercase">Apellido</label>
                                         <InputMask mask="aaaaaaaaaaaaaaa" id="Apellido" type="text" onChange={this.handleApellido} name="Apellido" placeholder="Perez" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     </span>
-                                
+
                                 </div>
                                 <label for="Telefono" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Telefono</label>
-                                <InputMask mask="9999-9999"id="Telefono"type="text" onChange={this.handleTele} name="Identidad" placeholder="00000000" maskPlaceholder="-"//placeholder="0000-0000-0000" 
+                                <InputMask mask="9999-9999" id="Telefono" type="text" disableUnderline onChange={this.handleTele} name="Identidad" placeholder="00000000" maskPlaceholder="-"//placeholder="0000-0000-0000" 
                                     autoComplete="cc-number"
-                                    className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required 
-                                    />
+                                    className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required
+                                />
 
                                 <label for="Identidad" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Identidad-Pasaporte-Carnet de residente (sin guiones)</label>
-                                <InputMask mask="****************"id="Identidad"type="text" onChange={this.handleId} name="Identidad" placeholder="0000-0000-00000" maskPlaceholder="-"//placeholder="0000-0000-0000" 
+                                <InputMask mask="****************" id="Identidad" disableUnderline type="text" onChange={this.handleId} name="Identidad" placeholder="0000-0000-00000" maskPlaceholder="-"//placeholder="0000-0000-0000" 
                                     autoComplete="cc-number"
-                                    className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required 
-                                    />
+                                    className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required
+                                />
 
                                 <label for="email" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">E-mail</label>
-                                <input id="email" type="email" name="email"  minlengt="12" onChange={this.handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                <input id="email" type="email" name="email" minlengt="12" onChange={this.handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Contraseña</label>
-                                <input  id="password" type="password" minlengt="8" name="password" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                <input id="password" type="password" minlengt="8" name="password" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Confirmar Contraseña</label>
-                                <input  id="Cpassword" type="password" minlengt="8" name="Cpassword" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                                                               
-                                <input value="Registrate" type="submit"   className="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" />
-                                <Link to="./login" className="flex justify-between inline-block mt-4 text-xs text-gray-500 cursor-pointer hover:text-black"> ¿Ya estás registrado?</Link>
+                                <input id="Cpassword" type="password" minlengt="8" name="Cpassword" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+
+                                <input value="Registrate" type="submit" className="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" />
+                                <Link to="./login" className="flex justify-between  mt-4 text-xs text-gray-500 cursor-pointer hover:text-black"> ¿Ya estás registrado?</Link>
                             </div>
                         </div>
                     </div>
