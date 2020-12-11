@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive'
 import ListaClientes from './Administración/ListaClientes'
+import Navbar from './Navbar'
 
 const AdminMenu=function() {
   const [isClosed, setClosed] = React.useState(false)
@@ -17,6 +18,7 @@ const AdminMenu=function() {
 
   return (
     <Router>
+      <Navbar/>
       <div className="flex bg-gray-100">
       {(isStatic || !isClosed) && (
         <aside
