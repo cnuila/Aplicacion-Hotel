@@ -15,6 +15,7 @@ import img_cuartos from '../imagenes/cuartos.jpg';
 import img_salon from '../imagenes/salon.jpg';
 import img_comida_1 from '../imagenes/ab4.jpg';
 import img_comida_2 from '../imagenes/ab5.jpg';
+import img_servicios from '../imagenes/servicios.png';
 import img_logo from '../imagenes/Logo.png';
 import img_facebook from '../imagenes/facebook.png';
 import { Link } from 'react-router-dom';
@@ -36,7 +37,7 @@ export default function Landing(){
                     <img src={img_carousel_3} alt="Tercera imagen"/>
                 </div>
             </Carousel>
-            <div class="container mx-auto p-2 items-center">
+            <div class="container mx-auto p-2">
                 <h1 class="text-red-900 text-4xl text-center font-semibold">Hotel Posada del Ángel</h1>
                 <div class="grid md:grid-cols-4 gap-4 sm:grid-col-2 ">
                     <div class="mt-5">
@@ -86,7 +87,7 @@ export default function Landing(){
                             incluyen banquete, decoración, luces, forros de sillas, centros de mesas, mantelería y mucho más.
                         </p>
                         <div class="flex justify-center">
-                            <button class="mt-5 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
+                            <button class="mt-5 mb-4 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
                                 <Link to ="/conferencias">MÁS INFORMACIÓN</Link>
                             </button>
                         </div> 
@@ -111,6 +112,25 @@ export default function Landing(){
                     </div>
                     <div class="flex-wrap">
                         <img class="mb-1 h-full w-full" src={img_comida_2}  alt="Imagen de comida" />
+                    </div>
+                </div>
+            </div>
+            <div class="mt-9 container mx-auto bg-gray-300">
+                <div class="grid md:grid-cols-2 sm:grid-cols-1">
+                    <div class="mt-2">
+                        <h1 class="mt-4 text-black text-3xl sm:text-md text-center font-semibold">Servicios</h1>
+                        <p class="m-10 text-xl text-center break-normal">Dentro de nuestro complejo hotelero, puedes ser visitante u hospedador. 
+                            Entre las actividades familiares que ofrecemos, están: fogata por las noches, senderismo, cancha de fútbol techada con grama artificial, 
+                            piscina y bar.
+                        </p>
+                        <div class="flex justify-center">
+                            <button class="mt-5 mb-4 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
+                                MÁS INFORMACIÓN
+                            </button>
+                        </div> 
+                    </div>
+                    <div class="flex-wrap">
+                        <img class="mb-1 h-full w-full" src={img_servicios} alt="Imagen de los servicios" />
                     </div>
                 </div>
             </div>
