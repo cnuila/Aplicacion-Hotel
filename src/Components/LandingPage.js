@@ -18,6 +18,7 @@ import img_comida_2 from '../imagenes/ab5.jpg';
 import img_logo from '../imagenes/Logo.png';
 import img_facebook from '../imagenes/facebook.png';
 import img_instagram from '../imagenes/instagram.png';
+import { Link } from 'react-router-dom';
 
 export default function Landing(){
     return (
@@ -71,7 +72,7 @@ export default function Landing(){
                 <img class="mt-2" src={img_cuartos} alt="Imagen cuartos" />
                 <div class="grid grid-cols-1">
                     <button class="mt-2 justify-self-center bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-4 rounded">
-                        MÁS INFORMACIÓN
+                        <Link to="/habitaciones" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">MÁS INFORMACIÓN</Link>
                     </button>
                 </div>
             </div>
@@ -106,7 +107,7 @@ export default function Landing(){
                         </p>
                         <div class="flex justify-center">
                             <button class="mt-5 mb-2 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
-                                MÁS INFORMACIÓN
+                            <Link to="/restaurante" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">MÁS INFORMACIÓN</Link>
                             </button>
                         </div>
                     </div>

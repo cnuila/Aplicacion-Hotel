@@ -2,8 +2,8 @@ import React from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 
-import img_restaurante_1 from '../restaurante1.jpg'
-import img_restaurante_2 from '../restaurante2.jpg'
+import img_restaurante_1 from '../imagenes/restaurante1.jpg'
+import img_restaurante_2 from '../imagenes/restaurante2.jpg'
 
 export default function RestaurantePrincipal(){
     return(
