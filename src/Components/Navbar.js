@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import firebase from 'firebase'
 import { Link } from 'react-router-dom';
 import menuIcon from '../assets/Hamburger_icon.png'
@@ -11,14 +11,14 @@ class Navbar extends Component {
         }
     }
 
-    cambiarNombre(newName){
+    cambiarNombre(newName) {
         this.setState({
             nombre: newName
         })
     }
 
-    cambioDeEstado = () =>{
-        firebase.auth().onAuthStateChanged(function(user) {
+    cambioDeEstado = () => {
+        firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 this.cambiarNombre(firebase.auth().currentUser.displayName)
             } else {
@@ -29,34 +29,32 @@ class Navbar extends Component {
 
     cerrarSesion = () => {
         firebase.auth().signOut().then(function () {
-            console.log("Cerró Sesión")
         }).catch(function (error) {
-            console.log("No se cerró")
             console.log(error)
         });
     }
-    render(){
+    render() {
+        let user = firebase.auth().currentUser;
+        let inicioSesion;
+        if (!user) {
+            inicioSesion = <li><Link to="/login" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Inicio de Sesión</Link></li>
+        }
         return (
             <>
                 <header class="lg:px-16 px-6 bg-blue-900 flex flex-wrap items-center lg:py-0 py-2 text-white">
                     <div class="flex-1 flex justify-between items-center">
                         <Link to="/">Hotel Posada del Ángel</Link>
                     </div>
-                    
+
                     <label for="menu-toggle" class="cursor-pointer lg:hidden block">
-                        <img src={menuIcon} class = "fill-current text-white w-10 h-10" alt = "Menu"></img>
+                        <img src={menuIcon} class="fill-current text-white w-10 h-10" alt="Menu"></img>
                     </label>
                     <input type="checkbox" class="hidden" id="menu-toggle" />
-                    
+
                     <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="menu">
                         <nav>
                             <ul class="lg:flex items-center justify-between text-base text-white pt-4 lg:pt-0">
-                                <li>
-                                    <Link to="/login" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Inicio de Sesión</Link>
-                                </li>
-                                <li>
-                                    <Link to="/signup" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Registrate</Link>
-                                </li>
+                                {inicioSesion}
                                 <li>
                                     <Link to="/servicios" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Servicios</Link>
                                 </li>
@@ -72,7 +70,7 @@ class Navbar extends Component {
                             </ul>
                         </nav>
                     </div>
-                </header>        
+                </header>
             </>
         )
     }

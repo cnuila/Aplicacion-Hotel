@@ -23,6 +23,22 @@ class SingIn extends React.Component {
         
     }
 
+    componentDidMount(){
+        var user = auth.currentUser;
+        if (user) {
+            console.log(user)
+            let nombreApellido = user.displayName.split(" ")
+            let correo = user.email;
+            this.setState({
+                Nombre:nombreApellido[0],
+                Apellido: nombreApellido[1],
+                email: correo,
+            })
+        } else {
+            console.log("no hay usuario ahorita")
+        }
+    }
+
     handleInputChange(target) {
         let { name, type } = target
         let valor
@@ -154,8 +170,6 @@ class SingIn extends React.Component {
         }
     }
 
-
-
     handleSubmit = (event) => {
 
         event.preventDefault()
@@ -189,6 +203,25 @@ class SingIn extends React.Component {
 
 
     render() {
+        var user = auth.currentUser;
+        let inputEmail;
+        let contraseña;
+        let confirmarContra;
+        if (user) {
+            inputEmail = <input id="email" type="email" name="email" minlengt="12" value={this.state.email} disabled className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />            
+        } else {
+            console.log("no hay usuario ahoritAAAa")    
+            inputEmail = <input id="email" type="email" name="email" minlengt="12" onChange={this.handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />              
+            contraseña = (<>
+                                    <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Confirmar Contraseña</label>
+                                    <input id="password" type="password" minlengt="8" name="password" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                </>)
+            confirmarContra = <>
+                                <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Contraseña</label>
+                                <input id="Cpassword" type="password" minlengt="8" name="Cpassword" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                            </>
+        }
+
         return (
             //<body background="https://scontent.ftgu1-1.fna.fbcdn.net/v/t1.0-9/104181902_10157399492806724_8294953661876225000_o.jpg?_nc_cat=106&ccb=2&_nc_sid=730e14&_nc_eui2=AeEEou_0423Aiq6dtRu13DttUSYYPRRfMA9RJhg9FF8wD08Drbpu5wZgHygu_4qYIHViFY6HimWDUa4lDDOZFYy3&_nc_ohc=fScc_TOxxQ8AX8OiH1a&_nc_ht=scontent.ftgu1-1.fna&oh=2473f66cfae5fc9eeb4380a8ba59983c&oe=5FEA1EC9" >
 
@@ -201,11 +234,11 @@ class SingIn extends React.Component {
                                 <div className="flex justify-between gap-3">
                                     <span className="w-1/2">
                                         <label for="Nombre" className="block text-xs font-semibold text-gray-600 uppercase">Nombre</label>
-                                        <input type="name" id="Nombre" disableUnderline onChange={this.handleNombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                        <input type="name" id="Nombre" disableUnderline onChange={this.handleNombre} value={this.state.Nombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     </span>
                                     <span className="w-1/2">
                                         <label for="Apellido" className="block text-xs font-semibold text-gray-600 uppercase">Apellido</label>
-                                        <InputMask mask="aaaaaaaaaaaaaaa" id="Apellido" type="text" onChange={this.handleApellido} name="Apellido" placeholder="Perez" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                        <InputMask mask="aaaaaaaaaaaaaaa" id="Apellido" type="text" onChange={this.handleApellido} value={this.state.Apellido} name="Apellido" placeholder="Perez" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     </span>
 
                                 </div>
@@ -222,12 +255,9 @@ class SingIn extends React.Component {
                                 />
 
                                 <label for="email" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">E-mail</label>
-                                <input id="email" type="email" name="email" minlengt="12" onChange={this.handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                                <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Contraseña</label>
-                                <input id="password" type="password" minlengt="8" name="password" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                                <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Confirmar Contraseña</label>
-                                <input id="Cpassword" type="password" minlengt="8" name="Cpassword" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-
+                                {inputEmail}
+                                {contraseña}
+                                {confirmarContra}
                                 <input value="Registrate" type="submit" className="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" />
                                 <Link to="./login" className="flex justify-between  mt-4 text-xs text-gray-500 cursor-pointer hover:text-black"> ¿Ya estás registrado?</Link>
                             </div>
