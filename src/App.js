@@ -11,13 +11,14 @@ import Restaurante from './Components/RestaurantePrincipal'
 import { AuthProvider } from './Components/Rutas Privadas/Auth';
 import PrivateRoute from "./Components/Rutas Privadas/RutaPrivada"
 import Conferencias from "./Components/Conferencias"
+import AgregarHabitaciones from "./Components/AgregarHabitaciones"
 import RecuperarContra from './Components/LogIn/RecuperarContra';
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/" exact component={LandingPage} />
+        <Route path="/" exact component={AgregarHabitaciones} />
         <Route path="/signup" component={SignIn} />
         <Route path="/login" component={LogIn} />
         <Route path="/administracion" component={Administracion} />
