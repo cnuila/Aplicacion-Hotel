@@ -26,7 +26,6 @@ class SingIn extends React.Component {
     componentDidMount(){
         var user = auth.currentUser;
         if (user) {
-            console.log(user)
             let nombreApellido = user.displayName.split(" ")
             let correo = user.email;
             this.setState({
@@ -35,29 +34,18 @@ class SingIn extends React.Component {
                 email: correo,
             })
         } else {
-            console.log("no hay usuario ahorita")
         }
     }
 
-    handleInputChange(target) {
-        let { name, type } = target
-        let valor
-        valor = target.value
-        //  this.estadoInicial({
-        //    [name]: valor,
-        // })
-        console.log(name + " " + valor)
-    }
+    
     handleNombre = (event) => {
-        console.log(event.target.value)
         var Nom = event.target.value
         Nom =Nom.replaceAll("_", "")
         this.setState({
-            Nombre: event.target.value,
+            Nombre: Nom,
         })
     }
     handleApellido = (event) => {
-        console.log(event.target.value)
         var Ape = event.target.value
         Ape = Ape.replaceAll("_", "")
         Ape = Ape.replaceAll(" ", "")
@@ -66,19 +54,16 @@ class SingIn extends React.Component {
         })
     }
     handlecontra = (event) => {
-        console.log(event.target.value)
         this.setState({
             password: event.target.value
         })
     }
     handleconfirma = (event) => {
-        console.log(event.target.value)
         this.setState({
             password2: event.target.value
         })
     }
     handleId = (event) => {
-        console.log(event.target.value)
         var ID = event.target.value;
         ID = ID.replaceAll("_", "")
         ID = ID.replaceAll("-", "")
@@ -87,93 +72,26 @@ class SingIn extends React.Component {
         })
     }
     handleemail = (event) => {
-        console.log(event.target.value)
-
+        
         this.setState({
             email: event.target.value
         })
     }
     handleTele = (event) => {
-        console.log(event.target.value)
         var tele = event.target.value;
         tele = tele.replaceAll("_", "")
         this.setState({
             Telefono: tele
         })
     }
-    /*function validar_clave(contrasenna)
-        {
-            if(contrasenna.length >= 8)
-            {		
-                var mayuscula = false;
-                var minuscula = false;
-                var numero = false;
-                var caracter_raro = false;
-            	
-                for(var i = 0;i<contrasenna.length;i++)
-                {
-                    if(contrasenna.charCodeAt(i) >= 65 && contrasenna.charCodeAt(i) <= 90)
-                    {
-                        mayuscula = true;
-                    }
-                    else if(contrasenna.charCodeAt(i) >= 97 && contrasenna.charCodeAt(i) <= 122)
-                    {
-                        minuscula = true;
-                    }
-                    else if(contrasenna.charCodeAt(i) >= 48 && contrasenna.charCodeAt(i) <= 57)
-                    {
-                        numero = true;
-                    }
-                    else
-                    {
-                        caracter_raro = true;
-                    }
-                }
-                if(mayuscula == true && minuscula == true && caracter_raro == true && numero == true)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }*/
-
-
-
-    //espacios en blanco
-    /*var espacios = false;
-    var cont = 0;
-    
-    while (!espacios && (cont < p1.length)) {
-      if (p1.charAt(cont) == " ")
-        espacios = true;
-      cont++;
-    }
-       
-    if (espacios) {
-      alert ("La contraseña no puede contener espacios en blanco");
-      return false;
-    } 
-     */
-    validaespacio(p1, p2) {
-        if (p1.length == 0 || p2.length == 0) {
-            alert("Los campos de la password no pueden quedar vacios");
-            return false;
-        }
-    }
-    contrasigaules(p1, p2) {
-        if (p1 != p2) {
-            alert("Las passwords deben de coincidir");
-            return false;
-        } else {
-            alert("Todo esta correcto");
-            return true;
-        }
-    }
 
     handleSubmit = (event) => {
 
         event.preventDefault()
 
+if (this.state.password !== this.state.password2) {
+            alert("las contraseñas no son iguales ")
+        } else {
         db.collection("Usuarios").doc(this.state.Identidad).set({
             Identidad: this.state.Identidad,
             Nombre: this.state.Nombre,
@@ -183,7 +101,6 @@ class SingIn extends React.Component {
             Telefono: this.state.Telefono,
 
         }).then(() => {
-            console.log("Agregado a la base de datos ")
         });
 
         let email = this.state.email
@@ -191,14 +108,12 @@ class SingIn extends React.Component {
 
         auth.createUserWithEmailAndPassword(email, password)
             .then((user) => {
-                console.log("Agrego a la base auth")
             })
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
-                console.log(errorMessage)
             });
-
+        }
     }
 
 
@@ -210,7 +125,6 @@ class SingIn extends React.Component {
         if (user) {
             inputEmail = <input id="email" type="email" name="email" minlengt="12" value={this.state.email} disabled className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />            
         } else {
-            console.log("no hay usuario ahoritAAAa")    
             inputEmail = <input id="email" type="email" name="email" minlengt="12" onChange={this.handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />              
             contraseña = (<>
                                     <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Confirmar Contraseña</label>
@@ -218,7 +132,7 @@ class SingIn extends React.Component {
                                 </>)
             confirmarContra = <>
                                 <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Contraseña</label>
-                                <input id="Cpassword" type="password" minlengt="8" name="Cpassword" onChange={this.handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                <input id="Cpassword" type="password" minlengt="8" name="Cpassword" onChange={this.handleconfirma} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                             </>
         }
 
@@ -234,7 +148,7 @@ class SingIn extends React.Component {
                                 <div className="flex justify-between gap-3">
                                     <span className="w-1/2">
                                         <label for="Nombre" className="block text-xs font-semibold text-gray-600 uppercase">Nombre</label>
-                                        <input type="name" id="Nombre" disableUnderline onChange={this.handleNombre} value={this.state.Nombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                        <InputMask mask="aaaaaaaaaaaaaaa"type="name" id="Nombre" disableUnderline onChange={this.handleNombre} value={this.state.Nombre} name="Nombre" placeholder="Juan" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     </span>
                                     <span className="w-1/2">
                                         <label for="Apellido" className="block text-xs font-semibold text-gray-600 uppercase">Apellido</label>
