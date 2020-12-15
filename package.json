@@ -17,6 +17,7 @@
     "react-responsive-carousel": "^3.2.10",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "react-star-ratings-component": "^1.0.1",
     "react-transition-group": "^1.2.1",
     "web-vitals": "^0.2.4"
   },
