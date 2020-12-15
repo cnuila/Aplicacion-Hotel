@@ -18,7 +18,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/" exact component={AgregarHabitaciones} />
+        <Route path="/" exact component={LandingPage} />
         <Route path="/signup" component={SignIn} />
         <Route path="/login" component={LogIn} />
         <Route path="/administracion" component={Administracion} />
