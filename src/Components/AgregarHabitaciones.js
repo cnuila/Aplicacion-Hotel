@@ -39,10 +39,18 @@ class AgregarHabitaciones extends Component{
 
     handleStateAgregados = (event) =>{
         event.preventDefault();
-        this.state.Agregados.push(this.state.elemento)
+
+        let elemento=this.state.Agregados
+
+        let valor=this.state.elemento
+
+        elemento.push(valor)
+
         this.setState({
+            Agregados:elemento,
             elemento:""
         })
+       // console.log("Nuevo estado - ",this.state.Agregados)
     }
 
     handleAgregarHabitacion = (event) =>{
@@ -58,11 +66,20 @@ class AgregarHabitaciones extends Component{
     }
 
 
-    handleDelete = (indice, elemento)=>{
-        console.log("Este es el indice - ",indice)
-        console.log("Este es el elemento - ",this.state.Agregados[indice])
-        this.state.Agregados.splice(indice, 1)
-        console.log("Este este es el estado - ",this.state.Agregados)
+    handleDelete = (value)=>{
+        let elemento=this.state.Agregados
+        let indice=elemento.indexOf(value)
+
+      //  console.log("Este es el indice - ",indice)
+      //  console.log("Este es el estado antes de borrar - ",elemento)
+     //   console.log("Elemento en una posicion - ",elemento[indice])
+
+        let valor = elemento.splice(indice, 1)
+     //   console.log("Esto es valor - ",valor)
+        this.setState({
+            Agregados:this.state.Agregados
+        })
+
     }
 
 
@@ -84,7 +101,7 @@ class AgregarHabitaciones extends Component{
                             {this.state.Agregados.map(elemento =>(   
                                 <div key={elemento}>
                                      <input defaultValue={elemento} type="text" className="inline-block w-10/12 p-3 mt-4 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"/>
-                                     <span onClick={()=>this.handleDelete(this.state.Agregados.indexOf(elemento), elemento)} className="cursor-pointer w-2/12 p-3 inline-block bg-red-500 text-center">X</span>
+                                     <span onClick={()=>this.handleDelete(elemento)} className="cursor-pointer w-2/12 p-3 inline-block bg-red-500 text-center">X</span>
                                 </div>
                             ))}
                             <button onClick={this.handleAgregarHabitacion} className="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">
