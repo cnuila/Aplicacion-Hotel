@@ -6,7 +6,8 @@ class RecuperarContra extends Component{
     constructor(){
         super()
         this.state={
-            ID:""
+            ID:"",
+            Error:""
         }
     }
 
@@ -16,15 +17,27 @@ class RecuperarContra extends Component{
         })
     }
 
+//Manejo de promesa
+
     recoverPass = () => {
         var auth = firebase.auth() 
         var email = this.state.ID
         auth.sendPasswordResetEmail(email)
-            .then(function(){
-                alert('Correo enviando con exito')
-            }, function(error){
-                alert(error);
-            })
+            .then(this.siSeEnvioElCorreo, this.noSeEnvioElCorreo)
+    }
+
+    siSeEnvioElCorreo = () =>{
+        console.log("el correo se mando")
+        this.setState({
+            Error:"El correo se envió con éxito."
+        })
+    }
+
+    noSeEnvioElCorreo = () =>{
+        console.log("el correo no se mando") 
+        this.setState({
+            Error:"El correo no fue enviado. Ingrese su correo nuevamente."
+        })
     }
 
     render(){
@@ -41,8 +54,9 @@ class RecuperarContra extends Component{
                             <div className="mt-5">
                                 <label> Ingrese su correo electrónico </label>
                                 <input type="text" placeholder="john.doe@company.com" onChange = {this.handleID} className="block w-full p-2 border rounded border-gray-500 mt-2"></input>
+                                <p className="text-red-500 mt-3 font-bold">{this.state.Error}</p>
                             </div>
-                            <div className="mt-10">
+                            <div className="mt-8">
                                 <input type="submit" value="Recuperar Contraseña" onClick= {this.recoverPass} className="py-3 bg-green-500 text-white w-full rounded hover:bg-green-600"></input>
                             </div>
                         </form>
