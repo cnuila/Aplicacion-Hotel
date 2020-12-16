@@ -6,13 +6,14 @@ export default function Lista() {
 
     const [listaClientes, setLista] = useState([])
     const [cargando, setCargando] = useState(true);
-    const [ultimo, setUltimo] = useState()
+    const [ultimo, setUltimo] = useState({})
 
     const handleScroll = event => {
         const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
         var bottom = scrollHeight - scrollTop;
         if (Math.floor(bottom) === clientHeight || Math.ceil(bottom) === clientHeight) {
-            console.log("Toco fondooooooooooooo");
+            console.log("entre")
+            setCargando(true)
             nextPage(ultimo)
         }
     }
@@ -20,20 +21,20 @@ export default function Lista() {
     function nextPage(ultimo) {
         console.log("nextPage");
         console.log("ultimo: ", ultimo);
-        let query = db.collection("Usuarios").orderBy("Nombre", "asc").startAfter(ultimo).limit(5)
+        let query = db.collection("Usuarios").orderBy("Nombre").startAfter(ultimo).limit(10)
         mostrarQuery(query)
     }
 
     const mostrarQuery = async (query) => {
         console.log("array viejo: ", listaClientes);
-        setCargando(true)
         query.onSnapshot((querySnapshot) => {
             const clientes = []
             querySnapshot.forEach((doc) => {
                 clientes.push({ ...doc.data(), id: doc.id })
             });
-            setLista((prev) => [...prev, ...clientes])
-            const last = clientes.slice(-1);
+            setLista(listaClientes.concat(clientes))            
+            const last = querySnapshot.docs[querySnapshot.docs.length - 1]
+            console.log(last)
             setUltimo(last)
             console.log("array nuevo: ", clientes);
         })
@@ -41,18 +42,20 @@ export default function Lista() {
 
     }
 
+    const getClientes = async () => {
+        let query = db.collection("Usuarios").orderBy("Nombre").limit(20)
+        mostrarQuery(query)
+    }
 
     useEffect(() => {
-        console.log("Mounted");
-        let query = db.collection("Usuarios").orderBy("Nombre")
-        mostrarQuery(query)
+        getClientes()
     }, [])
 
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
-                <div className="col-span-1 flex flex-col max-h-screen min-h-screen rounded-l-sm p-2 overflow-y-auto divide-y divide-gray-500 divide-opacity-50">
-                    <div className="bg-gray-300 sticky top-0 opacity-95 rounded-t-md mx-1 mt-1 p-3 text-center font-bold text-lg">
+                <div className="col-span-1 flex flex-col max-h-screen min-h-screen rounded-l-sm p-2 overflow-y-auto divide-y divide-gray-500 divide-opacity-50" onScroll={handleScroll}>
+                    <div className="bg-gray-300 sticky z-10 opacity-95 top-0 rounded-t-md mx-1 mt-1 p-3 text-center font-bold text-lg">
                         Clientes
                     </div>
 
