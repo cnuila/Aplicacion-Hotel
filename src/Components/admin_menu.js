@@ -10,6 +10,7 @@ import ListaClientes from './Administración/ListaClientes'
 import Navbar from './Navbar'
 import { storage } from '../firebase';
 import {useDropzone} from 'react-dropzone';
+import firebase from 'firebase'
 
 const AdminMenu=function() {
   const [isClosed, setClosed] = React.useState(false)
@@ -253,6 +254,14 @@ function Habitaciones(props){
       </div>
     </div>
   )
+}
+
+function EliminarUsuario(Id){
+  firebase.firestore().collection('Usuarios').doc(Id).delete().then(function(){
+    console.log("Cliente eliminado.");
+  }).catch(function(error) {
+    console.error("Error al eliminar cliente: ", error);
+  });
 }
 
 export default AdminMenu;
