@@ -1,6 +1,7 @@
 import { PreviousMap } from 'postcss';
 import React, { useState, useEffect } from 'react'
 import { db } from '../../firebase'
+import firebase from 'firebase'
 
 export default function Lista() {
 
@@ -63,7 +64,7 @@ export default function Lista() {
                         return (
                             <div className="mx-1 p-4 text-xs font-semibold hover:bg-gray-200 relative">
                                 {cliente.Nombre} {cliente.Apellido}
-                                <button className="ml-4 p-1 bg-red-400 inset-y-0 right-0 absolute inset-y-3 right-3"> Eliminar </button>
+                                <button className="ml-4 p-1 bg-red-400 inset-y-0 right-0 absolute inset-y-3 right-3" onClick={() => {if(window.confirm('Seguro que desea eliminar este usuario?')){EliminarUsuario(cliente.Identidad)};}}> Eliminar </button>
                             </div>
                         )
                     })}
@@ -91,3 +92,11 @@ export default function Lista() {
         </div>
     )
 }
+
+function EliminarUsuario(Id){
+    firebase.firestore().collection('Usuarios').doc(Id).delete().then(function(){
+      console.log("Cliente eliminado.");
+    }).catch(function(error) {
+      console.error("Error al eliminar cliente: ", error);
+    });
+  }
