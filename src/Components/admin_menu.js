@@ -152,7 +152,7 @@ function Restaurante() {
 
 function Servicios() {
   return (
-    <ModServicios Id="asd"/>
+    <ModServicios Id="prueba1"/>
   )
 }
 

@@ -103,12 +103,13 @@ class ModServicios extends Component{
                 <div className="grid min-h-screen place-items-center">
                     <div className="w-3/4 p-12 bg-white">
                         <h1 className="text-xl font-semibold text-center">Información sobre el servicio</h1>
-                        <form className="mt-6">                       
+                        <form  onSubmit={this.handleAgregarServicios} className="mt-6">                       
                             <label className="block mt-2 text-sm font-semibold text-gray-600 uppercase">Nombre del servicio</label>
-                            <input type="text" defaultValue={this.state.Nombre} onChange={this.handleNombre} name="nombre" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                            <input type="text" id="nombre" onChange={this.handleNombre} name="nombre" defaultValue={this.state.Nombre} placeholder="Salón de eventos" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                             <label className="block mt-2 text-sm font-semibold text-gray-600 uppercase">Precio del servicio</label>
-                            <input type="number" defaultValue={this.state.Precio} onChange={this.handlePrecio} name="Precio" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                            <input type="number" id="precio" onChange={this.handlePrecio} name="Precio" defaultValue={this.state.Precio} placeholder="Lps.1500" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                             <label className="block mt-8 text-sm font-semibold text-gray-600 uppercase">Detalles</label>
+                            <input type="text" id="detalles" value={this.state.elemento} onChange={this.handleDetalles} name="Detalles" placeholder="Incluye decoraciones" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"/>
                             <div className="w-full">
                               <button onClick={this.handleStateDetalles} className="text-white font-bold p-4 rounded bg-blue-900 hover:bg-indigo-700 px-3 py-2 mt-4">Agregar detalle</button>
                             </div>
