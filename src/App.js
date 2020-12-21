@@ -3,6 +3,7 @@ import LogIn from './Components/LogIn/LogIn'
 import SignIn from './Components/LogIn/SignIn'
 import Administracion from './Components/admin_menu'
 import LandingPage from "./Components/LandingPage"
+import AgregarHabitaciones from "./Components/AgregarHabitaciones"
 import Listar from "./Components/Listar"
 import RecuperarContraseña from './Components/LogIn/RecuperarContra'
 import Servicos from './Components/Servicios'
@@ -28,7 +29,7 @@ function App() {
         <Route path="/habitaciones" component={Habitaciones} />
         <Route path="/restaurante" component={Restaurante} />
         <Route path="/conferencias" component={Conferencias}/>
-        <Route path="/reseña" component={Comentario}/>
+
       </Switch>
     </Router>
   );
