@@ -1,9 +1,9 @@
 import React from 'react'
 import { Component } from 'react'
 import { db } from '../firebase'
+import SubirArchivos from './SubirArchivos'
 
 class AgregarHabitaciones extends Component{
-
 
     constructor(){
         super()
@@ -82,7 +82,6 @@ class AgregarHabitaciones extends Component{
 
     }
 
-
     render(){
         return(
                 <div className="grid min-h-screen place-items-center">
@@ -98,12 +97,17 @@ class AgregarHabitaciones extends Component{
                             <div className="w-full">
                               <button onClick={this.handleStateAgregados} className="bg-green-400 px-3 py-2 mt-4">Agregar complemento</button>
                             </div>
+
                             {this.state.Agregados.map(elemento =>(   
                                 <div key={elemento}>
                                      <input defaultValue={elemento} type="text" className="inline-block w-10/12 p-3 mt-4 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"/>
                                      <span onClick={()=>this.handleDelete(elemento)} className="cursor-pointer w-2/12 p-3 inline-block bg-red-500 text-center">X</span>
                                 </div>
                             ))}
+                            <div class="py-6"/>
+                            <div>
+                                <SubirArchivos/>
+                            </div>
                             <button onClick={this.handleAgregarHabitacion} className="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">
                                 Agregar Habitación
                             </button>
@@ -111,12 +115,7 @@ class AgregarHabitaciones extends Component{
                     </div>
                 </div>
         )
-    }
-
-
-
-
-    
+    }    
 }
 
 export default AgregarHabitaciones
