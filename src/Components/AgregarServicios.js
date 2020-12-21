@@ -72,10 +72,6 @@ class AgregarServicios extends Component{
         this.alerta(), ()=>{
            console.log("No agrego a servicios")
        });
-        var n1 = (document.getElementById("nombre").value);
-        var n2 = parseInt(document.getElementById("precio").value);
-        n1.value = "";
-        n2.value = 0;
     }
     
     handleDelete = (value)=>{
