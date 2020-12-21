@@ -116,11 +116,12 @@ class ModServicios extends Component{
                             {this.state.Detalles.map(elemento =>(   
                                 <div key={elemento}>
                                      <input defaultValue={elemento} type="text" className="inline-block w-10/12 p-3 mt-4 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required/>
-                                     <span onClick={()=>this.handleDelete(elemento)} className="cursor-pointer w-2/12 p-3 inline-block text-white bg-red-500 text-center">X</span>
+                                     <span onClick={()=>this.handleDelete(elemento)} className="cursor-pointer w-2/12 p-3 inline-block bg-red-500 text-center">X</span>
                                 </div>
                             ))}
-                            <button  onClick={this.handleModServicios} className="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Guardar Cambios</button>
-                                
+                            <button type="submit" onClick={this.handleModServicios} className="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" >
+                                Guardar Cambios
+                            </button>  
                         </form>
                     </div>
                 </div>
