@@ -20,8 +20,9 @@ const AdminMenu = function () {
   })
 
   return (
+    <div>
+    <Navbar/>
     <Router>
-      <Navbar/>
       <div className="flex bg-gray-100">
         {(isStatic || !isClosed) && (
           <aside
@@ -120,6 +121,7 @@ const AdminMenu = function () {
         </main>
       </div>
     </Router>
+    </div>
   )
 }
 

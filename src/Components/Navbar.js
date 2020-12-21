@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase'
 import { Link } from 'react-router-dom';
 import menuIcon from '../assets/Hamburger_icon.png'
+import Dropdown from "./Dropdown";
 
 class Navbar extends Component {
     constructor() {
@@ -65,7 +66,7 @@ class Navbar extends Component {
                                     <a href="./" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200" onClick={this.cerrarSesion}>Cerrar Sesion</a>
                                 </li>
                                 <li>
-                                    <a href="./" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">{this.state.nombre}</a>
+                                    <Dropdown/>
                                 </li>
                             </ul>
                         </nav>
