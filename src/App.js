@@ -7,7 +7,7 @@ import AgregarHabitaciones from "./Components/AgregarHabitaciones"
 import Listar from "./Components/Listar"
 import RecuperarContraseña from './Components/LogIn/RecuperarContra'
 import Servicos from './Components/Servicios'
-import Habitaciones from './Components/prototipo'
+import Habitaciones from './Components/Habitaciones'
 import Restaurante from './Components/RestaurantePrincipal'
 import { AuthProvider } from './Components/Rutas Privadas/Auth';
 import PrivateRoute from "./Components/Rutas Privadas/RutaPrivada"
