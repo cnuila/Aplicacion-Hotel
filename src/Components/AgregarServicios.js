@@ -20,8 +20,10 @@ class AgregarServicios extends Component{
     }
     
     handleNombre = (event)=>{
+        var Nom = event.target.value
+        Nom = Nom.replaceAll(" ", "-")
         this.setState({
-            Nombre:event.target.value
+            Nombre: Nom,
         })
         
     }
