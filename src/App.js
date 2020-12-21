@@ -13,6 +13,8 @@ import PrivateRoute from "./Components/Rutas Privadas/RutaPrivada"
 import Conferencias from "./Components/Conferencias"
 import RecuperarContra from './Components/LogIn/RecuperarContra';
 import Reseña from "./Components/Reseña";
+import reseña from './Components/Reseña';
+import Comentario from "./Components/Comentario"
 function App() {
   return (
     <Router>
@@ -26,7 +28,7 @@ function App() {
         <Route path="/habitaciones" component={Habitaciones} />
         <Route path="/restaurante" component={Restaurante} />
         <Route path="/conferencias" component={Conferencias}/>
-        
+        <Route path="/reseña" component={Comentario}/>
       </Switch>
     </Router>
   );
