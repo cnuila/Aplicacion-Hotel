@@ -72,7 +72,7 @@ export default function Landing(){
                 <img class="mt-2" src={img_cuartos} alt="Imagen cuartos" />
                 <div class="grid grid-cols-1">
                     <button class="mt-2 justify-self-center bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-4 rounded">
-                        <Link to="/habitaciones" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">MÁS INFORMACIÓN</Link>
+                        <Link to="/habitaciones">MÁS INFORMACIÓN</Link>
                     </button>
                 </div>
             </div>
@@ -106,7 +106,7 @@ export default function Landing(){
                         </p>
                         <div class="flex justify-center">
                             <button class="mt-5 mb-2 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
-                            <Link to="/restaurante" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-indigo-400">MÁS INFORMACIÓN</Link>
+                            <Link to="/restaurante">MÁS INFORMACIÓN</Link>
                             </button>
                         </div>
                     </div>
@@ -125,7 +125,7 @@ export default function Landing(){
                         </p>
                         <div class="flex justify-center">
                             <button class="mt-5 mb-4 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
-                                MÁS INFORMACIÓN
+                                <Link to="/servicios">MÁS INFORMACIÓN</Link>
                             </button>
                         </div> 
                     </div>

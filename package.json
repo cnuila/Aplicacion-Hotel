@@ -21,6 +21,7 @@
     "react-scripts": "4.0.1",
     "react-star-ratings-component": "^1.0.1",
     "react-transition-group": "^1.2.1",
+    "sweetalert": "^2.1.2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

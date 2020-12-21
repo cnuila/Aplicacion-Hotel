@@ -12,6 +12,7 @@ import { storage } from '../firebase';
 import {useDropzone} from 'react-dropzone';
 import firebase from 'firebase'
 import AgregarHabitaciones from './AgregarHabitaciones'
+import AgregarServicios from './AgregarServicios';
 
 const AdminMenu = function () {
   const [isClosed, setClosed] = React.useState(false)
@@ -158,11 +159,7 @@ function Restaurante() {
 
 function Servicios() {
   return (
-    <div>
-      <h1>
-        this is services
-      </h1>
-    </div>
+    <AgregarServicios />
   )
 }
 
