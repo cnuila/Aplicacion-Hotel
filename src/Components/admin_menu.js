@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,6 +11,8 @@ import Navbar from './Navbar'
 import { storage } from '../firebase';
 import {useDropzone} from 'react-dropzone';
 import firebase from 'firebase'
+import AgregarHabitaciones from './AgregarHabitaciones'
+import AgregarServicios from './AgregarServicios';
 
 const AdminMenu = function () {
   const [isClosed, setClosed] = React.useState(false)
@@ -37,16 +39,19 @@ const AdminMenu = function () {
               <nav>
                 <ul>
                   <li className="p-3 hover:bg-blue-900" >
-                    <Link to="/Admin/Inicio" className="btn btn-primary text-white">Inicio</Link>
+                    <Link to="/administracion/Inicio" className="btn btn-primary text-white">Inicio</Link>
                   </li>
                   <li className="p-3 hover:bg-blue-900" >
-                    <Link to="/Admin/Clientes" className="btn btn-primary text-white">Clientes</Link>
+                    <Link to="/administracion/Clientes" className="btn btn-primary text-white">Clientes</Link>
                   </li>
                   <li className="p-3 hover:bg-blue-900">
-                    <Link to="/Admin/Restaurante" className="btn btn-primary text-white">Restaurante</Link>
+                    <Link to="/administracion/Restaurante" className="btn btn-primary text-white">Restaurante</Link>
                   </li>
                   <li className="p-3 hover:bg-blue-900">
-                    <Link to="/Admin/Servicios" className="btn btn-primary text-white">Servicios</Link>
+                    <Link to="/administracion/Servicios" className="btn btn-primary text-white">Servicios</Link>
+                  </li>
+                  <li className="p-3 hover:bg-blue-900">
+                    <Link to="/administracion/Habitaciones" className="btn btn-primary text-white">Habitaciones</Link>
                   </li>
                 </ul>
               </nav>
@@ -105,17 +110,20 @@ const AdminMenu = function () {
           </header>
 
           <Switch>
-            <Route path="/Admin/Inicio">
+            <Route path="/administracion/Inicio">
               <Inicio />
             </Route>
-            <Route path="/Admin/Clientes">
+            <Route path="/administracion/Clientes">
               <Clientes />
             </Route>
-            <Route path="/Admin/Restaurante">
+            <Route path="/administracion/Restaurante">
               <Restaurante />
             </Route>
-            <Route path="/Admin/Servicios">
+            <Route path="/administracion/Servicios">
               <Servicios />
+            </Route>
+            <Route path="/administracion/Habitaciones">
+              <Habitaciones />
             </Route>
           </Switch>
         </main>
@@ -153,11 +161,13 @@ function Restaurante() {
 
 function Servicios() {
   return (
-    <div>
-      <h1>
-        this is services
-      </h1>
-    </div>
+    <AgregarServicios />
+  )
+}
+
+function Habitaciones() {
+  return(
+    <AgregarHabitaciones/>
   )
 }
 

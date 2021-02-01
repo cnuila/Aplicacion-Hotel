@@ -7,13 +7,15 @@ import AgregarHabitaciones from "./Components/AgregarHabitaciones"
 import Listar from "./Components/Listar"
 import RecuperarContraseña from './Components/LogIn/RecuperarContra'
 import Servicos from './Components/Servicios'
-import Habitaciones from './Components/prototipo'
+import Habitaciones from './Components/Habitaciones'
 import Restaurante from './Components/RestaurantePrincipal'
 import { AuthProvider } from './Components/Rutas Privadas/Auth';
 import PrivateRoute from "./Components/Rutas Privadas/RutaPrivada"
 import Conferencias from "./Components/Conferencias"
 import RecuperarContra from './Components/LogIn/RecuperarContra';
 import Reseña from "./Components/Reseña";
+import reseña from './Components/Reseña';
+import Comentario from "./Components/Comentario"
 function App() {
   return (
     <Router>
@@ -27,7 +29,7 @@ function App() {
         <Route path="/habitaciones" component={Habitaciones} />
         <Route path="/restaurante" component={Restaurante} />
         <Route path="/conferencias" component={Conferencias}/>
-        
+
       </Switch>
     </Router>
   );
