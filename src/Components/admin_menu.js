@@ -171,13 +171,7 @@ function Habitaciones() {
   )
 }
 
-function EliminarUsuario(Id){
-  firebase.firestore().collection('Usuarios').doc(Id).delete().then(function(){
-    console.log("Cliente eliminado.");
-  }).catch(function(error) {
-    console.error("Error al eliminar cliente: ", error);
-  });
-}
+
 
 export default AdminMenu;
 
