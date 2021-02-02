@@ -2,6 +2,7 @@ import React from 'react'
 import { Component } from 'react'
 import { db } from '../firebase'
 import swal from 'sweetalert'
+import SubirArchivos from './SubirArchivos'
 
 class AgregarServicios extends Component{
 
@@ -109,6 +110,10 @@ class AgregarServicios extends Component{
                                      <span onClick={()=>this.handleDelete(elemento)} className="cursor-pointer w-2/12 p-3 inline-block bg-red-500 text-center">X</span>
                                 </div>
                             ))}
+                            <div class="py-6"/>
+                            <div>
+                                <SubirArchivos/>
+                            </div>
                             <button type="submit" className="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" >
                                 Agregar Servicio
                             </button>   
