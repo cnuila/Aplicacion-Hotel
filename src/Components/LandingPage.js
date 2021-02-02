@@ -37,7 +37,7 @@ export default function Landing(){
                     <img src={img_carousel_3} alt="Tercera imagen"/>
                 </div>
             </Carousel>
-            <div class="container mx-auto p-2">
+            <div class="container mx-auto xl:mx-8 p-2">
                 <h1 class="text-red-900 text-4xl text-center font-semibold">Hotel Posada del Ángel</h1>
                 <div class="grid md:grid-cols-4 gap-4 sm:grid-col-2 ">
                     <div class="mt-5">
@@ -66,7 +66,7 @@ export default function Landing(){
                     </div>
                 </div>
             </div>
-            <div class="mt-2 container mx-auto p-2 bg-gray-900">
+            <div class="mt-2 container mx-auto xl:mx-8 p-2 bg-gray-900">
                 <h1 class="mt-1 text-yellow-300 text-xl text-center font-semibold">Ofrecemos</h1>
                 <h1 class="text-white text-4xl text-center font-semibold">Habitaciones sencillas, dobles y triples</h1>
                 <img class="mt-2" src={img_cuartos} alt="Imagen cuartos" />
@@ -76,7 +76,7 @@ export default function Landing(){
                     </button>
                 </div>
             </div>
-            <div class="mt-9 container mx-auto bg-gray-300">
+            <div class="mt-9 container mx-auto xl:mx-8 bg-gray-300">
                 <div class="grid md:grid-cols-2 sm:grid-cols-1">
                     <div class="flex-wrap">
                         <img class="mb-1 h-full w-full" src={img_salon} alt="Imagen del salón" />
@@ -94,7 +94,7 @@ export default function Landing(){
                     </div>
                 </div>
             </div>
-            <div class="mt-9 container mx-auto bg-gray-300">
+            <div class="mt-9 container mx-auto xl:mx-8 bg-gray-300">
                 <div class="grid md:grid-cols-3 sm:grid-cols-1">
                     <div class="flex-wrap">
                         <img class="mb-1 h-full w-full" src={img_comida_1} alt="Imagen de comida" />
@@ -115,7 +115,7 @@ export default function Landing(){
                     </div>
                 </div>
             </div>
-            <div class="mt-9 container mx-auto bg-gray-300">
+            <div class="mt-9 container mx-auto xl:mx-8 bg-gray-300">
                 <div class="grid md:grid-cols-2 sm:grid-cols-1">
                     <div class="mt-2">
                         <h1 class="mt-4 text-black text-3xl sm:text-md text-center font-semibold">Servicios</h1>
@@ -134,7 +134,7 @@ export default function Landing(){
                     </div>
                 </div>
             </div>
-            <div class="mt-9 mb-9 container mx-auto p-2 bg-gray-900">
+            <div class="mt-9 mb-9 container mx-auto xl:mx-8 p-2 bg-gray-900">
                 <h1 class="mt-1 text-yellow-300 text-xl text-center font-semibold">Ubicación</h1>
                 <h1 class="text-white text-4xl text-center font-semibold mb-4">¿Cómo nos puedes encontrar?</h1>
                 <Iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1934.3074285689665!2d-87.04248922823774!3d14.158726185191815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6faf3855555555%3A0x23df6e20819ac5af!2sPosada%20del%20Angel!5e0!3m2!1ses-419!2shn!4v1606704703518!5m2!1ses-419!2shn" 
@@ -142,7 +142,7 @@ export default function Landing(){
                 </Iframe>
             </div>
             <nav class="bg-gray-900">
-                <div class="container mx-auto">
+                <div class="container">
                     <div class="flex flex-wrap overflow-hidden sm:-mx-1 md:-mx-px lg:-mx-2 xl:-mx-2">
                         <div class="w-full overflow-hidden sm:my-1 sm:px-1 sm:w-1/2 md:my-px md:px-px md:w-1/2 lg:my-2 lg:px-2 lg:w-1/4 xl:my-2 xl:px-2 xl:w-1/4 pb-6">
                             <img class="mb-1" src={img_logo}  alt="Logo" />
