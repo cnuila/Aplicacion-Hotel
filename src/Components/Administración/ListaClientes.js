@@ -1,7 +1,5 @@
-import { PreviousMap } from 'postcss';
 import React, { useState, useEffect } from 'react'
 import { db } from '../../firebase'
-import firebase from 'firebase'
 
 export default function Lista() {
 
@@ -18,7 +16,7 @@ export default function Lista() {
     const handleScroll = event => {
         if (ultimo !== undefined) {
             const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-            var bottom = scrollHeight - scrollTop;
+            let bottom = scrollHeight - scrollTop;
             if (Math.floor(bottom) === clientHeight || Math.ceil(bottom) === clientHeight) {
                 setCargando(true)
                 nextPage(ultimo)
@@ -74,19 +72,6 @@ export default function Lista() {
         setCliente(cliente)        
     }
 
-    const eliminarUsuario = Id => {
-        firebase.firestore().collection('Usuarios').doc(Id).delete().then(function () {
-            setNombre("Nombre")
-            setApellido("Apellido")
-            setEmail("john.va@va.org")
-            setIdentidad("0801-2000-08813")
-            setTelefono("9999-9999")
-            setCliente({})            
-        }).catch(function (error) {
-            console.error("Error al eliminar cliente: ", error);
-        });
-    }
-
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -128,7 +113,7 @@ export default function Lista() {
                             <h2 className="text-blue-500 font-semibold cursor-default">Teléfono</h2>
                             <h2 className="text-black">{telefono}</h2>
                         </div>
-                        <button className="mt-4 py-2 px-4 bg-red-600 rounded-md text-gray-100" onClick={() => { if (window.confirm('Seguro que desea eliminar este usuario?')) { eliminarUsuario(clienteSeleccionado.Identidad) }; }}> Eliminar Cliente </button>
+                        <button className="mt-4 py-2 px-4 bg-red-600 rounded-md text-gray-100"> Eliminar Cliente </button>
                     </div>
                 </div>
             </div>

@@ -81,20 +81,18 @@ export default function SignIn({ history }) {
             alert("las contraseñas no son iguales ")
         } else {
             let user = auth.currentUser;
-            let UID;
-            if (user) {
-                UID = user.uid;
-            } else {
+            if (!user) {
                 let email = info.email
                 let password = info.password
 
                 await auth.createUserWithEmailAndPassword(email, password)
-                    .then(({ user }) => {
-                        UID = user.uid
+                    .then(() => {
                     })
                     .catch((error) => {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
+                        let errorCode = error.code;
+                        let errorMessage = error.message;
+                        console.log(errorCode)
+                        console.log(errorMessage)
                     });
             }
             db.collection("Usuarios").doc(info.Identidad).set({
@@ -103,7 +101,6 @@ export default function SignIn({ history }) {
                 Apellido: info.Apellido,
                 Email: info.email,
                 Telefono: info.Telefono,
-                UID,
             }).then(() => {
                 history.push("/");
             });

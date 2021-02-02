@@ -89,7 +89,7 @@ export default function LogIn({ history }) {
                             </div>
 
                             <div className="grid grid-cols-2 mt-4 place-items-center">
-                                <div className="flex col-span-2 bg-black hover:bg-gray-900 m-3 h-12 w-full items-center shadow-lg rounded cursor-pointer">
+                                <div className="flex col-span-2 bg-black hover:bg-gray-900 m-3 h-12 w-full items-center shadow-lg rounded cursor-pointer focus:outline-none">
                                     <button type="submit" className="mx-1 text-center w-full text-sm font-semibold text-white text-opacity-90">
                                         Iniciar Sesión
                                     </button>
