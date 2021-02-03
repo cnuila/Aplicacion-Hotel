@@ -11,7 +11,7 @@ import Navbar from './Navbar'
 import { storage } from '../firebase';
 import {useDropzone} from 'react-dropzone';
 import firebase from 'firebase'
-import AgregarHabitaciones from './AgregarHabitaciones'
+import AgregarHabitaciones from './AgregarItems/AgregarHabitaciones'
 import AgregarServicios from './AgregarServicios';
 
 const AdminMenu = function () {

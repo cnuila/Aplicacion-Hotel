@@ -3,7 +3,6 @@ import LogIn from './Components/LogIn/LogIn'
 import SignIn from './Components/LogIn/SignIn'
 import Administracion from './Components/admin_menu'
 import LandingPage from "./Components/LandingPage"
-import AgregarHabitaciones from "./Components/AgregarHabitaciones"
 import Listar from "./Components/Listar"
 import RecuperarContraseña from './Components/LogIn/RecuperarContra'
 import Servicos from './Components/Servicios'
