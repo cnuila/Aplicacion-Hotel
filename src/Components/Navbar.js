@@ -37,8 +37,11 @@ class Navbar extends Component {
     render() {
         let user = firebase.auth().currentUser;
         let inicioSesion;
+        let miCuenta;
         if (!user) {
-            inicioSesion = <li><Link to="/login" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Inicio de Sesión</Link></li>
+            inicioSesion = <li><Link to="/login" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Inicio de Sesión</Link></li>            
+        } else {
+            miCuenta = <li><Link to="/miInfo" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Mi Cuenta</Link></li>
         }
         return (
             <>
@@ -56,6 +59,7 @@ class Navbar extends Component {
                         <nav>
                             <ul class="lg:flex items-center justify-between text-base text-white pt-4 lg:pt-0">
                                 {inicioSesion}
+                                {miCuenta}
                                 <li>
                                     <Link to="/servicios" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Servicios</Link>
                                 </li>

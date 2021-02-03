@@ -4,7 +4,7 @@ import SignIn from './Components/LogIn/SignIn'
 import Administracion from './Components/admin_menu'
 import LandingPage from "./Components/LandingPage"
 import AgregarHabitaciones from "./Components/AgregarHabitaciones"
-import Listar from "./Components/Listar"
+import ListarUsuario from "./Components/ListarUsuario"
 import RecuperarContraseña from './Components/LogIn/RecuperarContra'
 import Servicos from './Components/Servicios'
 import Habitaciones from './Components/Habitaciones'
@@ -26,6 +26,7 @@ function App() {
         <Route path="/administracion" component={Administracion} />
         <Route path="/recuperarContra" component={RecuperarContraseña} />
         <Route path="/servicios" component={Servicos} />
+        <Route path="/miInfo" exact component={ListarUsuario}/>
         <Route path="/habitaciones" component={Habitaciones} />
         <Route path="/restaurante" component={Restaurante} />
         <Route path="/conferencias" component={Conferencias}/>
