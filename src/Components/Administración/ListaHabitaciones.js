@@ -1,0 +1,122 @@
+import React, { useState, useEffect } from 'react'
+import AgregarHabitaciones from './AgregarHabitaciones'
+import { db } from '../../firebase'
+
+export default function Lista() {
+
+    const estadoInicial = {
+        Nombre: "Nombre de la Habitación",
+        Precio: 1000,
+        Complementos: [{ id: 100, text: "Camas Dobles" }, { id: 200, text: "TV 55 pulgadas" }],
+        Url: undefined,
+    }
+
+    const [habitaciones, setHabitaciones] = useState([])
+    const [habitacionSeleccionada, setHabitacionSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+    const [mostrarAgregar, setMostrarAgregar] = useState(false)
+
+    const getHabitaciones = async () => {
+        await db.collection("Habitaciones").orderBy("Nombre").get().then(querySnapshot => {
+            const habitaciones = []
+            querySnapshot.forEach(doc => {
+                habitaciones.push({ ...doc.data(), id: doc.id })
+            })
+            setHabitaciones(habitaciones)
+        })
+    }
+
+    useEffect(() => {
+        getHabitaciones()
+    }, [])
+
+    const handleHabitacion = habitacion => {
+        const { Nombre, Precio, Complementos, Url } = habitacion
+        setHabitacionSeleccionada({
+            Nombre,
+            Precio,
+            Complementos,
+            Url,
+        })
+        setMostrarAgregar(false)
+    }
+
+    const handleOnClickAgregar = () => {
+        setMostrarAgregar(true)
+        setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+    }
+
+    const seAgregoHabitacion = () => {
+        setMostrarAgregar(false)
+    }
+
+    const { Nombre, Precio, Complementos, Url } = habitacionSeleccionada
+    return (
+        <div className="max-h-screen transform scale-0 sm:scale-100">
+            <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
+                <div className="col-span-1 flex flex-col max-h-screen min-h-screen rounded-l-sm overflow-y-auto divide-y divide-gray-500 divide-opacity-50">
+                    <div className="bg-gray-300 sticky z-10 opacity-95 top-0 rounded-t-md mx-1 mt-1 p-3">
+                        <div className="relative grid text-center">
+                            <div className="absolute p-1 place-self-end">
+                                <svg className="fill-current mx-1 mt-1 cursor-pointer text-blue-500 hover:text-blue-600 h-5 w-5 place-self-center" onClick={handleOnClickAgregar} viewBox="0 0 426.667 426.667" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M405.332 192H234.668V21.332C234.668 9.559 225.109 0 213.332 0 201.559 0 192 9.559 192 21.332V192H21.332C9.559 192 0 201.559 0 213.332c0 11.777 9.559 21.336 21.332 21.336H192v170.664c0 11.777 9.559 21.336 21.332 21.336 11.777 0 21.336-9.559 21.336-21.336V234.668h170.664c11.777 0 21.336-9.559 21.336-21.336 0-11.773-9.559-21.332-21.336-21.332zm0 0" />
+                                </svg>
+                            </div>
+                            <h2 className="font-bold text-lg">Habitaciones</h2>
+                        </div>
+                    </div>
+
+                    {habitaciones.map((habitacion, index) => {
+                        return (habitacionSeleccionada.Nombre === habitacion.Nombre ?
+                            (<div key={index} className="mx-1 p-4 text-xs text-white font-semibold bg-gray-700 relative cursor-pointer" onClick={() => handleHabitacion(habitacion)}>
+                                {habitacion.Nombre}
+                            </div>)
+                            :
+                            (<div key={index} className="mx-1 p-4 text-xs font-semibold hover:bg-gray-200 relative cursor-pointer" onClick={() => handleHabitacion(habitacion)}>
+                                {habitacion.Nombre}
+                            </div>)
+                        )
+                    })}
+                </div>
+                <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
+                    {mostrarAgregar
+                        ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion}/>)
+                        : (
+                            <div className="h-full w-10/12 px-20 py-8">
+                                <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+                                <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                    <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
+                                    <h2 className="text-black pl-4">{Precio}</h2>
+                                </div>
+                                <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                    <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
+                                    {
+                                        Complementos.map(complemento => {
+                                            const { id, text } = complemento
+                                            return <h2 className="text-black pl-4">{id} | {text}</h2>
+                                        })
+                                    }
+                                </div>
+                                {Url !== undefined
+                                    ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
+                                        <div className="grid grid-cols-2 place-items-center">
+                                            {
+                                                Url.map(foto => {
+                                                    return (
+                                                        <img
+                                                            className="h-40 w-40 p-2 object-cover rounded-xl"
+                                                            alt="Habitacion"
+                                                            src={foto}
+                                                        />)
+                                                })
+                                            }
+                                        </div>
+                                    </div>)
+                                    : <></>}
+                            </div>)
+                    }
+                </div>
+            </div>
+        </div>
+    )
+}

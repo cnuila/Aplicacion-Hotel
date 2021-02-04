@@ -20,7 +20,6 @@ export default function SignIn({ history }) {
 
     useEffect(() => {
         let user = auth.currentUser;
-        console.log(user)
         if (user && user.providerData[0].providerId === "google.com") {
             let nombreApellido = user.displayName.split(" ")
             let correo = user.email;
