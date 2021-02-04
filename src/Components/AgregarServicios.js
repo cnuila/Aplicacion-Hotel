@@ -74,6 +74,7 @@ class AgregarServicios extends Component{
         this.alerta(), ()=>{
            console.log("No agrego a servicios")
        });
+       document.getElementById("agregarForm").reset();
     }
     
     handleDelete = (value)=>{
@@ -93,7 +94,7 @@ class AgregarServicios extends Component{
                 <div className="grid min-h-screen place-items-center">
                     <div className="w-3/4 p-12 bg-white">
                         <h1 className="text-xl font-semibold text-center">Ingrese información sobre el servicio</h1>
-                        <form  onSubmit={this.handleAgregarServicios} className="mt-6">                       
+                        <form  id="agregarForm" onSubmit={this.handleAgregarServicios} className="mt-6">                       
                             <label className="block mt-2 text-sm font-semibold text-gray-600 uppercase">Nombre del servicio</label>
                             <input type="text" id="nombre" onChange={this.handleNombre} name="nombre" placeholder="Salón de eventos" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                             <label className="block mt-2 text-sm font-semibold text-gray-600 uppercase">Precio del servicio</label>
@@ -111,7 +112,7 @@ class AgregarServicios extends Component{
                             ))}
                             <button type="submit" className="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" >
                                 Agregar Servicio
-                            </button>   
+                            </button>  
                                 
                         </form>
                     </div>
