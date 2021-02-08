@@ -103,7 +103,7 @@ function AgregarHabitaciones() {
 
     const alertaSuccess = () => {
         swal({
-            text: "La Habitacion " + Nombre + " fue agregado exitosamente",
+            text: "La Habitación " + Nombre + " fue agregado exitosamente",
             icon: "success",
             button: "Aceptar"
         });
@@ -111,7 +111,7 @@ function AgregarHabitaciones() {
 
     const alertaFail = () => {
         swal({
-            text: "La Habitacion " + Nombre + " no se pudo agregar",
+            text: "La Habitación " + Nombre + " no se pudo agregar",
             icon: "error",
             button: "Aceptar"
         });
@@ -119,7 +119,7 @@ function AgregarHabitaciones() {
 
     const alertaFotos = () => {
         swal({
-            text: "La Habitacion " + Nombre + " no tiene imagenes",
+            text: "La Habitación " + Nombre + " no tiene imágenes",
             icon: "error",
             button: "Aceptar"
         });
