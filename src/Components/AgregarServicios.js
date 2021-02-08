@@ -1,134 +1,250 @@
-import React from 'react'
-import { Component } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { db } from '../firebase'
 import swal from 'sweetalert'
-import SubirArchivos from './SubirArchivos'
+import { storage } from '../firebase';
+import { useDropzone } from 'react-dropzone';
+import Items from './AgregarItems/Items'
+import Form from './AgregarItems/Form'
+import { TiMediaPlayOutline } from 'react-icons/ti';
 
-class AgregarServicios extends Component{
+function AgregarServicios() {
+
+    const [Nombre, setNombre] = useState("");
+    const [Precio, setPrecio] = useState("");
+    const [files, setFiles] = useState([]);
+    const [Url, setUrl] = useState([]);
+    const [progress, setProgress] = useState(0);
+    const [todos, setTodos] = useState([]);
 
 
-    constructor(){
-        super()
-        this.state={
-            Nombre:"",
-            Precio:"",
-            Detalles:[],
-            Fotografias:[],
-            elemento:""
+    const {
+        getRootProps,
+        getInputProps,
+        isDragActive,
+        isDragAccept,
+        isDragReject
+    } = useDropzone({
+        accept: 'image/jpeg, image/png, image/jpg', maxFiles: 5, onDrop: acceptedFiles => {
+            setFiles(acceptedFiles.map(file => Object.assign(file, {
+                preview: URL.createObjectURL(file)
+            })));
         }
+    })
 
-        
-    }
-    
-    handleNombre = (event)=>{
-        var Nom = event.target.value
-        Nom = Nom.replaceAll(" ", "-")
-        this.setState({
-            Nombre: Nom,
-        })
-        
-    }
+    const baseStyle = {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
+        borderWidth: 2,
+        borderRadius: 2,
+        borderColor: '#eeeeee',
+        borderStyle: 'dashed',
+        backgroundColor: '#fafafa',
+        color: '#bdbdbd',
+        outline: 'none',
+        transition: 'border .24s ease-in-out'
+    };
 
-    handlePrecio = (event)=>{
-        this.setState({
-            Precio:event.target.value
-        })
-        
-    }
+    const activeStyle = {
+        borderColor: '#2196f3'
+    };
 
-    handleDetalles = (event) =>{
-        this.setState({
-            elemento:event.target.value
-        })
-    }
+    const acceptStyle = {
+        borderColor: '#00e676'
+    };
 
-    handleStateDetalles = (event) =>{
-        event.preventDefault();
+    const rejectStyle = {
+        borderColor: '#ff1744'
+    };
 
-        let elemento=this.state.Detalles
+    const thumbsContainer = {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 16
+    };
 
-        let valor=this.state.elemento
+    const thumb = {
+        display: 'inline-flex',
+        borderRadius: 2,
+        border: '1px solid #eaeaea',
+        marginBottom: 8,
+        marginRight: 8,
+        width: 100,
+        height: 100,
+        padding: 4,
+        boxSizing: 'border-box'
+    };
 
-        elemento.push(valor)
+    const thumbInner = {
+        display: 'flex',
+        minWidth: 0,
+        overflow: 'hidden'
+    };
 
-        this.setState({
-            Detalles:elemento,
-            elemento:""
-        })
-    }
-    
-    alerta=()=>{
+    const img = {
+        display: 'block',
+        width: 'auto',
+        height: '100%'
+    };
+
+    const style = useMemo(() => ({
+        ...baseStyle,
+        ...(isDragActive ? activeStyle : {}),
+        ...(isDragAccept ? acceptStyle : {}),
+        ...(isDragReject ? rejectStyle : {})
+    }), [
+        isDragActive,
+        isDragReject,
+        isDragAccept
+    ]);
+
+    const alertaSuccess = () => {
         swal({
-            text: "El servicio "+ this.state.Nombre + " fue agregado exitosamente",
+            text: "El Servicio " + Nombre + " fue agregado exitosamente",
             icon: "success",
             button: "Aceptar"
         });
     }
 
-    handleAgregarServicios = (event) =>{
-       event.preventDefault();
-       db.collection("Servicios").doc(this.state.Nombre).set({
-           Nombre:this.state.Nombre,
-           Precio:this.state.Precio,
-           Detalles:this.state.Detalles
-       }).then(()=>
-        this.alerta(), ()=>{
-           console.log("No agrego a servicios")
-       });
-       document.getElementById("agregarForm").reset();
+    const alertaFail = () => {
+        swal({
+            text: "El Servicio " + Nombre + " no se pudo agregar",
+            icon: "error",
+            button: "Aceptar"
+        });
     }
+
+    const alertaFotos = () => {
+        swal({
+            text: "El Servicio" + Nombre + " no tiene imagenes",
+            icon: "error",
+            button: "Aceptar"
+        });
+    }
+
+    const handleUpload = async (event) => {
+        event.preventDefault()
+        let dirFotos = [];
+        let uploadTask = null;
+        if (files.length !== 0) {
+            for (var i = 0; i < files.length; i++) {
+                const nombreFoto = files[i].name;
+                uploadTask = await storage.ref(`servicios/${nombreFoto}`).put(files[i]);
+
+                let Links = await storage
+                    .ref("servicios")
+                    .child(nombreFoto)
+                    .getDownloadURL()
+                    .then(url => {
+                        dirFotos.push(url)
+                    });
+            }
+
+            db.collection("Servicios").doc(Nombre).set({
+                Nombre: Nombre,
+                Precio: Precio,
+                Complementos: todos,
+                Url: dirFotos
+            }).then(() =>
+                alertaSuccess(), () => {
+                    alertaFail()
+                });
+
+        } else {
+            alertaFotos()
+        }
+    };
+    //<progress value={progress} max="100" />
+
+    const thumbs = files.map(file => (
+        <div style={thumb} key={file.name}>
+            <div style={thumbInner}>
+                <img
+                    alt=""
+                    src={file.preview}
+                    style={img}
+                />
+            </div>
+        </div>
+    ));
+
+    useEffect(() => () => {
+        files.forEach(file => URL.revokeObjectURL(file.preview));
+    }, [files]);
     
-    handleDelete = (value)=>{
-        let elemento=this.state.Detalles
-        let indice=elemento.indexOf(value)
 
-        let valor = elemento.splice(indice, 1)
-        this.setState({
-            Detalles:this.state.Detalles
-        })
+    const addTodo = todo => {
+        if (!todo.text || /^\s*$/.test(todo.text)) {
+            return;
+        }
 
-    }
+        const newTodos = [todo, ...todos];
 
+        setTodos(newTodos);
+    };
 
-    render(){
-        return(
-                <div className="grid min-h-screen place-items-center">
-                    <div className="w-3/4 p-12 bg-white">
-                        <h1 className="text-xl font-semibold text-center">Ingrese información sobre el servicio</h1>
-                        <form  id="agregarForm" onSubmit={this.handleAgregarServicios} className="mt-6">                       
-                            <label className="block mt-2 text-sm font-semibold text-gray-600 uppercase">Nombre del servicio</label>
-                            <input type="text" id="nombre" onChange={this.handleNombre} name="nombre" placeholder="Salón de eventos" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                            <label className="block mt-2 text-sm font-semibold text-gray-600 uppercase">Precio del servicio</label>
-                            <input type="number" id="precio" onChange={this.handlePrecio} name="Precio" placeholder="Lps.1500" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                            <label className="block mt-8 text-sm font-semibold text-gray-600 uppercase">Detalles</label>
-                            <input type="text" id="detalles" value={this.state.elemento} onChange={this.handleDetalles} name="Detalles" placeholder="Incluye decoraciones" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"/>
-                            <div className="w-full">
-                              <button onClick={this.handleStateDetalles} className="text-white font-bold p-4 rounded bg-blue-900 hover:bg-indigo-700 px-3 py-2 mt-4">Agregar detalle</button>
+    const updateTodo = (todoId, newValue) => {
+        if (!newValue.text || /^\s*$/.test(newValue.text)) {
+            return;
+        }
+
+        setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item)));
+    };
+
+    const removeTodo = id => {
+        const removedArr = [...todos].filter(todo => todo.id !== id);
+
+        setTodos(removedArr);
+    };
+
+    const completeTodo = id => {
+        let updatedTodos = todos.map(todo => {
+            if (todo.id === id) {
+                todo.isComplete = !todo.isComplete;
+            }
+            return todo;
+        });
+        setTodos(updatedTodos);
+    };
+
+    return (
+        <div className="grid min-h-screen place-items-center">
+            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-5/12">
+                <h1 className="text-xl font-semibold text-center">Ingrese información sobre el servicio</h1>
+                <form onSubmit={handleUpload} className="mt-6">
+                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre del Servicio</label>
+                    <input onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
+                    <input onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
+
+                    <Form onSubmit={addTodo} />
+                    <Items
+                        todos={todos}
+                        completeTodo={completeTodo}
+                        removeTodo={removeTodo}
+                        updateTodo={updateTodo}
+                    />
+
+                    <div class="py-6">
+                        <section className="container">
+                            <div {...getRootProps({ className: 'dropzone', style })}>
+                                <input {...getInputProps()} />
+                                <p>Drag 'n' drop some files here, or click to select files</p>
                             </div>
-                            {this.state.Detalles.map(elemento =>(   
-                                <div key={elemento}>
-                                     <input defaultValue={elemento} type="text" className="inline-block w-10/12 p-3 mt-4 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required/>
-                                     <span onClick={()=>this.handleDelete(elemento)} className="cursor-pointer w-2/12 p-3 inline-block bg-red-500 text-center">X</span>
-                                </div>
-                            ))}
-                            <div class="py-6"/>
-                            <div>
-                                <SubirArchivos/>
-                            </div>
-                            <button type="submit" className="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none" >
-                                Agregar Servicio
-                            </button>  
-                                
-                        </form>
+                            <aside style={thumbsContainer}>
+                                {thumbs}
+                            </aside>
+                        </section>
                     </div>
-                </div>
-        )
-    }
-
-
-
-
-    
+                    <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Agregar Habitacion</button>
+                </form>
+            </div>
+        </div>
+    )
 }
 
 export default AgregarServicios
