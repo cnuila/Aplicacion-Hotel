@@ -14,7 +14,8 @@ import Conferencias from "./Components/Conferencias"
 import RecuperarContra from './Components/LogIn/RecuperarContra';
 import Reseña from "./Components/Reseña";
 import reseña from './Components/Reseña';
-import Comentario from "./Components/Comentario"
+import Comentario from "./Components/Comentario";
+import InfoHabitacion from "./Components/InformacionHabitacion";
 function App() {
   return (
     <Router>
@@ -29,6 +30,7 @@ function App() {
         <Route path="/habitaciones" component={Habitaciones} />
         <Route path="/restaurante" component={Restaurante} />
         <Route path="/conferencias" component={Conferencias}/>
+        <Route path="/Habitacion"component={InfoHabitacion}/>
 
       </Switch>
     </Router>
