@@ -1,13 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import { db } from '../firebase'
+import { db } from '../../firebase'
 import swal from 'sweetalert'
-import { storage } from '../firebase';
+import { storage } from '../../firebase';
 import { useDropzone } from 'react-dropzone';
-import Items from './AgregarItems/Items'
-import Form from './AgregarItems/Form'
+import Items from '../AgregarItems/Items'
+import Form from '../AgregarItems/Form'
 import { TiMediaPlayOutline } from 'react-icons/ti';
 
-function AgregarServicios() {
+function AgregarServicios(props) {
 
     const [Nombre, setNombre] = useState("");
     const [Precio, setPrecio] = useState("");
@@ -146,13 +146,15 @@ function AgregarServicios() {
             db.collection("Servicios").doc(Nombre).set({
                 Nombre: Nombre,
                 Precio: Precio,
-                Complementos: todos,
+                Detalles: todos,
                 Url: dirFotos
-            }).then(() =>
-                alertaSuccess(), () => {
-                    alertaFail()
-                });
-
+            }).then(() => {
+                alertaSuccess()
+                props.seAgregoServicio()
+                props.getServicios()
+            }).catch(() => {
+                alertaFail()
+            })
         } else {
             alertaFotos()
         }
@@ -212,7 +214,7 @@ function AgregarServicios() {
 
     return (
         <div className="grid min-h-screen place-items-center">
-            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-5/12">
+            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-full">
                 <h1 className="text-xl font-semibold text-center">Ingrese información sobre el servicio</h1>
                 <form onSubmit={handleUpload} className="mt-6">
                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre del Servicio</label>
@@ -240,7 +242,7 @@ function AgregarServicios() {
                             </aside>
                         </section>
                     </div>
-                    <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Agregar Habitacion</button>
+                    <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Agregar Servicio</button>
                 </form>
             </div>
         </div>

@@ -7,7 +7,7 @@ import Items from '../AgregarItems/Items'
 import Form from '../AgregarItems/Form'
 import { TiMediaPlayOutline } from 'react-icons/ti';
 
-function AgregarHabitaciones() {
+function AgregarHabitaciones(props) {
 
     const [Nombre, setNombre] = useState("");
     const [Precio, setPrecio] = useState("");
@@ -148,10 +148,13 @@ function AgregarHabitaciones() {
                 Precio: Precio,
                 Complementos: todos,
                 Url: dirFotos
-            }).then(() =>
-                alertaSuccess(), () => {
-                    alertaFail()
-                });
+            }).then(() => {
+                alertaSuccess()
+                props.seAgregoHabitacion()
+                props.getHabitaciones()
+            }).catch(() => {
+                alertaFail()
+            })
 
         } else {
             alertaFotos()
