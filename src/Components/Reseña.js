@@ -55,12 +55,12 @@ class reseña extends React.Component {
             <div >
                 <div class="flex justify-center">
                     <div class="flex justify-center shadow-lg  mx-8 mb-1 ">
-                        <form class="w-full max-w-xl justify-center  bg-indigo-600 rounded-lg px-4 pt-1 border-gray-600 border-1">
+                        <form class="w-full max-w-xl justify-center  bg-gray-200 rounded-lg px-4 pt-1 border-gray-600 border-1">
                             <div class="flex flex-wrap justify-center -mx-3 mb-10">
-                                <h2 class="px-4 -pt-1 pb-2 text-white text-lg">Tu opinión es importante</h2>
+                                <h2 class="px-4 -pt-1 pb-2 text-blue text-lg">Tu opinión es importante</h2>
                                 <ReactStarRating
                                     numberOfStar={5} numberOfSelectedStar={3} colorFilledStar="yellow"
-                                    colorEmptyStar="gray" starSize="20px" spaceBetweenStar="8px"
+                                    colorEmptyStar="blue" starSize="20px" spaceBetweenStar="8px"
                                     disableOnSelect={false}
                                     onSelectStar={val => {
                                         this.state.Rating = val
