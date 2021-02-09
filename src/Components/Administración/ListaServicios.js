@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import AgregarServicios from '../AgregarServicios'
+import AgregarServicios from './AgregarServicios'
 import { db } from '../../firebase'
 
 export default function Lista() {
@@ -7,7 +7,7 @@ export default function Lista() {
     const estadoInicial = {
         Nombre: "Nombre del Servicio",
         Precio: 1000,
-        Detalles: ["Comida gratis"],
+        Detalles: [{id:1,text:"Comida gratis"}],
     }
 
     const [servicios, setServicios] = useState([])
@@ -29,11 +29,12 @@ export default function Lista() {
     }, [])
 
     const handleServicio = servicio => {
-        const { Nombre, Precio, Detalles } = servicio
+        const { Nombre, Precio, Detalles, Url } = servicio
         setServicioSeleccionado({
             Nombre,
             Precio,
             Detalles,
+            Url,
         })
         setMostrarAgregar(false)
     }
@@ -47,7 +48,7 @@ export default function Lista() {
         setMostrarAgregar(false)
     }
 
-    const { Nombre, Precio, Detalles } = servicioSeleccionado
+    const { Nombre, Precio, Detalles, Url } = servicioSeleccionado
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -77,7 +78,7 @@ export default function Lista() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarServicios seAgregoServicio={seAgregoServicio} />)
+                        ? (<AgregarServicios seAgregoServicio={seAgregoServicio} getServicios={getServicios}/>)
                         : (
                             <div className="h-full w-10/12 px-20 py-8">
                                 <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
@@ -89,10 +90,27 @@ export default function Lista() {
                                     <h2 className="text-blue-500 font-semibold cursor-default">Detalles</h2>
                                     {
                                         Detalles.map(detalle => {
-                                            return <h2 className="text-black pl-4">{detalle}</h2>
+                                            return <h2 className="text-black pl-4">{detalle.id} | {detalle.text}</h2>
                                         })
                                     }
                                 </div>
+                                {Url !== undefined
+                                    ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
+                                        <div className="grid grid-cols-2 place-items-center">
+                                            {
+                                                Url.map(foto => {
+                                                    return (
+                                                        <img
+                                                            className="h-40 w-40 p-2 object-cover rounded-xl"
+                                                            alt="Habitacion"
+                                                            src={foto}
+                                                        />)
+                                                })
+                                            }
+                                        </div>
+                                    </div>)
+                                    : <></>}
                             </div>)
                     }
                 </div>
