@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import AgregarHabitaciones from './AgregarHabitaciones'
-import { db } from '../../firebase'
+import { db, storage } from '../../firebase'
+import Habitacion from '../Habitacion'
+import swal from 'sweetalert'
+import { render } from '@testing-library/react'
 
 export default function Lista() {
 
@@ -45,6 +48,32 @@ export default function Lista() {
         setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
     }
 
+    const handleEliminarHabitacion = async (id, fotos) => {
+        let habitacion = db.collection("Habitaciones").doc(id)
+        await habitacion.delete().then(() => {
+            if (fotos !== undefined) {
+                let deleteRef
+                for (let i = 0; i < fotos.length; i++) {
+                    deleteRef = storage.refFromURL(fotos[i])
+                    deleteRef.delete()
+                }
+            }
+        }).then(() => {
+            swal({
+                text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
+                icon: "success",
+                button: "Aceptar"
+            });
+            getHabitaciones()
+        }).catch(function (error) {
+            swal({
+                icon: "error",
+                title: "Error al Eliminar",
+                text: "Error: " + error
+            })
+        });
+    }
+
     const seAgregoHabitacion = () => {
         setMostrarAgregar(false)
     }
@@ -79,7 +108,7 @@ export default function Lista() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion}/>)
+                        ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion} />)
                         : (
                             <div className="h-full w-10/12 px-20 py-8">
                                 <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
@@ -113,6 +142,16 @@ export default function Lista() {
                                         </div>
                                     </div>)
                                     : <></>}
+                                {Nombre !== "Nombre de la Habitación" ? (
+                                    <div>
+                                        <button className="bg-red-300 h-10 w-1/6 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
+                                            Eliminar
+                                                </button>
+                                    </div>) : (
+                                        <div>
+                                        </div>
+                                    )
+                                }
                             </div>)
                     }
                 </div>
