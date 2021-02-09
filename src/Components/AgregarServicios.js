@@ -93,7 +93,7 @@ class AgregarServicios extends Component{
     render(){
         return(
                 <div className="grid min-h-screen place-items-center">
-                    <div className="w-3/4 p-12 bg-white">
+                    <div className="w-full p-12 bg-white">
                         <h1 className="text-xl font-semibold text-center">Ingrese información sobre el servicio</h1>
                         <form  id="agregarForm" onSubmit={this.handleAgregarServicios} className="mt-6">                       
                             <label className="block mt-2 text-sm font-semibold text-gray-600 uppercase">Nombre del servicio</label>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import AgregarHabitaciones from './AgregarHabitaciones'
+import AgregarHabitaciones from '../AgregarItems/AgregarHabitaciones'
 import { db } from '../../firebase'
 
 export default function Lista() {
