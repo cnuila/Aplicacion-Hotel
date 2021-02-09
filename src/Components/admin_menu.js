@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,9 +10,6 @@ import ListaClientes from './Administración/ListaClientes'
 import ListaHabitaciones from './Administración/ListaHabitaciones'
 import ListaServicios from './Administración/ListaServicios'
 import Navbar from './Navbar'
-import { storage } from '../firebase';
-import { useDropzone } from 'react-dropzone';
-import firebase from 'firebase'
 
 const AdminMenu = function () {
   const [isClosed, setClosed] = React.useState(false)
