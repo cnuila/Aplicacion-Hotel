@@ -7,7 +7,7 @@ import Items from './Items'
 import Form from './Form'
 import { TiMediaPlayOutline } from 'react-icons/ti';
 
-function AgregarHabitaciones() {
+function AgregarHabitaciones(props) {
 
     const [Nombre, setNombre] = useState("");
     const [Precio, setPrecio] = useState("");
@@ -148,10 +148,12 @@ function AgregarHabitaciones() {
                 Precio: Precio,
                 Complementos: todos,
                 Url: dirFotos
-            }).then(() =>
-                alertaSuccess(), () => {
-                    alertaFail()
-                });
+            }).then(() => {
+                alertaSuccess()
+                props.seAgregoHabitacion()
+            }).catch(() => {
+                alertaFail()
+            });
 
         } else {
             alertaFotos()
@@ -212,7 +214,7 @@ function AgregarHabitaciones() {
 
     return (
         <div className="grid min-h-screen place-items-center">
-            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-5/12">
+            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-full">
                 <h1 className="text-xl font-semibold text-center">Ingrese información sobre la habitación</h1>
                 <form onSubmit={handleUpload} className="mt-6">
                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre de la habitación</label>

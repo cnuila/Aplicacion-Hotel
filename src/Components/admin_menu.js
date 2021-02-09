@@ -8,11 +8,11 @@ import {
 import { useMediaQuery } from 'react-responsive'
 import ListaClientes from './Administración/ListaClientes'
 import ListaHabitaciones from './Administración/ListaHabitaciones'
+import ListaServicios from './Administración/ListaServicios'
 import Navbar from './Navbar'
 import { storage } from '../firebase';
 import { useDropzone } from 'react-dropzone';
 import firebase from 'firebase'
-import AgregarServicios from './AgregarServicios';
 
 const AdminMenu = function () {
   const [isClosed, setClosed] = React.useState(false)
@@ -161,7 +161,7 @@ function Restaurante() {
 
 function Servicios() {
   return (
-    <AgregarServicios />
+    <ListaServicios />
   )
 }
 
