@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import AgregarServicios from './AgregarServicios'
-import { db } from '../../firebase'
-
+import { db, storage} from '../../firebase'
+import swal from 'sweetalert'
 export default function Lista() {
 
     const estadoInicial = {
         Nombre: "Nombre del Servicio",
         Precio: 1000,
-        Detalles: [{id:1,text:"Comida gratis"}],
+        Detalles: [{ id: 1, text: "Comida gratis" }],
     }
 
     const [servicios, setServicios] = useState([])
@@ -44,6 +44,32 @@ export default function Lista() {
         setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
     }
 
+    const handleEliminarServicio = async (id, fotos) => {
+        let servicio = db.collection("Servicios").doc(id)
+        await servicio.delete().then(() => {
+            if (fotos !== undefined) {
+                let deleteRef
+                for (let i = 0; i < fotos.length; i++) {
+                    deleteRef = storage.refFromURL(fotos[i])
+                    deleteRef.delete()
+                }
+            }
+        }).then(() => {
+            swal({
+                text: "El Servicio " + Nombre + " fue eliminado exitosamente",
+                icon: "success",
+                button: "Aceptar"
+            });
+            getServicios()
+        }).catch(function (error) {
+            swal({
+                icon: "error",
+                title: "Error al Eliminar",
+                text: "Error: " + error
+            })
+        });
+    }
+
     const seAgregoServicio = () => {
         setMostrarAgregar(false)
     }
@@ -78,7 +104,7 @@ export default function Lista() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarServicios seAgregoServicio={seAgregoServicio} getServicios={getServicios}/>)
+                        ? (<AgregarServicios seAgregoServicio={seAgregoServicio} getServicios={getServicios} />)
                         : (
                             <div className="h-full w-10/12 px-20 py-8">
                                 <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
@@ -111,6 +137,16 @@ export default function Lista() {
                                         </div>
                                     </div>)
                                     : <></>}
+                                {Nombre !== "Nombre del Servicio" ? (
+                                    <div>
+                                        <button className="bg-red-300 h-10 w-1/6 rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
+                                            Eliminar
+                                        </button>
+                                    </div>) : (
+                                        <div>
+                                        </div>
+                                    )
+                                }
                             </div>)
                     }
                 </div>

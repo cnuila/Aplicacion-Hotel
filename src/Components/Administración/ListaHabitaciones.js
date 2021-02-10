@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import AgregarHabitaciones from './AgregarHabitaciones'
 import { db, storage } from '../../firebase'
 import Habitacion from '../Habitacion'
 import swal from 'sweetalert'
