@@ -4,6 +4,7 @@ import Habitacion from '../Habitacion'
 import swal from 'sweetalert'
 import { render } from '@testing-library/react'
 import AgregarHabitaciones from '../AgregarItems/AgregarHabitaciones'
+import AgregarServicios from './AgregarServicios'
 
 export default function Lista() {
 
@@ -17,6 +18,7 @@ export default function Lista() {
     const [habitaciones, setHabitaciones] = useState([])
     const [habitacionSeleccionada, setHabitacionSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
+    const [mostrarModificar, setMostrarModificar] = useState(false)
 
     const getHabitaciones = async () => {
         await db.collection("Habitaciones").orderBy("Nombre").get().then(querySnapshot => {
@@ -41,6 +43,7 @@ export default function Lista() {
             Url,
         })
         setMostrarAgregar(false)
+        setMostrarModificar(false)
     }
 
     const handleOnClickAgregar = () => {
@@ -78,6 +81,14 @@ export default function Lista() {
         setMostrarAgregar(false)
     }
 
+    const seModificarHabitacion = () => {
+        setMostrarModificar(false)
+    }
+
+    const handleOnClickModificar = () => {
+        setMostrarModificar(true)
+    }
+
     const { Nombre, Precio, Complementos, Url } = habitacionSeleccionada
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
@@ -108,7 +119,8 @@ export default function Lista() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion} getHabitaciones={getHabitaciones}/>)
+                        ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion} getHabitaciones={getHabitaciones} />)
+                        : mostrarModificar ? <AgregarServicios/>
                         : (
                             <div className="h-full w-10/12 px-20 py-8">
                                 <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
@@ -143,10 +155,17 @@ export default function Lista() {
                                     </div>)
                                     : <></>}
                                 {Nombre !== "Nombre de la Habitación" ? (
-                                    <div>
-                                        <button className="bg-red-300 h-10 w-1/6 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
-                                            Eliminar
+                                    <div class="grid grid-cols-2">
+                                        <div>
+                                            <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
+                                                Eliminar
                                                 </button>
+                                        </div>
+                                        <div>
+                                            <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
+                                                Modificar
+                                                </button>
+                                        </div>
                                     </div>) : (
                                         <div>
                                         </div>
