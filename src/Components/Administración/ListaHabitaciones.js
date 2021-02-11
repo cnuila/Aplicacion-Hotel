@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { db, storage } from '../../firebase'
+import Habitacion from '../Habitacion'
+import swal from 'sweetalert'
+import { render } from '@testing-library/react'
 import AgregarHabitaciones from '../AgregarItems/AgregarHabitaciones'
-import { db } from '../../firebase'
+import ModificarHabitacion from './ModificarHabitacion'
 
 export default function Lista() {
 
@@ -14,6 +18,7 @@ export default function Lista() {
     const [habitaciones, setHabitaciones] = useState([])
     const [habitacionSeleccionada, setHabitacionSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
+    const [mostrarModificar, setMostrarModificar] = useState(false)
 
     const getHabitaciones = async () => {
         await db.collection("Habitaciones").orderBy("Nombre").get().then(querySnapshot => {
@@ -38,6 +43,7 @@ export default function Lista() {
             Url,
         })
         setMostrarAgregar(false)
+        setMostrarModificar(false)
     }
 
     const handleOnClickAgregar = () => {
@@ -45,8 +51,42 @@ export default function Lista() {
         setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
     }
 
+    const handleEliminarHabitacion = async (id, fotos) => {
+        let habitacion = db.collection("Habitaciones").doc(id)
+        await habitacion.delete().then(() => {
+            if (fotos !== undefined) {
+                let deleteRef
+                for (let i = 0; i < fotos.length; i++) {
+                    deleteRef = storage.refFromURL(fotos[i])
+                    deleteRef.delete()
+                }
+            }
+        }).then(() => {
+            swal({
+                text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
+                icon: "success",
+                button: "Aceptar"
+            });
+            getHabitaciones()
+        }).catch(function (error) {
+            swal({
+                icon: "error",
+                title: "Error al Eliminar",
+                text: "Error: " + error
+            })
+        });
+    }
+
     const seAgregoHabitacion = () => {
         setMostrarAgregar(false)
+    }
+
+    const seModificarHabitacion = () => {
+        setMostrarModificar(false)
+    }
+
+    const handleOnClickModificar = () => {
+        setMostrarModificar(true)
     }
 
     const { Nombre, Precio, Complementos, Url } = habitacionSeleccionada
@@ -79,7 +119,9 @@ export default function Lista() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion} getHabitaciones={getHabitaciones}/>)
+                        ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion} getHabitaciones={getHabitaciones} />)
+                        : mostrarModificar 
+                        ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre}/>
                         : (
                             <div className="h-full w-10/12 px-20 py-8">
                                 <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
@@ -113,6 +155,23 @@ export default function Lista() {
                                         </div>
                                     </div>)
                                     : <></>}
+                                {Nombre !== "Nombre de la Habitación" ? (
+                                    <div class="grid grid-cols-2">
+                                        <div>
+                                            <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
+                                                Eliminar
+                                                </button>
+                                        </div>
+                                        <div>
+                                            <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
+                                                Modificar
+                                                </button>
+                                        </div>
+                                    </div>) : (
+                                        <div>
+                                        </div>
+                                    )
+                                }
                             </div>)
                     }
                 </div>
