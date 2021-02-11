@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import AgregarServicios from './AgregarServicios'
-import { db, storage} from '../../firebase'
+import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
+import ModificarServicios from './ModificarServicios'
+
 export default function Lista() {
 
     const estadoInicial = {
@@ -13,6 +15,7 @@ export default function Lista() {
     const [servicios, setServicios] = useState([])
     const [servicioSeleccionado, setServicioSeleccionado] = useState({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
+    const [mostrarModificar, setMostrarModificar] = useState(false)
 
     const getServicios = async () => {
         await db.collection("Servicios").orderBy("Nombre").get().then(querySnapshot => {
@@ -37,6 +40,7 @@ export default function Lista() {
             Url,
         })
         setMostrarAgregar(false)
+        setMostrarModificar(false)
     }
 
     const handleOnClickAgregar = () => {
@@ -74,7 +78,16 @@ export default function Lista() {
         setMostrarAgregar(false)
     }
 
+    const seModificarHabitacion = () => {
+        setMostrarModificar(false)
+    }
+
+    const handleOnClickModificar = () => {
+        setMostrarModificar(true)
+    }
+
     const { Nombre, Precio, Detalles, Url } = servicioSeleccionado
+
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -105,49 +118,58 @@ export default function Lista() {
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
                         ? (<AgregarServicios seAgregoServicio={seAgregoServicio} getServicios={getServicios} />)
-                        : (
-                            <div className="h-full w-10/12 px-20 py-8">
-                                <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
-                                <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                    <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
-                                    <h2 className="text-black pl-4">{Precio}</h2>
-                                </div>
-                                <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                    <h2 className="text-blue-500 font-semibold cursor-default">Detalles</h2>
-                                    {
-                                        Detalles.map(detalle => {
-                                            return <h2 className="text-black pl-4">{detalle.id} | {detalle.text}</h2>
-                                        })
+                        : mostrarModificar
+                            ? <ModificarServicios nombre={servicioSeleccionado.Nombre} />
+                            : (
+                                <div className="h-full w-10/12 px-20 py-8">
+                                    <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+                                    <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                        <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
+                                        <h2 className="text-black pl-4">{Precio}</h2>
+                                    </div>
+                                    <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                        <h2 className="text-blue-500 font-semibold cursor-default">Detalles</h2>
+                                        {
+                                            Detalles.map(detalle => {
+                                                return <h2 className="text-black pl-4">{detalle.id} | {detalle.text}</h2>
+                                            })
+                                        }
+                                    </div>
+                                    {Url !== undefined
+                                        ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
+                                            <div className="grid grid-cols-2 place-items-center">
+                                                {
+                                                    Url.map(foto => {
+                                                        return (
+                                                            <img
+                                                                className="h-40 w-40 p-2 object-cover rounded-xl"
+                                                                alt="Habitacion"
+                                                                src={foto}
+                                                            />)
+                                                    })
+                                                }
+                                            </div>
+                                        </div>)
+                                        : <></>}
+                                    {Nombre !== "Nombre del Servicio" ? (
+                                        <div class="grid grid-cols-2">
+                                            <div>
+                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
+                                                    Eliminar
+                                            </button>
+                                            </div>
+                                            <div>
+                                                <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
+                                                    Modificar
+                                            </button>
+                                            </div>
+                                        </div>) : (
+                                            <div>
+                                            </div>
+                                        )
                                     }
-                                </div>
-                                {Url !== undefined
-                                    ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
-                                        <div className="grid grid-cols-2 place-items-center">
-                                            {
-                                                Url.map(foto => {
-                                                    return (
-                                                        <img
-                                                            className="h-40 w-40 p-2 object-cover rounded-xl"
-                                                            alt="Habitacion"
-                                                            src={foto}
-                                                        />)
-                                                })
-                                            }
-                                        </div>
-                                    </div>)
-                                    : <></>}
-                                {Nombre !== "Nombre del Servicio" ? (
-                                    <div>
-                                        <button className="bg-red-300 h-10 w-1/6 rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
-                                            Eliminar
-                                        </button>
-                                    </div>) : (
-                                        <div>
-                                        </div>
-                                    )
-                                }
-                            </div>)
+                                </div>)
                     }
                 </div>
             </div>

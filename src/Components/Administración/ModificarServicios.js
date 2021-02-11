@@ -4,7 +4,7 @@ import Items from '../AgregarItems/Items'
 import Form from '../AgregarItems/Form'
 import swal from 'sweetalert'
 
-function ModificarHabitacion(props) {
+function ModificarServicios(props) {
 
     const [todos, setTodos] = useState([]);
     const [nombre, setNombre] = useState("");
@@ -13,23 +13,24 @@ function ModificarHabitacion(props) {
 
     const handleUpload = (event) =>{
         event.preventDefault()
-        db.collection("Habitaciones").doc(props.nombre).set({
+        db.collection("Servicios").doc(props.nombre).set({
             Nombre: nombre,
             Precio: precio,
-            Complementos: todos,
+            Detalles: todos,
             Url: url
         }).then(() =>
             alertaSuccess());
+        
     }
 
     useEffect(() => {
         setNombre(props.nombre)
-        db.collection("Habitaciones").where("Nombre", "==", props.nombre)
+        db.collection("Servicios").where("Nombre", "==", props.nombre)
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     setNombre(doc.data().Nombre)
-                    setTodos(doc.data().Complementos)
+                    setTodos(doc.data().Detalles)
                     setPrecio(doc.data().Precio)
                     setUrl(doc.data().Url)
                 });
@@ -42,7 +43,7 @@ function ModificarHabitacion(props) {
 
     const alertaSuccess = () => {
         swal({
-            text: "La Habitacion se modifico exitosamente",
+            text: "El Servicio se modifico exitosamente",
             icon: "success",
             button: "Aceptar"
         });
@@ -110,4 +111,4 @@ function ModificarHabitacion(props) {
     )
 }
 
-export default ModificarHabitacion
+export default ModificarServicios

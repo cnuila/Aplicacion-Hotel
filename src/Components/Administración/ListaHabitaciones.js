@@ -90,6 +90,7 @@ export default function Lista() {
     }
 
     const { Nombre, Precio, Complementos, Url } = habitacionSeleccionada
+
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -120,59 +121,59 @@ export default function Lista() {
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
                         ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion} getHabitaciones={getHabitaciones} />)
-                        : mostrarModificar 
-                        ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre}/>
-                        : (
-                            <div className="h-full w-10/12 px-20 py-8">
-                                <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
-                                <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                    <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
-                                    <h2 className="text-black pl-4">{Precio}</h2>
-                                </div>
-                                <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                    <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
-                                    {
-                                        Complementos.map(complemento => {
-                                            const { id, text } = complemento
-                                            return <h2 className="text-black pl-4">{id} | {text}</h2>
-                                        })
+                        : mostrarModificar
+                            ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} />
+                            : (
+                                <div className="h-full w-10/12 px-20 py-8">
+                                    <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+                                    <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                        <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
+                                        <h2 className="text-black pl-4">{Precio}</h2>
+                                    </div>
+                                    <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                        <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
+                                        {
+                                            Complementos.map(complemento => {
+                                                const { id, text } = complemento
+                                                return <h2 className="text-black pl-4">{id} | {text}</h2>
+                                            })
+                                        }
+                                    </div>
+                                    {Url !== undefined
+                                        ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
+                                            <div className="grid grid-cols-2 place-items-center">
+                                                {
+                                                    Url.map(foto => {
+                                                        return (
+                                                            <img
+                                                                className="h-40 w-40 p-2 object-cover rounded-xl"
+                                                                alt="Habitacion"
+                                                                src={foto}
+                                                            />)
+                                                    })
+                                                }
+                                            </div>
+                                        </div>)
+                                        : <></>}
+                                    {Nombre !== "Nombre de la Habitación" ? (
+                                        <div class="grid grid-cols-2">
+                                            <div>
+                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
+                                                    Eliminar
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
+                                                    Modificar
+                                                </button>
+                                            </div>
+                                        </div>) : (
+                                            <div>
+                                            </div>
+                                        )
                                     }
-                                </div>
-                                {Url !== undefined
-                                    ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
-                                        <div className="grid grid-cols-2 place-items-center">
-                                            {
-                                                Url.map(foto => {
-                                                    return (
-                                                        <img
-                                                            className="h-40 w-40 p-2 object-cover rounded-xl"
-                                                            alt="Habitacion"
-                                                            src={foto}
-                                                        />)
-                                                })
-                                            }
-                                        </div>
-                                    </div>)
-                                    : <></>}
-                                {Nombre !== "Nombre de la Habitación" ? (
-                                    <div class="grid grid-cols-2">
-                                        <div>
-                                            <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
-                                                Eliminar
-                                                </button>
-                                        </div>
-                                        <div>
-                                            <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
-                                                Modificar
-                                                </button>
-                                        </div>
-                                    </div>) : (
-                                        <div>
-                                        </div>
-                                    )
-                                }
-                            </div>)
+                                </div>)
                     }
                 </div>
             </div>
