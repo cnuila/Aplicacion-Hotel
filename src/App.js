@@ -29,7 +29,6 @@ function App() {
         <Route path="/habitaciones" component={Habitaciones} />
         <Route path="/restaurante" component={Restaurante} />
         <Route path="/conferencias" component={Conferencias}/>
-
       </Switch>
     </Router>
   );
