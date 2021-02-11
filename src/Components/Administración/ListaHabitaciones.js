@@ -4,7 +4,7 @@ import Habitacion from '../Habitacion'
 import swal from 'sweetalert'
 import { render } from '@testing-library/react'
 import AgregarHabitaciones from '../AgregarItems/AgregarHabitaciones'
-import AgregarServicios from './AgregarServicios'
+import ModificarHabitacion from './ModificarHabitacion'
 
 export default function Lista() {
 
@@ -120,7 +120,8 @@ export default function Lista() {
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
                         ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion} getHabitaciones={getHabitaciones} />)
-                        : mostrarModificar ? <AgregarServicios/>
+                        : mostrarModificar 
+                        ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre}/>
                         : (
                             <div className="h-full w-10/12 px-20 py-8">
                                 <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
