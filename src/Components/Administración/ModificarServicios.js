@@ -18,8 +18,10 @@ function ModificarServicios(props) {
             Precio: precio,
             Detalles: todos,
             Url: url
-        }).then(() =>
-            alertaSuccess());
+        }).then(() => {
+            alertaSuccess()
+            props.mostrarInicial()
+        });
         
     }
 

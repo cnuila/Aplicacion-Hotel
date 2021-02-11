@@ -23,7 +23,7 @@ export default function Habitaciones() {
             <div>
                 <Navbar />
             </div>
-            <div className="text-2xl text-center font-bold mt-3">
+            <div className="text-3xl text-center font-bold mt-3">
                 Habitaciones
                 </div>
             <div class="space-y-4">

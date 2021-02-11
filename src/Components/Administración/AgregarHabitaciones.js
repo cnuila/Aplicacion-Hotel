@@ -150,8 +150,7 @@ function AgregarHabitaciones(props) {
                 Url: dirFotos
             }).then(() => {
                 alertaSuccess()
-                props.seAgregoHabitacion()
-                props.getHabitaciones()
+                props.mostarInicial()
             }).catch(() => {
                 alertaFail()
             })

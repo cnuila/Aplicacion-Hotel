@@ -64,6 +64,7 @@ export default function Lista() {
                 icon: "success",
                 button: "Aceptar"
             });
+            setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
             getServicios()
         }).catch(function (error) {
             swal({
@@ -74,12 +75,11 @@ export default function Lista() {
         });
     }
 
-    const seAgregoServicio = () => {
+    const mostrarInicial = () => {
         setMostrarAgregar(false)
-    }
-
-    const seModificarHabitacion = () => {
         setMostrarModificar(false)
+        setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
+        getServicios()
     }
 
     const handleOnClickModificar = () => {
@@ -117,9 +117,9 @@ export default function Lista() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarServicios seAgregoServicio={seAgregoServicio} getServicios={getServicios} />)
+                        ? (<AgregarServicios mostrarInicial={mostrarInicial} />)
                         : mostrarModificar
-                            ? <ModificarServicios nombre={servicioSeleccionado.Nombre} />
+                            ? <ModificarServicios nombre={servicioSeleccionado.Nombre} mostrarInicial={mostrarInicial}/>
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>

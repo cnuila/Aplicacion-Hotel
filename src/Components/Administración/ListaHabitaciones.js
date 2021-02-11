@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { db, storage } from '../../firebase'
-import Habitacion from '../Habitacion'
 import swal from 'sweetalert'
-import { render } from '@testing-library/react'
 import AgregarHabitaciones from '../AgregarItems/AgregarHabitaciones'
 import ModificarHabitacion from './ModificarHabitacion'
 
@@ -67,6 +65,7 @@ export default function Lista() {
                 icon: "success",
                 button: "Aceptar"
             });
+            setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
             getHabitaciones()
         }).catch(function (error) {
             swal({
@@ -77,12 +76,11 @@ export default function Lista() {
         });
     }
 
-    const seAgregoHabitacion = () => {
+    const mostrarInicial = () => {
         setMostrarAgregar(false)
-    }
-
-    const seModificarHabitacion = () => {
         setMostrarModificar(false)
+        setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+        getHabitaciones()
     }
 
     const handleOnClickModificar = () => {
@@ -120,9 +118,9 @@ export default function Lista() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarHabitaciones seAgregoHabitacion={seAgregoHabitacion} getHabitaciones={getHabitaciones} />)
+                        ? (<AgregarHabitaciones mostrarInicial={mostrarInicial}/>)
                         : mostrarModificar
-                            ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} />
+                            ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} mostrarInicial={mostrarInicial} />
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>

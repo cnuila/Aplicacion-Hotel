@@ -150,8 +150,7 @@ function AgregarServicios(props) {
                 Url: dirFotos
             }).then(() => {
                 alertaSuccess()
-                props.seAgregoServicio()
-                props.getServicios()
+                props.mostrarInicial()
             }).catch(() => {
                 alertaFail()
             })

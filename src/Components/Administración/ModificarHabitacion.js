@@ -18,8 +18,10 @@ function ModificarHabitacion(props) {
             Precio: precio,
             Complementos: todos,
             Url: url
-        }).then(() =>
-            alertaSuccess());
+        }).then(() => {
+            alertaSuccess()
+            props.mostrarInicial()
+        });
     }
 
     useEffect(() => {
