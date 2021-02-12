@@ -14,7 +14,6 @@ import RecuperarContra from './Components/LogIn/RecuperarContra';
 import Reseña from "./Components/Reseña";
 import reseña from './Components/Reseña';
 import Comentario from "./Components/Comentario"
-
 function App() {
   return (
     <Router>
@@ -28,6 +27,7 @@ function App() {
         <Route path="/miInfo" exact component={ListarUsuario}/>
         <Route path="/habitaciones" component={Habitaciones} />
         <Route path="/restaurante" component={Restaurante} />
+
       </Switch>
     </Router>
   );
