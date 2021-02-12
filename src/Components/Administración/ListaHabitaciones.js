@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
-import AgregarHabitaciones from '../AgregarItems/AgregarHabitaciones'
+import AgregarHabitaciones from './AgregarHabitaciones'
 import ModificarHabitacion from './ModificarHabitacion'
 
 export default function Lista() {

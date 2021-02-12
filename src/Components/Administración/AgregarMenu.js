@@ -119,7 +119,7 @@ function AgregarMenu(props) {
 
     const alertaFotos = () => {
         swal({
-            text: "El Menu " + Nombre + " no tiene imagenes",
+            text: "El Menu" + Nombre + " no tiene imagenes",
             icon: "error",
             button: "Aceptar"
         });

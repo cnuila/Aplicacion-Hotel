@@ -119,7 +119,7 @@ function AgregarHabitaciones(props) {
 
     const alertaFotos = () => {
         swal({
-            text: "La Habitacion " + Nombre + " no tiene imagenes",
+            text: "La Habitacion" + Nombre + " no tiene imagenes",
             icon: "error",
             button: "Aceptar"
         });
@@ -150,11 +150,10 @@ function AgregarHabitaciones(props) {
                 Url: dirFotos
             }).then(() => {
                 alertaSuccess()
-                props.mostarInicial()
+                props.mostrarInicial()
             }).catch(() => {
                 alertaFail()
             })
-
         } else {
             alertaFotos()
         }
@@ -214,14 +213,14 @@ function AgregarHabitaciones(props) {
 
     return (
         <div className="grid min-h-screen place-items-center">
-            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-11/12">
-                <h1 className="text-xl font-semibold text-center">Ingrese información sobre la habitación</h1>
+            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-full">
+                <h1 className="text-xl font-semibold text-center">Ingrese información sobre la habitacion</h1>
                 <form onSubmit={handleUpload} className="mt-6">
-                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre de la habitación</label>
+                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre de la habitacion</label>
                     <input onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
                     <input onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Agregar Complementos</label>
+                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
 
                     <Form onSubmit={addTodo} />
                     <Items
