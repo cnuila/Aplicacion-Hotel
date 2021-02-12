@@ -53,9 +53,6 @@ class Navbar extends Component {
                                     <Link to="/servicios" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Servicios</Link>
                                 </li>
                                 <li>
-                                    <a href="./" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200" onClick={this.cerrarSesion}>Cerrar Sesion</a>
-                                </li>
-                                <li>
                                     <Dropdown/>
                                 </li>
                             </ul>
