@@ -29,14 +29,6 @@ class Navbar extends Component {
             }
         });
     }
-
-    cerrarSesion = () => {
-        auth.signOut().then(function () {
-        }).catch(function (error) {
-            console.log(error)
-        });
-    }
-
     render() {
         let user = auth.currentUser;
         let inicioSesion;
@@ -65,12 +57,6 @@ class Navbar extends Component {
                                 {miCuenta}
                                 <li>
                                     <Link to="/servicios" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Servicios</Link>
-                                </li>
-                                <li>
-                                    <Link to="/administracion" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Admin</Link>
-                                </li>
-                                <li>
-                                    <a href="./" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200" onClick={this.cerrarSesion}>Cerrar Sesion</a>
                                 </li>
                                 <li>
                                     <Dropdown/>
