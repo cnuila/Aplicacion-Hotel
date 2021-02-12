@@ -3,7 +3,7 @@ import Habitacion from './Habitacion'
 import Navbar from './Navbar';
 import { db } from '../firebase'
 
-export default function Habitaciones(){
+export default function Habitaciones() {
 
     const [habitaciones, setHabitaciones] = useState([])
 
@@ -15,24 +15,22 @@ export default function Habitaciones(){
                 listaHabitaciones.push({ ...doc.data(), id: doc.id })
             });
             setHabitaciones(listaHabitaciones)
-            console.log(listaHabitaciones)
         })
     }, [])
 
     return (
-        <div className="bg-white">
+        <div className="bg-gray-100 h-full">
             <div>
                 <Navbar />
             </div>
-            <div className="text-2xl text-center font-bold mt-3">
+            <div className="text-3xl text-center font-bold mt-3">
                 Habitaciones
                 </div>
             <div class="space-y-4">
                 {habitaciones.map(h => {
                     return (
                         <div>
-                            {h.Precio}
-                            <Habitacion />
+                            <Habitacion precio={h.Precio} complementos={h.Complementos} url={h.Url} nombre={h.Nombre} />
                         </div>
                     )
                 })}

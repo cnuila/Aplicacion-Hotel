@@ -35,7 +35,7 @@ function Form(props) {
       ) : (
           <div>
             <input
-              placeholder='Desayuno Gratis'
+              placeholder='detalle'
               value={input}
               onChange={handleChange}
               name='text'

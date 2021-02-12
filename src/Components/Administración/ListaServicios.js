@@ -1,43 +1,42 @@
 import React, { useState, useEffect } from 'react'
+import AgregarServicios from './AgregarServicios'
 import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
-import AgregarHabitaciones from '../AgregarItems/AgregarHabitaciones'
-import ModificarHabitacion from './ModificarHabitacion'
+import ModificarServicios from './ModificarServicios'
 
 export default function Lista() {
 
     const estadoInicial = {
-        Nombre: "Nombre de la Habitación",
+        Nombre: "Nombre del Servicio",
         Precio: 1000,
-        Complementos: [{ id: 100, text: "Camas Dobles" }, { id: 200, text: "TV 55 pulgadas" }],
-        Url: undefined,
+        Detalles: [{ id: 1, text: "Comida gratis" }],
     }
 
-    const [habitaciones, setHabitaciones] = useState([])
-    const [habitacionSeleccionada, setHabitacionSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+    const [servicios, setServicios] = useState([])
+    const [servicioSeleccionado, setServicioSeleccionado] = useState({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
     const [mostrarModificar, setMostrarModificar] = useState(false)
 
-    const getHabitaciones = async () => {
-        await db.collection("Habitaciones").orderBy("Nombre").get().then(querySnapshot => {
-            const habitaciones = []
+    const getServicios = async () => {
+        await db.collection("Servicios").orderBy("Nombre").get().then(querySnapshot => {
+            const serviciosAgregar = []
             querySnapshot.forEach(doc => {
-                habitaciones.push({ ...doc.data(), id: doc.id })
+                serviciosAgregar.push({ ...doc.data(), id: doc.id })
             })
-            setHabitaciones(habitaciones)
+            setServicios(serviciosAgregar)
         })
     }
 
     useEffect(() => {
-        getHabitaciones()
+        getServicios()
     }, [])
 
-    const handleHabitacion = habitacion => {
-        const { Nombre, Precio, Complementos, Url } = habitacion
-        setHabitacionSeleccionada({
+    const handleServicio = servicio => {
+        const { Nombre, Precio, Detalles, Url } = servicio
+        setServicioSeleccionado({
             Nombre,
             Precio,
-            Complementos,
+            Detalles,
             Url,
         })
         setMostrarAgregar(false)
@@ -46,12 +45,12 @@ export default function Lista() {
 
     const handleOnClickAgregar = () => {
         setMostrarAgregar(true)
-        setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+        setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
     }
 
-    const handleEliminarHabitacion = async (id, fotos) => {
-        let habitacion = db.collection("Habitaciones").doc(id)
-        await habitacion.delete().then(() => {
+    const handleEliminarServicio = async (id, fotos) => {
+        let servicio = db.collection("Servicios").doc(id)
+        await servicio.delete().then(() => {
             if (fotos !== undefined) {
                 let deleteRef
                 for (let i = 0; i < fotos.length; i++) {
@@ -61,12 +60,12 @@ export default function Lista() {
             }
         }).then(() => {
             swal({
-                text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
+                text: "El Servicio " + Nombre + " fue eliminado exitosamente",
                 icon: "success",
                 button: "Aceptar"
             });
-            setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
-            getHabitaciones()
+            setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
+            getServicios()
         }).catch(function (error) {
             swal({
                 icon: "error",
@@ -79,15 +78,15 @@ export default function Lista() {
     const mostrarInicial = () => {
         setMostrarAgregar(false)
         setMostrarModificar(false)
-        setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
-        getHabitaciones()
+        setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
+        getServicios()
     }
 
     const handleOnClickModificar = () => {
         setMostrarModificar(true)
     }
 
-    const { Nombre, Precio, Complementos, Url } = habitacionSeleccionada
+    const { Nombre, Precio, Detalles, Url } = servicioSeleccionado
 
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
@@ -100,27 +99,27 @@ export default function Lista() {
                                     <path d="M405.332 192H234.668V21.332C234.668 9.559 225.109 0 213.332 0 201.559 0 192 9.559 192 21.332V192H21.332C9.559 192 0 201.559 0 213.332c0 11.777 9.559 21.336 21.332 21.336H192v170.664c0 11.777 9.559 21.336 21.332 21.336 11.777 0 21.336-9.559 21.336-21.336V234.668h170.664c11.777 0 21.336-9.559 21.336-21.336 0-11.773-9.559-21.332-21.336-21.332zm0 0" />
                                 </svg>
                             </div>
-                            <h2 className="font-bold text-lg">Habitaciones</h2>
+                            <h2 className="font-bold text-lg">Servicios</h2>
                         </div>
                     </div>
 
-                    {habitaciones.map((habitacion, index) => {
-                        return (habitacionSeleccionada.Nombre === habitacion.Nombre ?
-                            (<div key={index} className="mx-1 p-4 text-xs text-white font-semibold bg-gray-700 relative cursor-pointer" onClick={() => handleHabitacion(habitacion)}>
-                                {habitacion.Nombre}
+                    {servicios.map((servicio, index) => {
+                        return (servicioSeleccionado.Nombre === servicio.Nombre ?
+                            (<div key={index} className="mx-1 p-4 text-xs text-white font-semibold bg-gray-700 relative cursor-pointer" onClick={() => handleServicio(servicio)}>
+                                {servicio.Nombre}
                             </div>)
                             :
-                            (<div key={index} className="mx-1 p-4 text-xs font-semibold hover:bg-gray-200 relative cursor-pointer" onClick={() => handleHabitacion(habitacion)}>
-                                {habitacion.Nombre}
+                            (<div key={index} className="mx-1 p-4 text-xs font-semibold hover:bg-gray-200 relative cursor-pointer" onClick={() => handleServicio(servicio)}>
+                                {servicio.Nombre}
                             </div>)
                         )
                     })}
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarHabitaciones mostrarInicial={mostrarInicial}/>)
+                        ? (<AgregarServicios mostrarInicial={mostrarInicial} />)
                         : mostrarModificar
-                            ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} mostrarInicial={mostrarInicial} />
+                            ? <ModificarServicios nombre={servicioSeleccionado.Nombre} mostrarInicial={mostrarInicial}/>
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
@@ -129,11 +128,10 @@ export default function Lista() {
                                         <h2 className="text-black pl-4">{Precio}</h2>
                                     </div>
                                     <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
+                                        <h2 className="text-blue-500 font-semibold cursor-default">Detalles</h2>
                                         {
-                                            Complementos.map(complemento => {
-                                                const { id, text } = complemento
-                                                return <h2 className="text-black pl-4">{id} | {text}</h2>
+                                            Detalles.map(detalle => {
+                                                return <h2 className="text-black pl-4">{detalle.id} | {detalle.text}</h2>
                                             })
                                         }
                                     </div>
@@ -154,17 +152,17 @@ export default function Lista() {
                                             </div>
                                         </div>)
                                         : <></>}
-                                    {Nombre !== "Nombre de la Habitación" ? (
+                                    {Nombre !== "Nombre del Servicio" ? (
                                         <div class="grid grid-cols-2">
                                             <div>
-                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
+                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
                                                     Eliminar
-                                                </button>
+                                            </button>
                                             </div>
                                             <div>
                                                 <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
                                                     Modificar
-                                                </button>
+                                            </button>
                                             </div>
                                         </div>) : (
                                             <div>

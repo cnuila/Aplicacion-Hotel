@@ -9,7 +9,7 @@ export default function LogIn({ history }) {
 
     //funcion que autentica por google
     const authGoogle = async () => {
-        var user = firebase.auth().currentUser;
+        var user = auth.currentUser;
         if (user) {
             alert("Debes cerrar sesión primero")
         } else {
@@ -45,25 +45,6 @@ export default function LogIn({ history }) {
 
     if (currentUser) {
         return <Redirect to="/" />;
-    }
-
-
-    const usuarioActual = () => {
-        var user = firebase.auth().currentUser;
-        if (user) {
-            console.log(user)
-        } else {
-            console.log("no hay usuario ahorita")
-        }
-    }
-
-    const cerrarSesion = () => {
-        firebase.auth().signOut().then(function () {
-            console.log("Cerró Sesión")
-        }).catch(function (error) {
-            console.log("No se cerró")
-            console.log(error)
-        });
     }
 
     return (

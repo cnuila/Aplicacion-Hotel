@@ -3,6 +3,7 @@ import firebase from 'firebase'
 import { Link } from 'react-router-dom';
 import menuIcon from '../assets/Hamburger_icon.png'
 import Dropdown from "./Dropdown";
+import { auth } from '../firebase';
 
 class Navbar extends Component {
     constructor() {
@@ -12,16 +13,17 @@ class Navbar extends Component {
         }
     }
 
-    cambiarNombre(newName) {
+    cambiarNombre = (newName) => {
         this.setState({
             nombre: newName
         })
     }
 
     cambioDeEstado = () => {
-        firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
-                this.cambiarNombre(firebase.auth().currentUser.displayName)
+        console.log("va")
+        auth.onAuthStateChanged(function (user) {
+            if (user) {               
+                this.cambiarNombre(user.displayName)
             } else {
                 this.cambiarNombre('Perfil')
             }
@@ -29,13 +31,14 @@ class Navbar extends Component {
     }
 
     cerrarSesion = () => {
-        firebase.auth().signOut().then(function () {
+        auth.signOut().then(function () {
         }).catch(function (error) {
             console.log(error)
         });
     }
+
     render() {
-        let user = firebase.auth().currentUser;
+        let user = auth.currentUser;
         let inicioSesion;
         let miCuenta;
         if (!user) {
