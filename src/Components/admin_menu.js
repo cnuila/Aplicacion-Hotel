@@ -9,6 +9,8 @@ import { useMediaQuery } from 'react-responsive'
 import ListaClientes from './Administración/ListaClientes'
 import ListaHabitaciones from './Administración/ListaHabitaciones'
 import ListaServicios from './Administración/ListaServicios'
+import AgregarMenu from './Administración/AgregarMenu'
+import ModificarMenu from './Administración/ModificarMenu'
 import Navbar from './Navbar'
 
 const AdminMenu = function () {
@@ -82,11 +84,7 @@ function Clientes() {
 
 function Restaurante() {
   return (
-    <div>
-      <h1>
-        this is restaurant
-      </h1>
-    </div>
+    <ModificarMenu/>
   )
 }
 
