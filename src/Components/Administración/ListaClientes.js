@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { db } from '../../firebase'
 
-export default function Lista() {
+export default function ListaClientes() {
 
     const [listaClientes, setLista] = useState([])
     const [cargando, setCargando] = useState(true)
