@@ -49,7 +49,7 @@ export default function LogIn({ history }) {
 
     return (
         <>
-            <div className="bg-fixed" Style="background-image: url(https://get.wallhere.com/photo/sea-bay-beach-Tourism-hotel-swimming-pool-resort-lagoon-pier-Caribbean-vacation-estate-leisure-ocean-186672.jpg)" >
+            <div className="bg-fixed" style={{backgroundImage:`url(${"https://yosoypuebla.com/directorio/wp-content/uploads/2018/04/hotel-posada-cuetzalan-alberca.jpg"})`}}>
                 <div className="grid min-h-screen place-items-center" >
 
                     <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-6/12">

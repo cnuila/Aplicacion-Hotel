@@ -1,39 +1,39 @@
 import React, { useState, useEffect } from 'react'
-import AgregarServicios from './AgregarServicios'
+import AgregarMenu from './AgregarMenu'
+import ModificarMenu from './ModificarMenu'
 import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
-import ModificarServicios from './ModificarServicios'
 
-export default function ListaServicios() {
+export default function ListaMenu() {
 
     const estadoInicial = {
-        Nombre: "Nombre del Servicio",
-        Precio: 1000,
-        Detalles: [{ id: 1, text: "Comida gratis" }],
+        Nombre: "Platillo",
+        Precio: 1500,
+        Detalles: [{ id: 1, text: "Langosta" }],
     }
 
-    const [servicios, setServicios] = useState([])
-    const [servicioSeleccionado, setServicioSeleccionado] = useState({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
+    const [menu, setMenu] = useState([])
+    const [platilloSeleccionado, setPlatilloSeleccionado] = useState({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
     const [mostrarModificar, setMostrarModificar] = useState(false)
 
-    const getServicios = async () => {
-        await db.collection("Servicios").orderBy("Nombre").get().then(querySnapshot => {
-            const serviciosAgregar = []
+    const getMenu = async () => {
+        await db.collection("Menu").orderBy("Nombre").get().then(querySnapshot => {
+            const menuAgregar = []
             querySnapshot.forEach(doc => {
-                serviciosAgregar.push({ ...doc.data(), id: doc.id })
+                menuAgregar.push({ ...doc.data(), id: doc.id })
             })
-            setServicios(serviciosAgregar)
+            setMenu(menuAgregar)
         })
     }
 
     useEffect(() => {
-        getServicios()
+        getMenu()
     }, [])
 
-    const handleServicio = servicio => {
-        const { Nombre, Precio, Detalles, Url } = servicio
-        setServicioSeleccionado({
+    const handlePlatillo = platillo => {
+        const { Nombre, Precio, Detalles, Url } = platillo
+        setPlatilloSeleccionado({
             Nombre,
             Precio,
             Detalles,
@@ -45,12 +45,12 @@ export default function ListaServicios() {
 
     const handleOnClickAgregar = () => {
         setMostrarAgregar(true)
-        setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
+        setPlatilloSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
     }
 
-    const handleEliminarServicio = async (id, fotos) => {
-        let servicio = db.collection("Servicios").doc(id)
-        await servicio.delete().then(() => {
+    const handleEliminarMenu = async (id, fotos) => {
+        let menu = db.collection("Menu").doc(id)
+        await menu.delete().then(() => {
             if (fotos !== undefined) {
                 let deleteRef
                 for (let i = 0; i < fotos.length; i++) {
@@ -60,12 +60,12 @@ export default function ListaServicios() {
             }
         }).then(() => {
             swal({
-                text: "El Servicio " + Nombre + " fue eliminado exitosamente",
+                text: "El Platillo " + Nombre + " fue eliminado exitosamente",
                 icon: "success",
                 button: "Aceptar"
             });
-            setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
-            getServicios()
+            setPlatilloSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
+            getMenu()
         }).catch(function (error) {
             swal({
                 icon: "error",
@@ -78,15 +78,15 @@ export default function ListaServicios() {
     const mostrarInicial = () => {
         setMostrarAgregar(false)
         setMostrarModificar(false)
-        setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
-        getServicios()
+        setPlatilloSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
+        getMenu()
     }
 
     const handleOnClickModificar = () => {
         setMostrarModificar(true)
     }
 
-    const { Nombre, Precio, Detalles, Url } = servicioSeleccionado
+    const { Nombre, Precio, Detalles, Url } = platilloSeleccionado
 
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
@@ -99,27 +99,27 @@ export default function ListaServicios() {
                                     <path d="M405.332 192H234.668V21.332C234.668 9.559 225.109 0 213.332 0 201.559 0 192 9.559 192 21.332V192H21.332C9.559 192 0 201.559 0 213.332c0 11.777 9.559 21.336 21.332 21.336H192v170.664c0 11.777 9.559 21.336 21.332 21.336 11.777 0 21.336-9.559 21.336-21.336V234.668h170.664c11.777 0 21.336-9.559 21.336-21.336 0-11.773-9.559-21.332-21.336-21.332zm0 0" />
                                 </svg>
                             </div>
-                            <h2 className="font-bold text-lg">Servicios</h2>
+                            <h2 className="font-bold text-lg">Restaurante</h2>
                         </div>
                     </div>
 
-                    {servicios.map((servicio, index) => {
-                        return (servicioSeleccionado.Nombre === servicio.Nombre ?
-                            (<div key={index} className="mx-1 p-4 text-xs text-white font-semibold bg-gray-700 relative cursor-pointer" onClick={() => handleServicio(servicio)}>
-                                {servicio.Nombre}
+                    {menu.map((platillo, index) => {
+                        return (platilloSeleccionado.Nombre === platillo.Nombre ?
+                            (<div key={index} className="mx-1 p-4 text-xs text-white font-semibold bg-gray-700 relative cursor-pointer" onClick={() => handlePlatillo(platillo)}>
+                                {platillo.Nombre}
                             </div>)
                             :
-                            (<div key={index} className="mx-1 p-4 text-xs font-semibold hover:bg-gray-200 relative cursor-pointer" onClick={() => handleServicio(servicio)}>
-                                {servicio.Nombre}
+                            (<div key={index} className="mx-1 p-4 text-xs font-semibold hover:bg-gray-200 relative cursor-pointer" onClick={() => handlePlatillo(platillo)}>
+                                {platillo.Nombre}
                             </div>)
                         )
                     })}
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarServicios mostrarInicial={mostrarInicial} />)
+                        ? (<AgregarMenu mostrarInicial={mostrarInicial} />)
                         : mostrarModificar
-                            ? <ModificarServicios nombre={servicioSeleccionado.Nombre} mostrarInicial={mostrarInicial}/>
+                            ? <ModificarMenu nombre={platilloSeleccionado.Nombre} mostrarInicial={mostrarInicial} />
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
@@ -144,7 +144,7 @@ export default function ListaServicios() {
                                                         return (
                                                             <img
                                                                 className="h-40 w-40 p-2 object-cover rounded-xl"
-                                                                alt="Servicio"
+                                                                alt="Platillo"
                                                                 src={foto}
                                                             />)
                                                     })
@@ -152,10 +152,10 @@ export default function ListaServicios() {
                                             </div>
                                         </div>)
                                         : <></>}
-                                    {Nombre !== "Nombre del Servicio" ? (
+                                    {Nombre !== "Platillo" ? (
                                         <div class="grid grid-cols-2">
                                             <div>
-                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
+                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarMenu(Nombre, Url)}>
                                                     Eliminar
                                             </button>
                                             </div>

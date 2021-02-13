@@ -4,7 +4,7 @@ import swal from 'sweetalert'
 import AgregarHabitaciones from './AgregarHabitaciones'
 import ModificarHabitacion from './ModificarHabitacion'
 
-export default function Lista() {
+export default function ListaHabitaciones() {
 
     const estadoInicial = {
         Nombre: "Nombre de la Habitación",
