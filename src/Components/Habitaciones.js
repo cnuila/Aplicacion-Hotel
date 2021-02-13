@@ -19,18 +19,13 @@ export default function Habitaciones() {
     }, [])
 
     return (
-        <div className="bg-gray-100 h-full">
-            <div>
-                <Navbar />
-            </div>
-            <div className="text-3xl text-center font-bold mt-3">
-                Habitaciones
-                </div>
+        <div className="bg-gray-100 h-screen">
+            <Navbar />
             <div class="space-y-4">
                 {habitaciones.map(h => {
                     return (
                         <div>
-                            <Habitacion precio={h.Precio} complementos={h.Complementos} url={h.Url} nombre={h.Nombre} />
+                            <Habitacion resena={h.resena} precio={h.Precio} complementos={h.Complementos} url={h.Url} nombre={h.Nombre} />
                         </div>
                     )
                 })}

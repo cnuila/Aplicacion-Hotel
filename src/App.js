@@ -14,6 +14,9 @@ import RecuperarContra from './Components/LogIn/RecuperarContra';
 import Reseña from "./Components/Reseña";
 import reseña from './Components/Reseña';
 import Comentario from "./Components/Comentario"
+import InfoHabitacion from "./Components/InformacionHabitacion"
+import Menu from "./Components/MenuRestaurante"
+
 function App() {
   return (
     <Router>
@@ -24,10 +27,11 @@ function App() {
         <Route path="/administracion" component={Administracion} />
         <Route path="/recuperarContra" component={RecuperarContraseña} />
         <Route path="/servicios" component={Servicos} />
-        <Route path="/miInfo" exact component={ListarUsuario}/>
-        <Route path="/habitaciones" component={Habitaciones} />
+        <Route path="/miInfo" exact component={ListarUsuario} />
+        <Route path="/habitaciones" exact component={Habitaciones} />
         <Route path="/restaurante" component={Restaurante} />
-
+        <Route path="/habitaciones/:nombre" component={InfoHabitacion} />
+        <Route path="/menu" component={Menu} />
       </Switch>
     </Router>
   );

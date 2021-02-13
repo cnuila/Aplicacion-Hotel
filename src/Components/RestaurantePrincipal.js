@@ -5,6 +5,7 @@ import { Carousel } from 'react-responsive-carousel';
 import img_restaurante_1 from '../imagenes/restaurante1.jpg'
 import img_restaurante_2 from '../imagenes/restaurante2.jpg'
 import Navbar from './Navbar';
+import { Link } from 'react-router-dom';
 
 export default function RestaurantePrincipal(){
     return(
@@ -36,8 +37,9 @@ export default function RestaurantePrincipal(){
                                 </div>
                                 <div class="absolute opacity-0 fd-sh group-hover:opacity-100"> 
                                     <div class="pt-8 text-center">
+                                        <Link to="/menu">
                                         <button class="text-center rounded-lg p-4 bg-white  text-gray-700 font-bold text-lg cursor-pointer button">Ver más</button>
-                                        
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

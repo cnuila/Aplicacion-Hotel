@@ -1,9 +1,12 @@
-    
+
 import { Link } from 'react-router-dom';
 import ReactStarRating from "react-star-ratings-component";
 import React, { Component } from 'react'
+import swal from 'sweetalert'
+import { db } from '../firebase'
 
 class reseña extends React.Component {
+
     constructor(props) {
         super(props)
         this.state = {
@@ -13,7 +16,6 @@ class reseña extends React.Component {
     estadoInicial = {
         Rating: '',
         comentario: '',
-
     }
     handlecomentario = (event) => {
         console.log(event.target.value)
@@ -24,29 +26,33 @@ class reseña extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault()
         // perform all neccassary validations
-        
-        if (this.state.comentario.includes('puta')||this.state.comentario.includes('maldito')||this.state.comentario.includes('puta')||this.state.comentario.includes('cabron')||this.state.comentario.includes('pija')||this.state.comentario.includes('mierda')
-        
-        ){    
+
+        if (this.state.comentario.includes('puta') || this.state.comentario.includes('maldito') || this.state.comentario.includes('puta') || this.state.comentario.includes('cabron') || this.state.comentario.includes('pija') || this.state.comentario.includes('mierda')
+
+        ) {
             console.log(this.state.Rating)
             alert("Su Comentario incluye palabras ofensivas")
-        }else if(this.state.Rating===""){
+        } else if (this.state.Rating === "") {
             console.log(this.state.Rating)
             alert("por favor indicar cuantas estrellas")
-        }else if(this.state.comentario.length<5){
+        } else if (this.state.comentario.length < 5) {
             alert("su comentario es muy corto")
-        } 
+        }
         else {
             console.log(this.state.Rating)
-            alert("Su Comentario es valido")
             // poner la base de datos que corresponde con la subcoleccion
-            /*db.collection("").doc(this.state.Identidad).set({
-                rating: this.state.Rating,
-                comentario: this.state.comentario,
-                
-            }).then(() => { 
+            const resAn = db.collection("Habitaciones").doc(this.props.nombre).get(this.props.resena)
+            console.log(resAn)
+            db.collection("Habitaciones").doc(this.props.nombre).update({
+                resena: [this.state.Rating, this.state.comentario]
+            }).then(() => {
+                swal({
+                    text: "La reseña fue enviada exitosamente",
+                    icon: "success",
+                    button: "Aceptar"
+                });
             });
-            */}
+        }
     }
 
     render() {
@@ -64,7 +70,7 @@ class reseña extends React.Component {
                                     disableOnSelect={false}
                                     onSelectStar={val => {
                                         this.state.Rating = val
-                                    }}/>
+                                    }} />
                                 <div class="w-full md:w-full px-3 mb-2 mt-2">
                                     <textarea name="comentario" onChange={this.handlecomentario} class="bg-gray-100 rounded border  border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="body" placeholder='Danos tu Opinión' required></textarea>
                                 </div>
@@ -73,14 +79,9 @@ class reseña extends React.Component {
                                 </div>
                             </div>
                         </form>
-
-
                     </div>
-
-
                 </div>
                 {/* inicio de comentarios anteriorires*/}
-                
             </div>
 
 

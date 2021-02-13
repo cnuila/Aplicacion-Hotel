@@ -147,7 +147,8 @@ function AgregarHabitaciones(props) {
                 Nombre: Nombre,
                 Precio: Precio,
                 Complementos: todos,
-                Url: dirFotos
+                Url: dirFotos,
+                Resena: [],
             }).then(() => {
                 alertaSuccess()
                 props.mostrarInicial()
