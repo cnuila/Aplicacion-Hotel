@@ -22,6 +22,9 @@ export default function Habitaciones() {
         <div className="bg-gray-100 h-screen">
             <Navbar />
             <div class="space-y-4">
+                <div className="text-3xl text-center font-bold mt-3">
+                    Habitaciones
+                </div>
                 {habitaciones.map(h => {
                     return (
                         <div>

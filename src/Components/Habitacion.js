@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import hotel from "../imagenes/hotel.jpg"
-import hotel1 from "../imagenes/hotel1.jpg"
-import hotel2 from "../imagenes/hotel2.jpg"
 import { Link } from 'react-router-dom';
 import { storage } from '../firebase';
 import InfoHabitacion from './InformacionHabitacion';
@@ -25,10 +22,7 @@ export default function Habitacion(props) {
         descargarFotos()
     }, [props.url])
     return (
-        <>
-            <div className="text-3xl text-center font-bold mt-3">
-                Habitaciones
-                </div>
+        <>            
             <div className="grid grid-cols-1 m-3 md:m-6 sm:grid-cols-2 sm:px-8 sm:gap-x-8 pb-4 md:py-12  bg-local bg-white rounded-lg">
                 <div className="relative z-10 col-start-1 row-start-1 px-4 pt-40 md:pt-20 pb-3 bg-gradient-to-t sm:bg-none">
                     <p className="text-sm font-medium text-black sm:mb-1 sm:text-black">Habitacion</p>
