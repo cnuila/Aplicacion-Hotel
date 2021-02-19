@@ -3,6 +3,7 @@ import imagen from "./ImagenFondo2.jpg"
 import InputMask from "react-input-mask"
 import Navbar from './Navbar'
 import { db, auth } from "../firebase"
+import swal from 'sweetalert'
 import { Link } from 'react-router-dom'
 
 export default function ListarUsuario({ history }) {
@@ -41,7 +42,11 @@ export default function ListarUsuario({ history }) {
             Apellido,
             Telefono,
         }).then(() => {
-            console.log("Se actualizó su información")
+            swal({
+                text: "Se actualizó su información",
+                icon: "success",
+                button: "Aceptar"
+            });
         }).catch(error => {
             console.log(error)
         })
