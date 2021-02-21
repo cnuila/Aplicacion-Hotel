@@ -1,92 +1,24 @@
-
-import { Link } from 'react-router-dom';
 import ReactStarRating from "react-star-ratings-component";
-import React, { Component } from 'react'
-import swal from 'sweetalert'
-import { db } from '../firebase'
+import React from 'react'
 
-class reseña extends React.Component {
+export default function Reseña(props) {
+    return (
+        <div class="">
+                <div class="flex justify-center container w-full mx-auto py-12 px-4">
+                    <div class="  flex justify-center w-2/3  bg-gray-300 rounded-3xl border-blue-900 border shadow-lg pb-6 lg:pb-0">
+                        <div class="w-full  p-4">
+                            <div class="justify-items-center ">
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            ...this.estadoInicial,
-        }
-    }
-    estadoInicial = {
-        Rating: '',
-        comentario: '',
-    }
-    handlecomentario = (event) => {
-        console.log(event.target.value)
-        this.setState({
-            comentario: event.target.value
-        })
-    }
-    handleSubmit = (event) => {
-        event.preventDefault()
-        // perform all neccassary validations
-
-        if (this.state.comentario.includes('puta') || this.state.comentario.includes('maldito') || this.state.comentario.includes('puta') || this.state.comentario.includes('cabron') || this.state.comentario.includes('pija') || this.state.comentario.includes('mierda')
-
-        ) {
-            console.log(this.state.Rating)
-            alert("Su Comentario incluye palabras ofensivas")
-        } else if (this.state.Rating === "") {
-            console.log(this.state.Rating)
-            alert("por favor indicar cuantas estrellas")
-        } else if (this.state.comentario.length < 5) {
-            alert("su comentario es muy corto")
-        }
-        else {
-            console.log(this.state.Rating)
-            // poner la base de datos que corresponde con la subcoleccion
-            const resAn = db.collection("Habitaciones").doc(this.props.nombre).get(this.props.resena)
-            console.log(resAn)
-            db.collection("Habitaciones").doc(this.props.nombre).update({
-                resena: [this.state.Rating, this.state.comentario]
-            }).then(() => {
-                swal({
-                    text: "La reseña fue enviada exitosamente",
-                    icon: "success",
-                    button: "Aceptar"
-                });
-            });
-        }
-    }
-
-    render() {
-
-        return (
-            <div >
-                <div class="flex justify-center">
-                    <div class="flex justify-center shadow-lg  mx-8 mb-1 ">
-                        <form class="w-full max-w-xl justify-center  bg-gray-200 rounded-lg px-4 pt-1 border-gray-600 border-1">
-                            <div class="flex flex-wrap justify-center -mx-3 mb-10">
-                                <h2 class="px-4 -pt-1 pb-2 text-blue text-lg">Tu opinión es importante</h2>
-                                <ReactStarRating
-                                    numberOfStar={5} numberOfSelectedStar={3} colorFilledStar="yellow"
-                                    colorEmptyStar="blue" starSize="20px" spaceBetweenStar="8px"
-                                    disableOnSelect={false}
-                                    onSelectStar={val => {
-                                        this.state.Rating = val
-                                    }} />
-                                <div class="w-full md:w-full px-3 mb-2 mt-2">
-                                    <textarea name="comentario" onChange={this.handlecomentario} class="bg-gray-100 rounded border  border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="body" placeholder='Danos tu Opinión' required></textarea>
+                                <h3 class="text-blue mx-7 font-semibold text-lg text-center md:text-left ">{props.resena.usuario} dice:</h3>
+                                <p class="work-sans font-semibold text-xl text-white"></p>
+                                <div class="mx-5 mb-1">
+                                    <ReactStarRating numberOfStar={5} numberOfSelectedStar={props.resena.rating} colorFilledStar="yellow" colorEmptyStar="blue" starSize="25px" spaceBetweenStar="8px" disableOnSelect={true} />
                                 </div>
-                                <div class="w-full justify-center flex items-start md:w-full px-3">
-                                    <input type='submit' onClick={this.handleSubmit} class="bg-gray-300  text-gray-900 font-medium py-1 px-4 border-2 border-gray-700 rounded-lg tracking-wide mr-1 hover:bg-gray-400" value='Sube tu comentario' />
-                                </div>
+                                <textarea name="comentario" value={props.resena.comentario} class="rounded-md bg-gray-200 text-xl leading-normal resize-none w-full h-20 py-2 px-3 font-medium text-gray-700 focus:outline-none "></textarea>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-                {/* inicio de comentarios anteriorires*/}
             </div>
-
-
-
-        )
-    }
+    )
 }
-export default reseña;

@@ -11,8 +11,14 @@ export default function Habitaciones() {
     useEffect(() => {
         db.collection("Habitaciones").onSnapshot((querySnapshot) => {
             const listaHabitaciones = []
-            querySnapshot.forEach((doc) => {
-                listaHabitaciones.push({ ...doc.data(), id: doc.id })
+            const listaReseñas = []
+            querySnapshot.forEach((doc) => {            
+                db.collection("Habitaciones").doc(doc.id).collection("Reseñas").onSnapshot((querySnapshot2) =>{                    
+                    querySnapshot2.forEach((doc2) =>{
+                        listaReseñas.push({...doc2.data(),id:doc2.id})
+                    })                    
+                })
+                listaHabitaciones.push({ ...doc.data(), id: doc.id,reseñas:listaReseñas })
             });
             setHabitaciones(listaHabitaciones)
         })
@@ -25,10 +31,10 @@ export default function Habitaciones() {
                 <div className="text-3xl text-center font-bold mt-3">
                     Habitaciones
                 </div>
-                {habitaciones.map(h => {
+                {habitaciones.map(habitacion => {
                     return (
                         <div>
-                            <Habitacion resena={h.resena} precio={h.Precio} complementos={h.Complementos} url={h.Url} nombre={h.Nombre} />
+                            <Habitacion reseñas={habitacion.reseñas} precio={habitacion.Precio} complementos={habitacion.Complementos} url={habitacion.Url} nombre={habitacion.Nombre} />
                         </div>
                     )
                 })}

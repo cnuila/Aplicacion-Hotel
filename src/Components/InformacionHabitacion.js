@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from 'react'
+import { db } from "../firebase"
 import Navbar from './Navbar';
 import Reseña from './Reseña';
-import Comentario from './Comentario';
-import img_carousel_1 from '../imagenes/ban222.jpg';
-import img_carousel_2 from '../imagenes/ban3.jpg';
-import img_carousel_3 from '../imagenes/ban4.jpg';
 import { Carousel } from 'react-responsive-carousel';
+import CrearReseña from './CrearReseña';
 
 export default function InfoHabitacion({ location }) {
   const nombre = location.state.props.nombre
   const complementos = location.state.props.complementos
   const precio = location.state.props.precio
   const fotos = location.state.fotos
-  const resena = location.state.props.resena
+  const [reseñas, setReseña] = useState([])
+
+  useEffect(() => {
+    db.collection("Habitaciones").doc(nombre).collection("Reseñas").onSnapshot((querySnapshot2) => {
+      const listaReseñas = []
+      querySnapshot2.forEach((doc2) => {
+        listaReseñas.push({ ...doc2.data(), id: doc2.id })
+      })
+      setReseña(listaReseñas)
+    })
+  }, [])
+
   const [value, onChange] = useState();
   return (
     <div>
@@ -106,16 +115,15 @@ export default function InfoHabitacion({ location }) {
           </div>
         </div>
         <div class=" bg-indigo-700">
-
-          {resena !== undefined ? (
-            resena.map(r => {
+          {reseñas !== undefined ? (
+            reseñas.map(reseña => {
               return (
-                <Comentario resena={r} />
+                <Reseña resena={reseña} />
               )
-            })) : (<>hi</>)
+            })) : (<></>)
           }
 
-          <Reseña nombre={nombre} resena={resena} />
+          <CrearReseña nombre={nombre} />
         </div>
       </body>
     </div>
