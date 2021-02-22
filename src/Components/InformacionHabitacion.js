@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { db } from "../firebase"
+import { db, auth } from "../firebase"
 import Navbar from './Navbar';
 import Reseña from './Reseña';
 import { Carousel } from 'react-responsive-carousel';
@@ -10,10 +10,11 @@ export default function InfoHabitacion({ location }) {
   const complementos = location.state.props.complementos
   const precio = location.state.props.precio
   const fotos = location.state.fotos
+  const [value, onChange] = useState();
   const [reseñas, setReseña] = useState([])
 
   useEffect(() => {
-    db.collection("Habitaciones").doc(nombre).collection("Reseñas").onSnapshot((querySnapshot2) => {
+    db.collection("Habitaciones").doc(nombre).collection("Reseñas").orderBy("rating","desc").onSnapshot((querySnapshot2) => {
       const listaReseñas = []
       querySnapshot2.forEach((doc2) => {
         listaReseñas.push({ ...doc2.data(), id: doc2.id })
@@ -22,7 +23,6 @@ export default function InfoHabitacion({ location }) {
     })
   }, [])
 
-  const [value, onChange] = useState();
   return (
     <div>
       <Navbar />
@@ -116,9 +116,9 @@ export default function InfoHabitacion({ location }) {
         </div>
         <div class=" bg-indigo-700">
           {reseñas !== undefined ? (
-            reseñas.map(reseña => {
+            reseñas.map((reseña,index) => {
               return (
-                <Reseña resena={reseña} />
+                <Reseña key={index} resena={reseña} nombre={nombre}/>
               )
             })) : (<></>)
           }

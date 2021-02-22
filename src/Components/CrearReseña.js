@@ -23,6 +23,12 @@ class CrearReseña extends React.Component {
         })
     }
 
+    onStarClick = (valor) => {
+        this.setState({
+            rating: valor,
+        })
+    }
+
     handleSubmit = (event) => {
         event.preventDefault()
         const user = auth.currentUser;
@@ -60,7 +66,7 @@ class CrearReseña extends React.Component {
                         text: "La reseña fue enviada exitosamente",
                         icon: "success",
                         button: "Aceptar"
-                    }) 
+                    })
                     this.setState({
                         rating:0,
                         comentario:"",
@@ -94,11 +100,8 @@ class CrearReseña extends React.Component {
                                     numberOfStar={5} numberOfSelectedStar={this.state.rating} colorFilledStar="yellow"
                                     colorEmptyStar="blue" starSize="20px" spaceBetweenStar="8px"
                                     disableOnSelect={false}
-                                    onSelectStar={val => {
-                                        this.setState({
-                                            rating: val
-                                        })
-                                    }} />
+                                    onSelectStar={(val) => this.onStarClick(val)}
+                                    />
                                 <div class="w-full md:w-full px-3 mb-2 mt-2">
                                     <textarea name="comentario" onChange={this.handlecomentario} value={this.state.comentario} class="bg-gray-100 rounded border  border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="body" placeholder='Danos tu Opinión' required></textarea>
                                 </div>

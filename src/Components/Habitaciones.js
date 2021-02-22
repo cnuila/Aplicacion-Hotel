@@ -31,10 +31,10 @@ export default function Habitaciones() {
                 <div className="text-3xl text-center font-bold mt-3">
                     Habitaciones
                 </div>
-                {habitaciones.map(habitacion => {
+                {habitaciones.map((habitacion,index) => {
                     return (
                         <div>
-                            <Habitacion reseñas={habitacion.reseñas} precio={habitacion.Precio} complementos={habitacion.Complementos} url={habitacion.Url} nombre={habitacion.Nombre} />
+                            <Habitacion key={index} reseñas={habitacion.reseñas} precio={habitacion.Precio} complementos={habitacion.Complementos} url={habitacion.Url} nombre={habitacion.Nombre} />
                         </div>
                     )
                 })}
