@@ -14,14 +14,18 @@ export default function InfoHabitacion({ location }) {
   const [reseñas, setReseña] = useState([])
 
   useEffect(() => {
-    db.collection("Habitaciones").doc(nombre).collection("Reseñas").orderBy("rating","desc").onSnapshot((querySnapshot2) => {
+    getReseñas()
+  }, [])
+
+  const getReseñas = () => {
+    db.collection("Habitaciones").doc(nombre).collection("Reseñas").orderBy("rating", "desc").get().then(querySnapshot => {
       const listaReseñas = []
-      querySnapshot2.forEach((doc2) => {
-        listaReseñas.push({ ...doc2.data(), id: doc2.id })
+      querySnapshot.forEach((doc) => {
+        listaReseñas.push({ ...doc.data(), id: doc.id })
       })
       setReseña(listaReseñas)
     })
-  }, [])
+  }
 
   return (
     <div>
@@ -76,7 +80,7 @@ export default function InfoHabitacion({ location }) {
                   <div>
                     <div class="rounded-lg bg-gray-100 flex py-2 px-3">
                       <span class="text-indigo-400 mr-1 mt-1">Lps.</span>
-                      <span class="font-bold text-indigo-600 text-3xl">{precio}</span>
+                      <span class="font-bold text-indigo-600 text-3xl">{precio}.00</span>
                     </div>
                   </div>
                   <div class="flex-1">
@@ -116,14 +120,14 @@ export default function InfoHabitacion({ location }) {
         </div>
         <div class=" bg-indigo-700">
           {reseñas !== undefined ? (
-            reseñas.map((reseña,index) => {
+            reseñas.map((reseña, index) => {
               return (
-                <Reseña key={index} resena={reseña} nombre={nombre}/>
+                <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas}/>
               )
             })) : (<></>)
           }
 
-          <CrearReseña nombre={nombre} />
+          <CrearReseña nombre={nombre} getReseñas={getReseñas}/>
         </div>
       </body>
     </div>

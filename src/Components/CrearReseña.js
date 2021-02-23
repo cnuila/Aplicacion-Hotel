@@ -67,6 +67,7 @@ class CrearReseña extends React.Component {
                         icon: "success",
                         button: "Aceptar"
                     })
+                    this.props.getReseñas()
                     this.setState({
                         rating:0,
                         comentario:"",

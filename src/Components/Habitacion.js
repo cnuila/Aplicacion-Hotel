@@ -22,7 +22,7 @@ export default function Habitacion(props) {
         descargarFotos()
     }, [props.url])
     return (
-        <>            
+        <div>
             <div className="grid grid-cols-1 m-3 md:m-6 sm:grid-cols-2 sm:px-8 sm:gap-x-8 pb-4 md:py-12  bg-local bg-white rounded-lg">
                 <div className="relative z-10 col-start-1 row-start-1 px-4 pt-40 md:pt-20 pb-3 bg-gradient-to-t sm:bg-none">
                     <p className="text-sm font-medium text-black sm:mb-1 sm:text-black">Habitacion</p>
@@ -32,16 +32,14 @@ export default function Habitacion(props) {
                 <div className="col-start-1 row-start-2 px-4 md:pb-10 bg-none">
 
                     <div className="flex items-center text-sm font-medium mt-5 mb-3 sm:mt-2 sm:mb-2 text-black">
-                        <div>{"Lps." + props.precio}</div>
+                        <div>{"Lps." + props.precio+".00"}</div>
                     </div>
                     <div className="text-sm font-medium text-black mt-2 mb-4 md:mt-6 md:mb-0">
                         <h2>Incluye:</h2>
-                        <ul class="grid grid-cols-1 mt-2 lg:grid-cols-2 list-disc list-inside bg-rose-200 pl-4">
-                            {props.complementos.map(c => {
+                        <ul className="grid grid-cols-1 mt-2 lg:grid-cols-2 list-disc list-inside bg-rose-200 pl-4">
+                            {props.complementos.map((complemento, index) => {
                                 return (
-                                    <div>
-                                        <li>{c.text}</li>
-                                    </div>
+                                    <li key={index}>{complemento.text}</li>
                                 )
                             })}
 
@@ -72,11 +70,10 @@ export default function Habitacion(props) {
                                     <img src={f} alt="foto" className="absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100" />
                                 </div>)
                             })
-
                         }
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
