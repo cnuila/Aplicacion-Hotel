@@ -51,28 +51,43 @@ export default function ListaHabitaciones() {
 
     const handleEliminarHabitacion = async (id, fotos) => {
         let habitacion = db.collection("Habitaciones").doc(id)
-        await habitacion.delete().then(() => {
-            if (fotos !== undefined) {
-                let deleteRef
-                for (let i = 0; i < fotos.length; i++) {
-                    deleteRef = storage.refFromURL(fotos[i])
-                    deleteRef.delete()
-                }
+        swal({
+            title: "Esta seguro?",
+            text: "La habitacion sera borrada permanentemente!",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: true,
             }
-        }).then(() => {
-            swal({
-                text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
-                icon: "success",
-                button: "Aceptar"
-            });
-            setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
-            getHabitaciones()
-        }).catch(function (error) {
-            swal({
-                icon: "error",
-                title: "Error al Eliminar",
-                text: "Error: " + error
-            })
+        }).then(async result => {
+            console.log(result)
+            if (result) {
+                await habitacion.delete().then(() => {
+                    if (fotos !== undefined) {
+                        let deleteRef
+                        for (let i = 0; i < fotos.length; i++) {
+                            deleteRef = storage.refFromURL(fotos[i])
+                            deleteRef.delete()
+                        }
+                    }
+                }).then(() => {
+                    swal({
+                        text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    });
+                    setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+                    getHabitaciones()
+                }).catch(function (error) {
+                    swal({
+                        icon: "error",
+                        title: "Error al Eliminar",
+                        text: "Error: " + error
+                    })
+                });
+            } else {
+                swal("Cancelado", "La habitacion no se borro");
+            }
         });
     }
 
@@ -118,7 +133,7 @@ export default function ListaHabitaciones() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarHabitaciones mostrarInicial={mostrarInicial}/>)
+                        ? (<AgregarHabitaciones mostrarInicial={mostrarInicial} />)
                         : mostrarModificar
                             ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} mostrarInicial={mostrarInicial} />
                             : (
