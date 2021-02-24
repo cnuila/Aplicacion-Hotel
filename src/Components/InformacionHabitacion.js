@@ -119,6 +119,7 @@ export default function InfoHabitacion({ location }) {
           </div>
         </div>
         <div class=" bg-indigo-700">
+          <div class="py-3">
           {reseñas !== undefined ? (
             reseñas.map((reseña, index) => {
               return (
@@ -128,6 +129,7 @@ export default function InfoHabitacion({ location }) {
           }
 
           <CrearReseña nombre={nombre} getReseñas={getReseñas}/>
+        </div>
         </div>
       </body>
     </div>

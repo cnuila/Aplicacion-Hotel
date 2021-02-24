@@ -37,11 +37,14 @@ export default function Reseña(props) {
     }
     console.log("se llamo")
     console.log(props)
-    const { resena } = props
+   
+    
+    const { resena } = props 
+    console.log(resena.rating)
     return (
         <div className="">
-            <div className="flex justify-center container w-full mx-auto py-12 px-4">
-                <div className="  flex justify-center w-2/3  bg-gray-300 rounded-3xl border-blue-900 border shadow-lg pb-6 lg:pb-0">
+            <div className="flex justify-center container w-full mx-auto py-2 px-4">
+                <div className="  flex justify-center w-3/5  bg-gray-300 rounded-3xl border-blue-900 border shadow-lg  lg:pb-0">
                     <div className="w-full  p-4">
                         <div className="justify-items-center ">
                             <div className="grid grid-cols-2">

@@ -65,13 +65,15 @@ class CrearReseña extends React.Component {
                     swal({
                         text: "La reseña fue enviada exitosamente",
                         icon: "success",
-                        button: "Aceptar"
+                        button: "Aceptar",
+                        
                     })
                     this.props.getReseñas()
                     this.setState({
                         rating:0,
                         comentario:"",
                     })        
+                    
                 }).catch((error) => {
                     swal({
                         text: error,
@@ -79,6 +81,7 @@ class CrearReseña extends React.Component {
                         button: "Aceptar"
                     });
                 })
+                
             }
         } else {
             swal({
@@ -93,7 +96,7 @@ class CrearReseña extends React.Component {
         return (
             <div >
                 <div class="flex justify-center">
-                    <div class="flex justify-center shadow-lg  mx-8 mb-1 ">
+                    <div class="flex justify-center shadow-lg py-4 mx-8 mb-1 ">
                         <form class="w-full max-w-xl justify-center  bg-gray-200 rounded-lg px-4 pt-1 border-gray-600 border-1">
                             <div class="flex flex-wrap justify-center -mx-3 mb-10">
                                 <h2 class="px-4 -pt-1 pb-2 text-blue text-lg">Tu opinión es importante</h2>
