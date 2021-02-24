@@ -30,14 +30,6 @@ class Navbar extends Component {
         });
     }
     render() {
-        let user = auth.currentUser;
-        let inicioSesion;
-        let miCuenta;
-        if (!user) {
-            inicioSesion = <li><Link to="/login" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Inicio de Sesión</Link></li>            
-        } else {
-            miCuenta = <li><Link to="/miInfo" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Mi Cuenta</Link></li>
-        }
         return (
             <>
                 <header class="lg:px-16 px-6 bg-blue-900 flex flex-wrap items-center lg:py-0 py-2 text-white">
@@ -53,11 +45,6 @@ class Navbar extends Component {
                     <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="menu">
                         <nav>
                             <ul class="lg:flex items-center justify-between text-base text-white pt-4 lg:pt-0">
-                                {inicioSesion}
-                                {miCuenta}
-                                <li>
-                                    <Link to="/servicios" class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-200">Servicios</Link>
-                                </li>
                                 <li>
                                     <Dropdown/>
                                 </li>
