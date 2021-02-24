@@ -4,6 +4,7 @@ import { db, storage } from '../../firebase';
 import Items from '../AgregarItems/Items'
 import Form from '../AgregarItems/Form'
 import swal from 'sweetalert'
+import Loading from './Loading'
 
 function ModificarHabitacion(props) {
 
@@ -12,6 +13,7 @@ function ModificarHabitacion(props) {
     const [precio, setPrecio] = useState("");
     const [url, setUrl] = useState([]);
     const [files, setFiles] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
     const {
         getRootProps,
@@ -198,7 +200,7 @@ function ModificarHabitacion(props) {
         url.map(ur => {
             dirFotos.push(ur)
         })
-
+        setShowModal(prev => !prev);
         if (files.length >= 0) {
             for (var i = 0; i < files.length; i++) {
                 const nombreFoto = files[i].name;
@@ -221,72 +223,82 @@ function ModificarHabitacion(props) {
             Url: dirFotos,
             Resena: [],
         }).then(() => {
+            setShowModal(prev => !prev);
             alertaSuccess()
             props.mostrarInicial()
+        }).catch(() => {
+            setShowModal(prev => !prev);
         })
     }
 
     return (
-        <div className="grid min-h-screen place-items-center">
-            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-11/12">
-                <h1 className="text-xl font-semibold text-center">Modifique la información sobre la habitación</h1>
-                <form onSubmit={handleUpload} className="mt-6">
-                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre de la habitación</label>
-                    <input value={nombre} onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" disabled required />
-                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
-                    <input value={precio} onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Agregar Complementos</label>
+        <>
+            {
+                showModal ? <Loading showModal={showModal} setShowModal={setShowModal} />
+                    : <div>
+                        <div className="grid min-h-screen place-items-center">
+                            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-11/12">
+                                <h1 className="text-xl font-semibold text-center">Modifique la información sobre la habitación</h1>
+                                <form onSubmit={handleUpload} className="mt-6">
+                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre de la habitación</label>
+                                    <input value={nombre} onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" disabled required />
+                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
+                                    <input value={precio} onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
 
-                    <Form onSubmit={addTodo} />
-                    <Items
-                        todos={todos}
-                        completeTodo={completeTodo}
-                        removeTodo={removeTodo}
-                        updateTodo={updateTodo}
-                    />
+                                    <Form onSubmit={addTodo} />
+                                    <Items
+                                        todos={todos}
+                                        completeTodo={completeTodo}
+                                        removeTodo={removeTodo}
+                                        updateTodo={updateTodo}
+                                    />
 
-                    <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
-                        <div className="grid grid-cols-2 place-items-center">
-                            {
-                                url.map(foto => {
-                                    return (
-                                        <div>
-                                            <div class="relative bg-gray-300 rounded-2xl m-auto py-2 px-2">
-                                                <button className="absolute top-0 right-0" onClick={handleModificarFotos}>
-                                                    <svg class="fill-current text-red-500 h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path id={foto} fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                                <img
-                                                    className="h-40 w-40 object-cover rounded-xl"
-                                                    alt="Habitacion"
-                                                    src={foto}
-                                                />
-                                            </div>
+                                    <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
+                                        <div className="grid grid-cols-2 place-items-center">
+                                            {
+                                                url.map(foto => {
+                                                    return (
+                                                        <div>
+                                                            <div class="relative bg-gray-300 rounded-2xl m-auto py-2 px-2">
+                                                                <button className="absolute top-0 right-0" onClick={handleModificarFotos}>
+                                                                    <svg class="fill-current text-red-500 h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path id={foto} fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </button>
+                                                                <img
+                                                                    className="h-40 w-40 object-cover rounded-xl"
+                                                                    alt="Habitacion"
+                                                                    src={foto}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
                                         </div>
-                                    )
-                                })
-                            }
+                                    </div>
+
+                                    <div class="py-6">
+                                        <section className="container">
+                                            <div {...getRootProps({ className: 'dropzone', style })}>
+                                                <input {...getInputProps()} />
+                                                <p>Drag 'n' drop some files here, or click to select files</p>
+                                            </div>
+                                            <aside style={thumbsContainer}>
+                                                {thumbs}
+                                            </aside>
+                                        </section>
+                                    </div>
+
+                                    <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Modificar Habitacion</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="py-6">
-                        <section className="container">
-                            <div {...getRootProps({ className: 'dropzone', style })}>
-                                <input {...getInputProps()} />
-                                <p>Drag 'n' drop some files here, or click to select files</p>
-                            </div>
-                            <aside style={thumbsContainer}>
-                                {thumbs}
-                            </aside>
-                        </section>
-                    </div>
-
-                    <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Modificar Habitacion</button>
-                </form>
-            </div>
-        </div>
+            }
+        </>
     )
 }
 

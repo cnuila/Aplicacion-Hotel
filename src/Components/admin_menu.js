@@ -52,7 +52,7 @@ const AdminMenu = function () {
             </aside>
           )}
 
-          <main className="flex-grow flex flex-col min-h-screen">          
+          <main className="flex-grow flex flex-col min-h-screen">
 
             <Switch>
               <Route path="/administracion/Clientes">
@@ -83,7 +83,7 @@ function Clientes() {
 
 function Restaurante() {
   return (
-    <ListaMenu/>
+    <ListaMenu />
   )
 }
 
