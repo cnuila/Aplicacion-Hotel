@@ -235,6 +235,11 @@ function AgregarHabitaciones(props) {
         setTodos(updatedTodos);
     };
 
+    const agregarDelDrop = (e) => {
+        const t = {id:1,text:e.target.name}
+        addTodo(t)
+    }
+
     return (
         <>
             {
@@ -263,7 +268,7 @@ function AgregarHabitaciones(props) {
                                             {
                                                 detallesDrop.map((text) => {
                                                     return (
-                                                        <a class="block px-12 flex text-sm text-black border-b-2 border-transparent hover:border-blue-800">{text}</a>
+                                                        <a onClick={agregarDelDrop} name={text} class="block px-12 flex text-sm text-black border-b-2 border-transparent hover:border-blue-800">{text}</a>
                                                     )
                                                 })
                                             }
