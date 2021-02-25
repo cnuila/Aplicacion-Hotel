@@ -188,14 +188,21 @@ function AgregarHabitaciones(props) {
 
     useEffect(() => {
         if (num === 0) {
+            const lista = []
             const listaHabitaciones = props.habitaciones
             listaHabitaciones.map((h) => {
                 const Complementos = h.Complementos
                 Complementos.map((deta) => {
                     const { text } = deta
-                    setDetallesDrop(prevDeta => [...prevDeta, text])
+                    lista.push(text)
                 })
             })
+
+            const lista2 = lista.filter(function(elem, pos) {
+                return lista.indexOf(elem) == pos;
+            });
+
+            setDetallesDrop(lista2)
             setNum(prevNum => prevNum + 1)
         }
     });
@@ -236,7 +243,7 @@ function AgregarHabitaciones(props) {
     };
 
     const agregarDelDrop = (e) => {
-        const t = {id:1,text:e.target.name}
+        const t = { id: 1, text: e.target.name }
         addTodo(t)
     }
 
