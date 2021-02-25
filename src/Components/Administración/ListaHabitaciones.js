@@ -155,8 +155,8 @@ export default function ListaHabitaciones() {
                                         <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
                                         {
                                             Complementos.map(complemento => {
-                                                const { id, text } = complemento
-                                                return <h2 className="text-black pl-4">{id} | {text}</h2>
+                                                const { text } = complemento
+                                                return <h2 className="text-black pl-4">{text}</h2>
                                             })
                                         }
                                     </div>
