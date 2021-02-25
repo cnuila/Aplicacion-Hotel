@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 
-function Loading({ showModal, setShowModal }) {
+function Loading({ showModal }) {
 
     return (
         <>
