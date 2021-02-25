@@ -13,9 +13,9 @@ class Dropdown extends Component {
         }
     }
 
-    revisarAdmin(){
-        if(auth.currentUser){
-            var docRef= db.collection("Admin").doc(auth.currentUser.email);
+    revisarAdmin() {
+        if (auth.currentUser) {
+            var docRef = db.collection("Admin").doc(auth.currentUser.email);
             docRef.get().then((doc) => {
                 if (doc.exists) {
                     this.setState({
@@ -33,15 +33,15 @@ class Dropdown extends Component {
                     admin: false
                 });
             });
-        }else{
+        } else {
             this.setState({
                 admin: false,
                 typeCheck: true
             });
         }
     }
-    setDisplayName(){
-        if(auth.currentUser){
+    setDisplayName() {
+        if (auth.currentUser) {
             db.collection("Usuarios").where("Email", "==", auth.currentUser.email)
                 .get()
                 .then((querySnapshot) => {
@@ -56,7 +56,7 @@ class Dropdown extends Component {
                         dispName: 'Perfil'
                     });
                 });
-        }else{
+        } else {
             this.setState({
                 dispName: 'Perfil'
             });
@@ -74,12 +74,12 @@ class Dropdown extends Component {
         });
     }
 
-    toggle(){
-        if(!this.state.typeCheck){
+    toggle() {
+        if (!this.state.typeCheck) {
             this.revisarAdmin();
             this.setDisplayName();
         }
-        this.setState(prevState =>({
+        this.setState(prevState => ({
             open: !prevState.open
         }))
     }
@@ -98,14 +98,17 @@ class Dropdown extends Component {
                     </div>
                     <div class={(this.state.open ? "origin-top-right z-40 absolute lg:right-0 mt-2 lg:mt-0 w-48 rounded-md shadow-lg bg-blue-900 ring-1 ring-black ring-opacity-5" : "hidden")}>
                         <div class="py-1">
-                            <Link to="/administracion" class={this.state.admin ? "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" : "hidden"} role="menuitem">Admin</Link>
-                            <Link to="/login" class={(auth.currentUser ? "hidden" : "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200")} role="menuitem">Iniciar Sesión</Link>
-                            <Link to="/miInfo" class="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" role="menuitem">Mi Perfil</Link>
-                            <a href="#" class="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" role="menuitem">Reservas</a>
+                            <Link to="/administracion" class={this.state.admin ? "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" : "hidden"} role="menuitem">Admin</Link>                            
+                            {auth.currentUser
+                                ? (<>
+                                        <Link to="/miInfo" class="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" role="menuitem">Mi Perfil</Link>
+                                        <Link to="/misReservas" class="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" role="menuitem">Mis Reservas</Link>
+                                    </>)
+                                : <></>}
                             <Link to="/" class={(auth.currentUser ? "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" : "hidden")} role="menuitem" onClick={this.cerrarSesion}>Cerrar Sesión</Link>
                         </div>
                     </div>
-                    </div>
+                </div>
             </div>
         )
     }
