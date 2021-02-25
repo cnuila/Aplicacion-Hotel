@@ -50,29 +50,44 @@ export default function ListaServicios() {
 
     const handleEliminarServicio = async (id, fotos) => {
         let servicio = db.collection("Servicios").doc(id)
-        await servicio.delete().then(() => {
-            if (fotos !== undefined) {
-                let deleteRef
-                for (let i = 0; i < fotos.length; i++) {
-                    deleteRef = storage.refFromURL(fotos[i])
-                    deleteRef.delete()
-                }
+        swal({
+            title: "Esta seguro?",
+            text: "El Servicio sera borrado permanentemente!",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: true,
             }
-        }).then(() => {
-            swal({
-                text: "El Servicio " + Nombre + " fue eliminado exitosamente",
-                icon: "success",
-                button: "Aceptar"
-            });
-            setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
-            getServicios()
-        }).catch(function (error) {
-            swal({
-                icon: "error",
-                title: "Error al Eliminar",
-                text: "Error: " + error
-            })
-        });
+        }).then(async result => {
+            if (result) {
+                await servicio.delete().then(() => {
+                    if (fotos !== undefined) {
+                        let deleteRef
+                        for (let i = 0; i < fotos.length; i++) {
+                            deleteRef = storage.refFromURL(fotos[i])
+                            deleteRef.delete()
+                        }
+                    }
+                }).then(() => {
+                    swal({
+                        text: "El Servicio " + Nombre + " fue eliminado exitosamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    });
+                    setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
+                    getServicios()
+                }).catch(function (error) {
+                    swal({
+                        icon: "error",
+                        title: "Error al Eliminar",
+                        text: "Error: " + error
+                    })
+                });
+            } else {
+                swal("Cancelado", "El Servicio no se borro");
+            }
+        })
+
     }
 
     const mostrarInicial = () => {
@@ -119,7 +134,7 @@ export default function ListaServicios() {
                     {mostrarAgregar
                         ? (<AgregarServicios mostrarInicial={mostrarInicial} />)
                         : mostrarModificar
-                            ? <ModificarServicios nombre={servicioSeleccionado.Nombre} mostrarInicial={mostrarInicial}/>
+                            ? <ModificarServicios nombre={servicioSeleccionado.Nombre} mostrarInicial={mostrarInicial} />
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
