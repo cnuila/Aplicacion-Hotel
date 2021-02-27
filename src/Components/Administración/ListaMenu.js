@@ -32,10 +32,9 @@ export default function ListaMenu() {
     }, [])
 
     const handlePlatillo = platillo => {
-        const { Nombre, Precio, Detalles, Url } = platillo
+        const { Nombre, Detalles, Url } = platillo
         setPlatilloSeleccionado({
             Nombre,
-            Precio,
             Detalles,
             Url,
         })
@@ -114,7 +113,7 @@ export default function ListaMenu() {
                                     <path d="M405.332 192H234.668V21.332C234.668 9.559 225.109 0 213.332 0 201.559 0 192 9.559 192 21.332V192H21.332C9.559 192 0 201.559 0 213.332c0 11.777 9.559 21.336 21.332 21.336H192v170.664c0 11.777 9.559 21.336 21.332 21.336 11.777 0 21.336-9.559 21.336-21.336V234.668h170.664c11.777 0 21.336-9.559 21.336-21.336 0-11.773-9.559-21.332-21.336-21.332zm0 0" />
                                 </svg>
                             </div>
-                            <h2 className="font-bold text-lg">Restaurante</h2>
+                            <h2 className="font-bold text-lg">Menus</h2>
                         </div>
                     </div>
 
@@ -132,16 +131,12 @@ export default function ListaMenu() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarMenu mostrarInicial={mostrarInicial} />)
+                        ? (<AgregarMenu mostrarInicial={mostrarInicial} menu={menu} />)
                         : mostrarModificar
-                            ? <ModificarMenu nombre={platilloSeleccionado.Nombre} mostrarInicial={mostrarInicial} />
+                            ? <ModificarMenu nombre={platilloSeleccionado.Nombre} mostrarInicial={mostrarInicial} menu={menu}/>
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
-                                    <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
-                                        <h2 className="text-black pl-4">{Precio}</h2>
-                                    </div>
                                     <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                         <h2 className="text-blue-500 font-semibold cursor-default">Detalles</h2>
                                         {

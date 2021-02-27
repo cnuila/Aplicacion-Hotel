@@ -28,12 +28,15 @@ export default function InfoHabitacion({ location, history }) {
 
   const getReseñas = () => {
     db.collection("Habitaciones").doc(nombre).collection("Reseñas").orderBy("rating", "desc").get().then(querySnapshot => {
+      
       const listaReseñas = []
       querySnapshot.forEach((doc) => {
         listaReseñas.push({ ...doc.data(), id: doc.id })
       })
       setReseña(listaReseñas)
     })
+
+    
   }
 
   const getReservas = () => {
@@ -184,6 +187,7 @@ export default function InfoHabitacion({ location, history }) {
                       minimumDate={utils().getToday()}
                       onDisabledDayError={handleDisabledSelect}
                       shouldHighlightWeekends
+                      
                     />
                   </div>
                 </div>

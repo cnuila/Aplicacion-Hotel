@@ -36,34 +36,37 @@ export default function Servicios() {
                         foto2 = Url[1]
                     }
                 }
-                return (
-                    <div key={index} class="bg-gray-300 mx-0 my-10 lg:mx-10 rounded-xl flex flex-col md:flex-row border-b-2 border-gray-300 py-5 lg:py-4 px-2 items-center md:items-start md:justify-center space-x-0 md:space-x-10 space-y-2 md:space-y-0">
 
-                        {foto1 !== undefined
-                            ? (<img src={foto1} class="bg-blue-100 w-72 h-72 rounded" alt="Sala de conferencia1"></img>)
-                            : <></>
-                        }
-                        {foto2 !== undefined
-                            ? (<img src={foto2} class="bg-blue-100 md: w-72 h-72 rounded md:order-last" alt="Sala de conferencia2"></img>)
-                            : <></>
-                        }
+                if (servicio.Visible) {
+                    return (
+                        <div key={index} class="bg-gray-300 mx-0 my-10 lg:mx-10 rounded-xl flex flex-col md:flex-row border-b-2 border-gray-300 py-5 lg:py-4 px-2 items-center md:items-start md:justify-center space-x-0 md:space-x-10 space-y-2 md:space-y-0">
 
-                        <div class="flex flex-col pl-5 w-80 space-y-3 justify-between">
-                            <div class="text-2xl font-semibold text-center">{Nombre}</div>
-                            {Detalles !== undefined
-                                ? (<ul class="list-disc pl-5">
-                                    {Detalles.map((detalle, index) => {
-                                        return (<li key={index} class="">
-                                            {detalle.text}
-                                        </li>)
-                                    })}
-                                </ul>)
+                            {foto1 !== undefined
+                                ? (<img src={foto1} class="bg-blue-100 w-72 h-72 rounded" alt="Sala de conferencia1"></img>)
                                 : <></>
                             }
-                            <div>Lps. {Precio}</div>
+                            {foto2 !== undefined
+                                ? (<img src={foto2} class="bg-blue-100 md: w-72 h-72 rounded md:order-last" alt="Sala de conferencia2"></img>)
+                                : <></>
+                            }
+
+                            <div class="flex flex-col pl-5 w-80 space-y-3 justify-between">
+                                <div class="text-2xl font-semibold text-center">{Nombre}</div>
+                                {Detalles !== undefined
+                                    ? (<ul class="list-disc pl-5">
+                                        {Detalles.map((detalle, index) => {
+                                            return (<li key={index} class="">
+                                                {detalle.text}
+                                            </li>)
+                                        })}
+                                    </ul>)
+                                    : <></>
+                                }
+                                <div>Lps. {Precio}</div>
+                            </div>
                         </div>
-                    </div>
-                )
+                    )
+                }
             })}
         </div>
     )

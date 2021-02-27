@@ -14,10 +14,19 @@ function AgregarHabitaciones(props) {
     const [Precio, setPrecio] = useState("");
     const [files, setFiles] = useState([]);
     const [Url, setUrl] = useState([]);
-    const [progress, setProgress] = useState(0);
+    const [num, setNum] = useState(0);
     const [todos, setTodos] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [detallesDrop, setDetallesDrop] = useState(() => {
+        return []
+    })
+    const [open, setOpen] = useState(false);
+    const [cantidad, setCantidad] = useState(0);
+    const [visible, setVisible] = useState(true);
 
+    const handleOpen = () => {
+        setOpen(prevOpen => !prevOpen)
+    }
 
     const {
         getRootProps,
@@ -151,10 +160,12 @@ function AgregarHabitaciones(props) {
                 Precio: Precio,
                 Complementos: todos,
                 Url: dirFotos,
-                Resena: [],
+                Cantidad: cantidad,
+                Visible: visible
             }).then(() => {
                 setShowModal(prev => !prev);
                 alertaSuccess()
+                setNum(prevNum => prevNum - 1)
                 props.mostrarInicial()
             }).catch(() => {
                 setShowModal(prev => !prev);
@@ -178,9 +189,26 @@ function AgregarHabitaciones(props) {
         </div>
     ));
 
-    useEffect(() => () => {
-        files.forEach(file => URL.revokeObjectURL(file.preview));
-    }, [files]);
+    useEffect(() => {
+        if (num === 0) {
+            const lista = []
+            const listaHabitaciones = props.habitaciones
+            listaHabitaciones.map((h) => {
+                const Complementos = h.Complementos
+                Complementos.map((deta) => {
+                    const { text } = deta
+                    lista.push(text)
+                })
+            })
+
+            const lista2 = lista.filter(function(elem, pos) {
+                return lista.indexOf(elem) == pos;
+            });
+
+            setDetallesDrop(lista2)
+            setNum(prevNum => prevNum + 1)
+        }
+    });
 
 
     const addTodo = todo => {
@@ -217,6 +245,11 @@ function AgregarHabitaciones(props) {
         setTodos(updatedTodos);
     };
 
+    const agregarDelDrop = (e) => {
+        const t = { id: Math.floor(Math.random() * 10000), text: e.target.name }
+        addTodo(t)
+    }
+
     return (
         <>
             {
@@ -230,7 +263,30 @@ function AgregarHabitaciones(props) {
                                     <input onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
                                     <input onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Cantidad de habitaciones</label>
+                                    <input onChange={event => setCantidad(event.target.value)} type="number" name="cantidad" placeholder="5" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
+                                    <div className="py-1" />
+
+                                    <div class="relative group inline-block">
+                                        <div onClick={handleOpen} class="inline-flex justify-center w-full rounded-md shadow-sm px-40 py-2 bg-blue-900 text-sm font-medium text-white my-2">
+                                            Detalles Pasados
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+
+                                        <div class={open ? ("px-40 py-1 w-full absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5") : "hidden"}>
+                                            {
+                                                detallesDrop.map((text) => {
+                                                    return (
+                                                        <a onClick={agregarDelDrop} name={text} class="block px-12 flex text-sm text-black border-b-2 border-transparent hover:border-blue-800">{text}</a>
+                                                    )
+                                                })
+                                            }
+                                        </div>
+
+                                    </div>
 
                                     <Form onSubmit={addTodo} />
                                     <Items

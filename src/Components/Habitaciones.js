@@ -23,18 +23,19 @@ export default function Habitaciones() {
             setHabitaciones(listaHabitaciones)
         })
     }, [])
-    console.log(habitaciones)
     return (
         <div className="bg-gray-100 h-screen">
             <Navbar />
             <div class="space-y-4">
-                <div className="text-3xl text-center font-bold mt-3">
+                <div className="text-4xl  text-center font-bold  mt-5">
                     Habitaciones
                 </div>
                 {habitaciones.map((habitacion, index) => {
-                    return (
-                        <Habitacion key={index} reseñas={habitacion.reseñas} precio={habitacion.Precio} complementos={habitacion.Complementos} url={habitacion.Url} nombre={habitacion.Nombre} />
-                    )
+                    if (habitacion.Visible) {
+                        return (
+                            <Habitacion key={index} reseñas={habitacion.reseñas} precio={habitacion.Precio} complementos={habitacion.Complementos} url={habitacion.Url} nombre={habitacion.Nombre} />
+                        )
+                    }
                 })}
 
             </div>

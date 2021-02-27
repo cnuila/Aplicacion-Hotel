@@ -11,13 +11,15 @@ import Loading from './Loading'
 function AgregarMenu(props) {
 
     const [Nombre, setNombre] = useState("");
-    const [Precio, setPrecio] = useState("");
     const [files, setFiles] = useState([]);
     const [Url, setUrl] = useState([]);
     const [progress, setProgress] = useState(0);
     const [todos, setTodos] = useState([]);
     const [showModal, setShowModal] = useState(false);
-
+    const [detallesDrop, setDetallesDrop] = useState([])
+    const [open, setOpen] = useState(false);
+    const [visible, setVisible] = useState(true);
+    const [num, setNum] = useState(0);
 
 
     const {
@@ -149,12 +151,13 @@ function AgregarMenu(props) {
 
             db.collection("Menu").doc(Nombre).set({
                 Nombre: Nombre,
-                Precio: Precio,
                 Detalles: todos,
-                Url: dirFotos
+                Url: dirFotos,
+                Visible: visible
             }).then(() => {
                 setShowModal(prev => !prev);
                 alertaSuccess()
+                setNum(prevNum => prevNum - 1)
                 props.mostrarInicial()
             }).catch(() => {
                 setShowModal(prev => !prev);
@@ -178,9 +181,26 @@ function AgregarMenu(props) {
         </div>
     ));
 
-    useEffect(() => () => {
-        files.forEach(file => URL.revokeObjectURL(file.preview));
-    }, [files]);
+    useEffect(() => {
+        if (num === 0) {
+            const lista = []
+            const ListaServicios = props.menu
+            ListaServicios.map((h) => {
+                const Complementos = h.Detalles
+                Complementos.map((deta) => {
+                    const { text } = deta
+                    lista.push(text)
+                })
+            })
+
+            const lista2 = lista.filter(function (elem, pos) {
+                return lista.indexOf(elem) == pos;
+            });
+
+            setDetallesDrop(lista2)
+            setNum(prevNum => prevNum + 1)
+        }
+    }, []);
 
 
     const addTodo = todo => {
@@ -217,6 +237,16 @@ function AgregarMenu(props) {
         setTodos(updatedTodos);
     };
 
+    const handleOpen = () => {
+        setOpen(prevOpen => !prevOpen)
+    }
+
+    const agregarDelDrop = (e) => {
+        console.log(e.target.name)
+        const t = { id: Math.floor(Math.random() * 10000), text: e.target.name }
+        addTodo(t)
+    }
+
     return (
         <>
             {
@@ -227,9 +257,27 @@ function AgregarMenu(props) {
                             <form onSubmit={handleUpload} className="mt-6">
                                 <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre del Menu</label>
                                 <input onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                                <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
-                                <input onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
+
+                                <div class="relative group inline-block">
+                                    <div onClick={handleOpen} class="inline-flex justify-center w-full rounded-md shadow-sm px-40 py-2 bg-blue-900 text-sm font-medium text-white my-2">
+                                        Detalles Pasados
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+
+                                    <div class={open ? ("px-40 py-1 w-full absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5") : "hidden"}>
+                                        {
+                                            detallesDrop.map((text) => {
+                                                return (
+                                                    <a onClick={agregarDelDrop} name={text} class="block px-12 flex text-sm text-black border-b-2 border-transparent hover:border-blue-800">{text}</a>
+                                                )
+                                            })
+                                        }
+                                    </div>
+
+                                </div>
 
                                 <Form onSubmit={addTodo} />
                                 <Items

@@ -23,9 +23,9 @@ export default function Habitacion(props) {
     }, [props.url])
     return (
         <div>
-            <div className="grid grid-cols-1 m-3 md:m-6 sm:grid-cols-2 sm:px-8 sm:gap-x-8 pb-4 md:py-12  bg-local bg-white rounded-lg">
-                <div className="relative z-10 col-start-1 row-start-1 px-4 pt-40 md:pt-20 pb-3 bg-gradient-to-t sm:bg-none">
-                    <p className="text-sm font-medium text-black sm:mb-1 sm:text-black">Habitacion</p>
+            <div className="grid grid-cols-1 m-3 md:m-6 sm:grid-cols-2 sm:px-8 sm:gap-x-8 pb-4 md:py-12  bg-local bg-white rounded-xl shadow-lg ">
+                <div className="relative z-10 col-start-1  row-start-1 px-4 pt-40 md:pt-6 pb-3 bg-gradient-to-t sm:bg-none">
+                    <p className="text-sm font-medium text-black sm:mb-1 sm:text-black">Habitación</p>
                     <h2 className="text-xl font-semibold text-black sm:text-2xl sm:leading-7 sm:text-black md:text-3xl">{props.nombre}</h2>
                 </div>
 
@@ -57,7 +57,7 @@ export default function Habitacion(props) {
                     }
                     }>
                         <button type="button" className="bg-blue-900 hover:bg-blue-700 text-white text-sm md:text-base font-semibold px-6 py-2 rounded-lg focus:outline-none focus:shadow-outline">
-                            Mas Informacion
+                            Mas Información
                             </button>
                     </Link>
                 </div>
