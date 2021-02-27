@@ -28,7 +28,12 @@ export default function ListaHabitaciones() {
                         listaReseñas.push({ ...doc2.data(), id: doc2.id })
                     })
                 })
-                listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas: listaReseñas })
+                if (listaReseñas.length === 0){
+                    listaHabitaciones.push({ ...doc.data(), id: doc.id})
+                } else {
+                    listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas:listaReseñas})
+                }
+                
             });
             setHabitaciones(listaHabitaciones)
         })
@@ -58,28 +63,43 @@ export default function ListaHabitaciones() {
 
     const handleEliminarHabitacion = async (id, fotos) => {
         let habitacion = db.collection("Habitaciones").doc(id)
-        await habitacion.delete().then(() => {
-            if (fotos !== undefined) {
-                let deleteRef
-                for (let i = 0; i < fotos.length; i++) {
-                    deleteRef = storage.refFromURL(fotos[i])
-                    deleteRef.delete()
-                }
+        swal({
+            title: "Esta seguro?",
+            text: "La habitacion sera borrada permanentemente!",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: true,
             }
-        }).then(() => {
-            swal({
-                text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
-                icon: "success",
-                button: "Aceptar"
-            });
-            setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
-            getHabitaciones()
-        }).catch(function (error) {
-            swal({
-                icon: "error",
-                title: "Error al Eliminar",
-                text: "Error: " + error
-            })
+        }).then(async result => {
+            console.log(result)
+            if (result) {
+                await habitacion.delete().then(() => {
+                    if (fotos !== undefined) {
+                        let deleteRef
+                        for (let i = 0; i < fotos.length; i++) {
+                            deleteRef = storage.refFromURL(fotos[i])
+                            deleteRef.delete()
+                        }
+                    }
+                }).then(() => {
+                    swal({
+                        text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    });
+                    setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+                    getHabitaciones()
+                }).catch(function (error) {
+                    swal({
+                        icon: "error",
+                        title: "Error al Eliminar",
+                        text: "Error: " + error
+                    })
+                });
+            } else {
+                swal("Cancelado", "La habitacion no se borro");
+            }
         });
     }
 
@@ -95,8 +115,6 @@ export default function ListaHabitaciones() {
     }
 
     const { Nombre, Precio, Complementos, Url, reseñas } = habitacionSeleccionada
-    console.log(habitaciones.reseñas)
-
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -140,8 +158,8 @@ export default function ListaHabitaciones() {
                                         <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
                                         {
                                             Complementos.map(complemento => {
-                                                const { id, text } = complemento
-                                                return <h2 className="text-black pl-4">{id} | {text}</h2>
+                                                const { text } = complemento
+                                                return <h2 className="text-black pl-4">{text}</h2>
                                             })
                                         }
                                     </div>
@@ -150,9 +168,9 @@ export default function ListaHabitaciones() {
                                             <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
                                             <div className="grid grid-cols-2 place-items-center">
                                                 {
-                                                    Url.map(foto => {
+                                                    Url.map((foto,index) => {
                                                         return (
-                                                            <img
+                                                            <img key ={index} 
                                                                 className="h-40 w-40 p-2 object-cover rounded-xl"
                                                                 alt="Habitacion"
                                                                 src={foto}

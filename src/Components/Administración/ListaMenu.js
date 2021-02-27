@@ -50,29 +50,44 @@ export default function ListaMenu() {
 
     const handleEliminarMenu = async (id, fotos) => {
         let menu = db.collection("Menu").doc(id)
-        await menu.delete().then(() => {
-            if (fotos !== undefined) {
-                let deleteRef
-                for (let i = 0; i < fotos.length; i++) {
-                    deleteRef = storage.refFromURL(fotos[i])
-                    deleteRef.delete()
-                }
+        swal({
+            title: "Esta seguro?",
+            text: "El Menu sera borrado permanentemente!",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: true,
             }
-        }).then(() => {
-            swal({
-                text: "El Platillo " + Nombre + " fue eliminado exitosamente",
-                icon: "success",
-                button: "Aceptar"
-            });
-            setPlatilloSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
-            getMenu()
-        }).catch(function (error) {
-            swal({
-                icon: "error",
-                title: "Error al Eliminar",
-                text: "Error: " + error
-            })
-        });
+        }).then(async result => {
+            if (result) {
+                await menu.delete().then(() => {
+                    if (fotos !== undefined) {
+                        let deleteRef
+                        for (let i = 0; i < fotos.length; i++) {
+                            deleteRef = storage.refFromURL(fotos[i])
+                            deleteRef.delete()
+                        }
+                    }
+                }).then(() => {
+                    swal({
+                        text: "El Platillo " + Nombre + " fue eliminado exitosamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    });
+                    setPlatilloSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
+                    getMenu()
+                }).catch(function (error) {
+                    swal({
+                        icon: "error",
+                        title: "Error al Eliminar",
+                        text: "Error: " + error
+                    })
+                });
+            } else {
+                swal("Cancelado", "El Menu no se borro");
+            }
+        })
+
     }
 
     const mostrarInicial = () => {
@@ -131,7 +146,7 @@ export default function ListaMenu() {
                                         <h2 className="text-blue-500 font-semibold cursor-default">Detalles</h2>
                                         {
                                             Detalles.map(detalle => {
-                                                return <h2 className="text-black pl-4">{detalle.id} | {detalle.text}</h2>
+                                                return <h2 className="text-black pl-4">{detalle.text}</h2>
                                             })
                                         }
                                     </div>
