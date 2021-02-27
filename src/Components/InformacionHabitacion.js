@@ -4,6 +4,9 @@ import Navbar from './Navbar';
 import Reseña from './Reseña';
 import { Carousel } from 'react-responsive-carousel';
 import CrearReseña from './CrearReseña';
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+
+import { Calendar, utils } from "react-modern-calendar-datepicker";
 
 export default function InfoHabitacion({ location }) {
   const nombre = location.state.props.nombre
@@ -26,7 +29,11 @@ export default function InfoHabitacion({ location }) {
       setReseña(listaReseñas)
     })
   }
-
+  const [selectedDayRange, setSelectedDayRange] = useState({
+    from: null ,
+    to: null
+  });
+  
   return (
     <div>
       <Navbar />
@@ -94,6 +101,19 @@ export default function InfoHabitacion({ location }) {
                 <p class="text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                 <div class="flex py-4 space-x-4">
                   <div>
+                    {/*  
+                    npm i react-modern-calendar-datepicker 
+                    https://kiarash-z.github.io/react-modern-calendar-datepicker/docs/props-list
+                    https://kiarash-z.github.io/react-modern-calendar-datepicker/docs/getting-started
+                    */ }
+                    <Calendar
+                      value={selectedDayRange}
+                      colorPrimaryLight="#cfedfc"
+                      colorPrimary="#9ad7f5"
+                      onChange={setSelectedDayRange}
+                      shouldHighlightWeekends
+                      minimumDate={utils().getToday()}
+                    />
                     {/* https://www.npmjs.com/package/@wojtekmaj/react-daterange-picker */}
                   </div>
                   <button type="button" class="h-14 px-6 py-2 font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white">
@@ -120,16 +140,16 @@ export default function InfoHabitacion({ location }) {
         </div>
         <div class=" bg-indigo-700">
           <div class="py-3">
-          {reseñas !== undefined ? (
-            reseñas.map((reseña, index) => {
-              return (
-                <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas}/>
-              )
-            })) : (<></>)
-          }
+            {reseñas !== undefined ? (
+              reseñas.map((reseña, index) => {
+                return (
+                  <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas} />
+                )
+              })) : (<></>)
+            }
 
-          <CrearReseña nombre={nombre} getReseñas={getReseñas}/>
-        </div>
+            <CrearReseña nombre={nombre} getReseñas={getReseñas} />
+          </div>
         </div>
       </body>
     </div>
