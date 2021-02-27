@@ -118,13 +118,9 @@ export default function ListaHabitaciones() {
         setMostrarModificar(true)
     }
 
-<<<<<<< HEAD
-    const { Nombre, Precio, Complementos, Url, reseñas } = habitacionSeleccionada
-=======
     const { Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacionSeleccionada
-    console.log(habitaciones.reseñas)
+    //console.log(habitaciones.reseñas)
 
->>>>>>> oswaldo
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
