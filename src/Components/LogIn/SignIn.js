@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { db, auth } from "../../firebase"
+import swal from 'sweetalert'
 import imagen from "../ImagenFondo2.jpg"
 import InputMask from "react-input-mask";
 import { Link } from 'react-router-dom';
@@ -77,7 +78,11 @@ export default function SignIn({ history }) {
         event.preventDefault()
 
         if (info.password !== info.password2) {
-            alert("las contraseñas no son iguales ")
+            swal({
+                text: "Las contraseñas no son iguales",
+                icon: "warning",
+                button: "Aceptar"
+            });
         } else {
             let user = auth.currentUser;
             if (!user) {
@@ -86,23 +91,46 @@ export default function SignIn({ history }) {
 
                 await auth.createUserWithEmailAndPassword(email, password)
                     .then(() => {
+                        db.collection("Usuarios").doc(info.Identidad).set({
+                            Identidad: info.Identidad,
+                            Nombre: info.Nombre,
+                            Apellido: info.Apellido,
+                            Email: info.email,
+                            Telefono: info.Telefono,
+                        }).then(() => {
+                            history.push("/");
+                        });
                     })
                     .catch((error) => {
                         let errorCode = error.code;
+                        if (errorCode === "auth/email-already-in-use") {
+                            swal({
+                                text: "Ya existe un usuario con ese correo",
+                                icon: "warning",
+                                button: "Aceptar"
+                            });
+                        }
+                        if (errorCode === "auth/weak-password") {
+                            swal({
+                                text: "La contraseña debe tener más de 6 caracteres",
+                                icon: "warning",
+                                button: "Aceptar"
+                            });
+                        }
                         let errorMessage = error.message;
-                        console.log(errorCode)
                         console.log(errorMessage)
                     });
+            } else {
+                db.collection("Usuarios").doc(info.Identidad).set({
+                    Identidad: info.Identidad,
+                    Nombre: info.Nombre,
+                    Apellido: info.Apellido,
+                    Email: info.email,
+                    Telefono: info.Telefono,
+                }).then(() => {
+                    history.push("/");
+                });
             }
-            db.collection("Usuarios").doc(info.Identidad).set({
-                Identidad: info.Identidad,
-                Nombre: info.Nombre,
-                Apellido: info.Apellido,
-                Email: info.email,
-                Telefono: info.Telefono,
-            }).then(() => {
-                history.push("/");
-            });
         }
     }
 

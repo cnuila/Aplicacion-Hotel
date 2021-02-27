@@ -18,13 +18,19 @@ export default function ListaHabitaciones() {
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
     const [mostrarModificar, setMostrarModificar] = useState(false)
 
-    const getHabitaciones = async () => {
-        await db.collection("Habitaciones").orderBy("Nombre").get().then(querySnapshot => {
-            const habitaciones = []
-            querySnapshot.forEach(doc => {
-                habitaciones.push({ ...doc.data(), id: doc.id })
-            })
-            setHabitaciones(habitaciones)
+    const getHabitaciones = () => {
+        db.collection("Habitaciones").onSnapshot((querySnapshot) => {
+            const listaHabitaciones = []
+            const listaReseñas = []
+            querySnapshot.forEach((doc) => {
+                db.collection("Habitaciones").doc(doc.id).collection("Reseñas").onSnapshot((querySnapshot2) => {
+                    querySnapshot2.forEach((doc2) => {
+                        listaReseñas.push({ ...doc2.data(), id: doc2.id })
+                    })
+                })
+                listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas: listaReseñas })
+            });
+            setHabitaciones(listaHabitaciones)
         })
     }
 
@@ -33,12 +39,13 @@ export default function ListaHabitaciones() {
     }, [])
 
     const handleHabitacion = habitacion => {
-        const { Nombre, Precio, Complementos, Url } = habitacion
+        const { Nombre, Precio, Complementos, Url, reseñas } = habitacion
         setHabitacionSeleccionada({
             Nombre,
             Precio,
             Complementos,
             Url,
+            reseñas,
         })
         setMostrarAgregar(false)
         setMostrarModificar(false)
@@ -51,28 +58,43 @@ export default function ListaHabitaciones() {
 
     const handleEliminarHabitacion = async (id, fotos) => {
         let habitacion = db.collection("Habitaciones").doc(id)
-        await habitacion.delete().then(() => {
-            if (fotos !== undefined) {
-                let deleteRef
-                for (let i = 0; i < fotos.length; i++) {
-                    deleteRef = storage.refFromURL(fotos[i])
-                    deleteRef.delete()
-                }
+        swal({
+            title: "Esta seguro?",
+            text: "La habitacion sera borrada permanentemente!",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: true,
             }
-        }).then(() => {
-            swal({
-                text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
-                icon: "success",
-                button: "Aceptar"
-            });
-            setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
-            getHabitaciones()
-        }).catch(function (error) {
-            swal({
-                icon: "error",
-                title: "Error al Eliminar",
-                text: "Error: " + error
-            })
+        }).then(async result => {
+            console.log(result)
+            if (result) {
+                await habitacion.delete().then(() => {
+                    if (fotos !== undefined) {
+                        let deleteRef
+                        for (let i = 0; i < fotos.length; i++) {
+                            deleteRef = storage.refFromURL(fotos[i])
+                            deleteRef.delete()
+                        }
+                    }
+                }).then(() => {
+                    swal({
+                        text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    });
+                    setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+                    getHabitaciones()
+                }).catch(function (error) {
+                    swal({
+                        icon: "error",
+                        title: "Error al Eliminar",
+                        text: "Error: " + error
+                    })
+                });
+            } else {
+                swal("Cancelado", "La habitacion no se borro");
+            }
         });
     }
 
@@ -87,7 +109,8 @@ export default function ListaHabitaciones() {
         setMostrarModificar(true)
     }
 
-    const { Nombre, Precio, Complementos, Url } = habitacionSeleccionada
+    const { Nombre, Precio, Complementos, Url, reseñas } = habitacionSeleccionada
+    console.log(habitaciones.reseñas)
 
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
@@ -118,7 +141,7 @@ export default function ListaHabitaciones() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarHabitaciones mostrarInicial={mostrarInicial}/>)
+                        ? (<AgregarHabitaciones mostrarInicial={mostrarInicial} />)
                         : mostrarModificar
                             ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} mostrarInicial={mostrarInicial} />
                             : (
@@ -126,7 +149,7 @@ export default function ListaHabitaciones() {
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
                                     <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
                                         <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
-                                        <h2 className="text-black pl-4">{Precio}</h2>
+                                        <h2 className="text-black pl-4">Lps.{Precio}.00</h2>
                                     </div>
                                     <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                         <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
@@ -149,6 +172,41 @@ export default function ListaHabitaciones() {
                                                                 alt="Habitacion"
                                                                 src={foto}
                                                             />)
+                                                    })
+                                                }
+                                            </div>
+                                        </div>)
+                                        : <></>}
+                                    {reseñas !== undefined
+                                        ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default mb-2">Reseñas</h2>
+                                            <div className="grid">
+                                                {
+                                                    reseñas.map(reseña => {
+                                                        const { usuario, rating, visualizar, comentario } = reseña
+                                                        let text = "No"
+                                                        if (visualizar) {
+                                                            text = "Sí"
+                                                        }
+                                                        return (<div className="ml-4 bg-gray-200 p-3 rounded-md my-1">
+                                                            <div className="flex flex-row">
+                                                                <h2 className="font-bold">Visible:</h2>
+                                                                <h2 className="pl-1"> {text}</h2>
+                                                            </div>                                                            
+                                                            <div className="flex flex-row">
+                                                                <h2 className="font-bold">Rating:</h2>
+                                                                <h2 className="px-1"> {rating}</h2>
+                                                                <h2>de 5 estrellas</h2>
+                                                            </div>
+                                                            <div className="flex flex-row">
+                                                                <h2 className="font-bold">Comentario:</h2>
+                                                                <h2 className="pl-1"> {comentario}</h2>
+                                                            </div>
+                                                            <div className="flex flex-row">
+                                                                <h2 className="font-bold">Usuario:</h2>
+                                                                <h2 className="pl-1"> {usuario}</h2>
+                                                            </div>
+                                                        </div>)
                                                     })
                                                 }
                                             </div>

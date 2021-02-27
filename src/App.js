@@ -10,10 +10,6 @@ import Habitaciones from './Components/Habitaciones'
 import Restaurante from './Components/RestaurantePrincipal'
 import { AuthProvider } from './Components/Rutas Privadas/Auth';
 import PrivateRoute from "./Components/Rutas Privadas/RutaPrivada"
-import RecuperarContra from './Components/LogIn/RecuperarContra';
-import Reseña from "./Components/Reseña";
-import reseña from './Components/Reseña';
-import Comentario from "./Components/Comentario"
 import InfoHabitacion from "./Components/InformacionHabitacion"
 import Menu from "./Components/MenuRestaurante"
 

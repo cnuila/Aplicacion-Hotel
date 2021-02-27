@@ -1,92 +1,65 @@
-
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
 import ReactStarRating from "react-star-ratings-component";
-import React, { Component } from 'react'
+import { auth, db } from "../firebase"
 import swal from 'sweetalert'
-import { db } from '../firebase'
 
-class reseña extends React.Component {
+export default function Reseña(props) {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            ...this.estadoInicial,
-        }
+    const [usuario, setUsuario] = useState("")
+
+    useEffect(() => {
+        setTimeout(() => {
+            let usuario = auth.currentUser
+            if (usuario) {
+                setUsuario(usuario.email)
+            }
+        }, 1000)
+    }, [])
+
+    const eliminarResena = (idResena) => {
+        swal({
+            title: "¿Seguro quieres eliminar tu reseña?",
+            text: "Una vez la elimines, no podrás deshacer la acción",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((seElimina) => {
+            if (seElimina) {
+                const { nombre } = props
+                db.collection("Habitaciones").doc(nombre).collection("Reseñas").doc(idResena).delete().then(() => {
+                    swal("Se eliminó tu reseña", {
+                        icon: "success",
+                    });
+                    props.getReseñas()
+                })
+            }
+        });
     }
-    estadoInicial = {
-        Rating: '',
-        comentario: '',
-    }
-    handlecomentario = (event) => {
-        console.log(event.target.value)
-        this.setState({
-            comentario: event.target.value
-        })
-    }
-    handleSubmit = (event) => {
-        event.preventDefault()
-        // perform all neccassary validations
-
-        if (this.state.comentario.includes('puta') || this.state.comentario.includes('maldito') || this.state.comentario.includes('puta') || this.state.comentario.includes('cabron') || this.state.comentario.includes('pija') || this.state.comentario.includes('mierda')
-
-        ) {
-            console.log(this.state.Rating)
-            alert("Su Comentario incluye palabras ofensivas")
-        } else if (this.state.Rating === "") {
-            console.log(this.state.Rating)
-            alert("por favor indicar cuantas estrellas")
-        } else if (this.state.comentario.length < 5) {
-            alert("su comentario es muy corto")
-        }
-        else {
-            console.log(this.state.Rating)
-            // poner la base de datos que corresponde con la subcoleccion
-            const resAn = db.collection("Habitaciones").doc(this.props.nombre).get(this.props.resena)
-            console.log(resAn)
-            db.collection("Habitaciones").doc(this.props.nombre).update({
-                resena: [this.state.Rating, this.state.comentario]
-            }).then(() => {
-                swal({
-                    text: "La reseña fue enviada exitosamente",
-                    icon: "success",
-                    button: "Aceptar"
-                });
-            });
-        }
-    }
-
-    render() {
-
-        return (
-            <div >
-                <div class="flex justify-center">
-                    <div class="flex justify-center shadow-lg  mx-8 mb-1 ">
-                        <form class="w-full max-w-xl justify-center  bg-gray-200 rounded-lg px-4 pt-1 border-gray-600 border-1">
-                            <div class="flex flex-wrap justify-center -mx-3 mb-10">
-                                <h2 class="px-4 -pt-1 pb-2 text-blue text-lg">Tu opinión es importante</h2>
-                                <ReactStarRating
-                                    numberOfStar={5} numberOfSelectedStar={3} colorFilledStar="yellow"
-                                    colorEmptyStar="blue" starSize="20px" spaceBetweenStar="8px"
-                                    disableOnSelect={false}
-                                    onSelectStar={val => {
-                                        this.state.Rating = val
-                                    }} />
-                                <div class="w-full md:w-full px-3 mb-2 mt-2">
-                                    <textarea name="comentario" onChange={this.handlecomentario} class="bg-gray-100 rounded border  border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="body" placeholder='Danos tu Opinión' required></textarea>
-                                </div>
-                                <div class="w-full justify-center flex items-start md:w-full px-3">
-                                    <input type='submit' onClick={this.handleSubmit} class="bg-gray-300  text-gray-900 font-medium py-1 px-4 border-2 border-gray-700 rounded-lg tracking-wide mr-1 hover:bg-gray-400" value='Sube tu comentario' />
-                                </div>
+    console.log("se llamo")
+    console.log(props)
+    const { resena } = props
+    return (
+        <div className="">
+            <div className="flex justify-center container w-full mx-auto py-12 px-4">
+                <div className="  flex justify-center w-2/3  bg-gray-300 rounded-3xl border-blue-900 border shadow-lg pb-6 lg:pb-0">
+                    <div className="w-full  p-4">
+                        <div className="justify-items-center ">
+                            <div className="grid grid-cols-2">
+                                <h3 className="text-blue mx-7 font-semibold text-lg text-center md:text-left ">{resena.usuario} dice:</h3>
+                                {usuario === resena.usuario
+                                    ? <svg className="fill-current mx-2 h-5 w-5 place-self-end text-gray-600 hover:text-gray-400 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" onClick={() => { eliminarResena(resena.id) }}>
+                                        <path d="M424 64h-88V48c0-26.51-21.49-48-48-48h-64c-26.51 0-48 21.49-48 48v16H88c-22.091 0-40 17.909-40 40v32c0 8.837 7.163 16 16 16h384c8.837 0 16-7.163 16-16v-32c0-22.091-17.909-40-40-40zM208 48c0-8.82 7.18-16 16-16h64c8.82 0 16 7.18 16 16v16h-96zM78.364 184a5 5 0 00-4.994 5.238l13.2 277.042c1.22 25.64 22.28 45.72 47.94 45.72h242.98c25.66 0 46.72-20.08 47.94-45.72l13.2-277.042a5 5 0 00-4.994-5.238zM320 224c0-8.84 7.16-16 16-16s16 7.16 16 16v208c0 8.84-7.16 16-16 16s-16-7.16-16-16zm-80 0c0-8.84 7.16-16 16-16s16 7.16 16 16v208c0 8.84-7.16 16-16 16s-16-7.16-16-16zm-80 0c0-8.84 7.16-16 16-16s16 7.16 16 16v208c0 8.84-7.16 16-16 16s-16-7.16-16-16z" />
+                                    </svg>
+                                    : <></>}
                             </div>
-                        </form>
+                            <div className="mx-5 mb-1">
+                                <ReactStarRating numberOfStar={5} numberOfSelectedStar={resena.rating} colorFilledStar="yellow" colorEmptyStar="blue" starSize="25px" spaceBetweenStar="8px" disableOnSelect={true} />
+                            </div>
+                            <textarea name="comentario" value={resena.comentario} className="rounded-md bg-gray-200 text-xl leading-normal resize-none w-full h-20 py-2 px-3 font-medium text-gray-700 focus:outline-none "></textarea>
+                        </div>
                     </div>
                 </div>
-                {/* inicio de comentarios anteriorires*/}
             </div>
-
-
-
-        )
-    }
+        </div>
+    )
 }
-export default reseña;

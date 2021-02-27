@@ -6,6 +6,7 @@ import { useDropzone } from 'react-dropzone';
 import Items from '../AgregarItems/Items'
 import Form from '../AgregarItems/Form'
 import { TiMediaPlayOutline } from 'react-icons/ti';
+import Loading from './Loading'
 
 function AgregarHabitaciones(props) {
 
@@ -15,6 +16,7 @@ function AgregarHabitaciones(props) {
     const [Url, setUrl] = useState([]);
     const [progress, setProgress] = useState(0);
     const [todos, setTodos] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
 
     const {
@@ -130,6 +132,7 @@ function AgregarHabitaciones(props) {
         let dirFotos = [];
         let uploadTask = null;
         if (files.length !== 0) {
+            setShowModal(prev => !prev);
             for (var i = 0; i < files.length; i++) {
                 const nombreFoto = files[i].name;
                 uploadTask = await storage.ref(`habitaciones/${nombreFoto}`).put(files[i]);
@@ -150,9 +153,11 @@ function AgregarHabitaciones(props) {
                 Url: dirFotos,
                 Resena: [],
             }).then(() => {
+                setShowModal(prev => !prev);
                 alertaSuccess()
                 props.mostrarInicial()
             }).catch(() => {
+                setShowModal(prev => !prev);
                 alertaFail()
             })
         } else {
@@ -176,7 +181,7 @@ function AgregarHabitaciones(props) {
     useEffect(() => () => {
         files.forEach(file => URL.revokeObjectURL(file.preview));
     }, [files]);
-    
+
 
     const addTodo = todo => {
         if (!todo.text || /^\s*$/.test(todo.text)) {
@@ -213,39 +218,46 @@ function AgregarHabitaciones(props) {
     };
 
     return (
-        <div className="grid min-h-screen place-items-center">
-            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-full">
-                <h1 className="text-xl font-semibold text-center">Ingrese información sobre la habitacion</h1>
-                <form onSubmit={handleUpload} className="mt-6">
-                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre de la habitacion</label>
-                    <input onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
-                    <input onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
+        <>
+            {
+                showModal ? <Loading showModal={showModal} setShowModal={setShowModal} />
+                    : <div>
+                        <div className="grid min-h-screen place-items-center">
+                            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-full">
+                                <h1 className="text-xl font-semibold text-center">Ingrese información sobre la habitacion</h1>
+                                <form onSubmit={handleUpload} className="mt-6">
+                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre de la habitacion</label>
+                                    <input onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
+                                    <input onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
 
-                    <Form onSubmit={addTodo} />
-                    <Items
-                        todos={todos}
-                        completeTodo={completeTodo}
-                        removeTodo={removeTodo}
-                        updateTodo={updateTodo}
-                    />
+                                    <Form onSubmit={addTodo} />
+                                    <Items
+                                        todos={todos}
+                                        completeTodo={completeTodo}
+                                        removeTodo={removeTodo}
+                                        updateTodo={updateTodo}
+                                    />
 
-                    <div class="py-6">
-                        <section className="container">
-                            <div {...getRootProps({ className: 'dropzone', style })}>
-                                <input {...getInputProps()} />
-                                <p>Drag 'n' drop some files here, or click to select files</p>
+                                    <div class="py-6">
+                                        <section className="container">
+                                            <div {...getRootProps({ className: 'dropzone', style })}>
+                                                <input {...getInputProps()} />
+                                                <p>Drag 'n' drop some files here, or click to select files</p>
+                                            </div>
+                                            <aside style={thumbsContainer}>
+                                                {thumbs}
+                                            </aside>
+                                        </section>
+                                    </div>
+                                    <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Agregar Habitacion</button>
+                                </form>
                             </div>
-                            <aside style={thumbsContainer}>
-                                {thumbs}
-                            </aside>
-                        </section>
+                        </div>
                     </div>
-                    <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Agregar Habitacion</button>
-                </form>
-            </div>
-        </div>
+            }
+        </>
     )
 }
 

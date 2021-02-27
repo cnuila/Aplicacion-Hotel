@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from 'react'
+import { db, auth } from "../firebase"
 import Navbar from './Navbar';
 import Reseña from './Reseña';
-import Comentario from './Comentario';
-import img_carousel_1 from '../imagenes/ban222.jpg';
-import img_carousel_2 from '../imagenes/ban3.jpg';
-import img_carousel_3 from '../imagenes/ban4.jpg';
 import { Carousel } from 'react-responsive-carousel';
+import CrearReseña from './CrearReseña';
 
 export default function InfoHabitacion({ location }) {
   const nombre = location.state.props.nombre
   const complementos = location.state.props.complementos
   const precio = location.state.props.precio
   const fotos = location.state.fotos
-  const resena = location.state.props.resena
   const [value, onChange] = useState();
+  const [reseñas, setReseña] = useState([])
+
+  useEffect(() => {
+    getReseñas()
+  }, [])
+
+  const getReseñas = () => {
+    db.collection("Habitaciones").doc(nombre).collection("Reseñas").orderBy("rating", "desc").get().then(querySnapshot => {
+      const listaReseñas = []
+      querySnapshot.forEach((doc) => {
+        listaReseñas.push({ ...doc.data(), id: doc.id })
+      })
+      setReseña(listaReseñas)
+    })
+  }
+
   return (
     <div>
       <Navbar />
@@ -67,7 +80,7 @@ export default function InfoHabitacion({ location }) {
                   <div>
                     <div class="rounded-lg bg-gray-100 flex py-2 px-3">
                       <span class="text-indigo-400 mr-1 mt-1">Lps.</span>
-                      <span class="font-bold text-indigo-600 text-3xl">{precio}</span>
+                      <span class="font-bold text-indigo-600 text-3xl">{precio}.00</span>
                     </div>
                   </div>
                   <div class="flex-1">
@@ -106,16 +119,15 @@ export default function InfoHabitacion({ location }) {
           </div>
         </div>
         <div class=" bg-indigo-700">
-
-          {resena !== undefined ? (
-            resena.map(r => {
+          {reseñas !== undefined ? (
+            reseñas.map((reseña, index) => {
               return (
-                <Comentario resena={r} />
+                <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas}/>
               )
-            })) : (<>hi</>)
+            })) : (<></>)
           }
 
-          <Reseña nombre={nombre} resena={resena} />
+          <CrearReseña nombre={nombre} getReseñas={getReseñas}/>
         </div>
       </body>
     </div>
