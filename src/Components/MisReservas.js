@@ -14,6 +14,61 @@ export default function MisReservas() {
         }, 1000)
     }, [])
 
+
+
+    const enviarPagoAlServidor = (respuesta) => {
+        // There's no server-side component of these samples. No transactions are
+        // processed and no money exchanged hands. Instantaneous transactions are not
+        // realistic. Add a 2 second delay to make it seem more real.
+        window.setTimeout(
+            respuesta.complete('success').then(
+                document.getElementById('result').innerHTML = instrumentToJsonString(respuesta)
+            ).catch(error => {
+                console.log(error)
+            }), 3000);
+    }
+    function instrumentToJsonString(instrument) {
+        let details = instrument.details;
+        details.cardNumber = 'XXXX-XXXX-XXXX-' + details.cardNumber.substr(12);
+        details.cardSecurityCode = '***';
+
+        return JSON.stringify({
+            methodName: instrument.methodName,
+            details: details,
+        }, undefined, 2);
+    }
+    const iniciarPago = (reserva) => {
+        const metodos = ['amex', 'mastercard', 'visa'];
+        const tipos = ['credit', 'debit']
+        const methodData = [{
+            supportedMethods: 'basic-card',
+            data: { supportedNetworks: metodos, supportedTypes: tipos },
+        }];
+
+        let details = {
+            total: { label: 'Total a pagar', amount: { currency: 'USD', value: ((reserva.precioPagar) + (reserva.precioPagar * 0.15)) } },
+            displayItems: [
+                {
+                    label: 'Subtotal de la Reserva',
+                    amount: { currency: 'USD', value: reserva.precioPagar },
+                },
+                {
+                    label: 'Impuesto sobre la venta',
+                    amount: { currency: 'USD', value: reserva.precioPagar * 0.15 },
+                },
+            ],
+        };
+        return new PaymentRequest(methodData, details);
+    }
+    const clickPago = (requestPago) => {
+        requestPago.show().then(respuesta => {
+            enviarPagoAlServidor(respuesta);
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+
     const getMisReservas = () => {
         let user = auth.currentUser;
         if (user) {
@@ -98,7 +153,7 @@ export default function MisReservas() {
                                         {pagada
                                             ? <></>
                                             : (
-                                                <div className="py-1 px-3 mx-3 bg-green-400 hover:bg-green-500 rounded-sm cursor-pointer text-gray-900 font-medium">
+                                                <div className="py-1 px-3 mx-3 bg-green-400 hover:bg-green-500 rounded-sm cursor-pointer text-gray-900 font-medium" onClick={() => clickPago(iniciarPago(reserva))}>
                                                     Pagar
                                                 </div>
                                             )
