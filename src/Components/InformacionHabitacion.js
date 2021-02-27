@@ -45,9 +45,7 @@ export default function InfoHabitacion({ location, history }) {
         let moment1 = moment(fechaInicial)
         let moment2 = moment(fechaFinal)
         let diferenciaDias = moment2.diff(moment1, 'days') + 1
-        console.log("vuelta")
         for (let i = 0; i < diferenciaDias; i++) {
-          console.log(moment1.format())
           diasDeshabilitados.push({
             year: parseInt(moment1.format('YYYY')),
             month: parseInt(moment1.format('MM')),
@@ -103,12 +101,18 @@ export default function InfoHabitacion({ location, history }) {
             let emailCliente = user.email
             let fechaFinal = new Date(to.year, to.month - 1, to.day)
             let fechaInicial = new Date(from.year, from.month - 1, from.day)
+            let moment1 = moment(fechaInicial)
+            let moment2 = moment(fechaFinal)
+            let diferenciaDias = moment2.diff(moment1, 'days') + 1
+            let precioPagar = precio * diferenciaDias
             db.collection("Reservas").add({
               idHabitacion: nombre,
               idCliente,
               emailCliente,
               fechaFinal,
-              fechaInicial
+              fechaInicial,
+              precioPagar,
+              pagada: false,
             }).then(() => {
               swal({
                 text: "Reservaste con éxito",
