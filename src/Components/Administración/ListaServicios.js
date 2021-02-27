@@ -9,7 +9,7 @@ export default function ListaServicios() {
     const estadoInicial = {
         Nombre: "Nombre del Servicio",
         Precio: 1000,
-        Detalles: [{ id: 1, text: "Comida gratis" }],
+        Detalles: [{ id: 1, text: "Comida gratis" }]
     }
 
     const [servicios, setServicios] = useState([])
@@ -132,9 +132,9 @@ export default function ListaServicios() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarServicios mostrarInicial={mostrarInicial} />)
+                        ? (<AgregarServicios mostrarInicial={mostrarInicial} servicios={servicios}/>)
                         : mostrarModificar
-                            ? <ModificarServicios nombre={servicioSeleccionado.Nombre} mostrarInicial={mostrarInicial} />
+                            ? <ModificarServicios nombre={servicioSeleccionado.Nombre} mostrarInicial={mostrarInicial} servicios={servicios} />
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>

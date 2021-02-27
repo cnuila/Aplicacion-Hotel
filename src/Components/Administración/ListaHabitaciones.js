@@ -11,6 +11,8 @@ export default function ListaHabitaciones() {
         Precio: 1000,
         Complementos: [{ id: 100, text: "Camas Dobles" }, { id: 200, text: "TV 55 pulgadas" }],
         Url: undefined,
+        Cantidad: 5,
+        Visible: true
     }
 
     const [habitaciones, setHabitaciones] = useState([])
@@ -44,13 +46,15 @@ export default function ListaHabitaciones() {
     }, [])
 
     const handleHabitacion = habitacion => {
-        const { Nombre, Precio, Complementos, Url, reseñas } = habitacion
+        const { Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacion
         setHabitacionSeleccionada({
             Nombre,
             Precio,
             Complementos,
             Url,
             reseñas,
+            Cantidad,
+            Visible
         })
         setMostrarAgregar(false)
         setMostrarModificar(false)
@@ -114,7 +118,13 @@ export default function ListaHabitaciones() {
         setMostrarModificar(true)
     }
 
+<<<<<<< HEAD
     const { Nombre, Precio, Complementos, Url, reseñas } = habitacionSeleccionada
+=======
+    const { Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacionSeleccionada
+    console.log(habitaciones.reseñas)
+
+>>>>>>> oswaldo
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -144,15 +154,20 @@ export default function ListaHabitaciones() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarHabitaciones mostrarInicial={mostrarInicial} />)
+                        ? (<AgregarHabitaciones mostrarInicial={mostrarInicial} habitaciones={habitaciones} />)
                         : mostrarModificar
-                            ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} mostrarInicial={mostrarInicial} />
+                            ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} mostrarInicial={mostrarInicial} habitaciones={habitaciones} />
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+                                    
                                     <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
                                         <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
                                         <h2 className="text-black pl-4">Lps.{Precio}.00</h2>
+                                    </div>
+                                    <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                        <h2 className="text-blue-500 font-semibold cursor-default">Cantidad de Habitacones</h2>
+                                        <h2 className="text-black pl-4">{Cantidad}</h2>
                                     </div>
                                     <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                         <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
@@ -195,7 +210,7 @@ export default function ListaHabitaciones() {
                                                             <div className="flex flex-row">
                                                                 <h2 className="font-bold">Visible:</h2>
                                                                 <h2 className="pl-1"> {text}</h2>
-                                                            </div>                                                            
+                                                            </div>
                                                             <div className="flex flex-row">
                                                                 <h2 className="font-bold">Rating:</h2>
                                                                 <h2 className="px-1"> {rating}</h2>

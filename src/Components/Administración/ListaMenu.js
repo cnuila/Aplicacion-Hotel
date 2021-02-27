@@ -132,9 +132,9 @@ export default function ListaMenu() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarMenu mostrarInicial={mostrarInicial} />)
+                        ? (<AgregarMenu mostrarInicial={mostrarInicial} menu={menu} />)
                         : mostrarModificar
-                            ? <ModificarMenu nombre={platilloSeleccionado.Nombre} mostrarInicial={mostrarInicial} />
+                            ? <ModificarMenu nombre={platilloSeleccionado.Nombre} mostrarInicial={mostrarInicial} menu={menu}/>
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
