@@ -11,7 +11,6 @@ import Loading from './Loading'
 function AgregarMenu(props) {
 
     const [Nombre, setNombre] = useState("");
-    const [Precio, setPrecio] = useState("");
     const [files, setFiles] = useState([]);
     const [Url, setUrl] = useState([]);
     const [progress, setProgress] = useState(0);
@@ -149,7 +148,6 @@ function AgregarMenu(props) {
 
             db.collection("Menu").doc(Nombre).set({
                 Nombre: Nombre,
-                Precio: Precio,
                 Detalles: todos,
                 Url: dirFotos
             }).then(() => {
@@ -228,7 +226,6 @@ function AgregarMenu(props) {
                                 <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre del Menu</label>
                                 <input onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
-                                <input onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                 <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
 
                                 <Form onSubmit={addTodo} />

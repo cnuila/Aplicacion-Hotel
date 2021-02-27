@@ -38,9 +38,8 @@ export default function Platillo(props) {
                             )
                         })}
                         </p>
-                        <p className="text-md text-gray-700 uppercase tracking-wide font-semibold mt-2">
-                            {/** precio */}
-                    Lps.{props.precio}
+                        <p className="text-md text-yellow-700 uppercase font-semibold mt-2">
+                            Para más información llamar al hotel
                         </p>
                     </div>
                 </div>

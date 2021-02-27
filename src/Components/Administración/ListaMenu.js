@@ -32,10 +32,9 @@ export default function ListaMenu() {
     }, [])
 
     const handlePlatillo = platillo => {
-        const { Nombre, Precio, Detalles, Url } = platillo
+        const { Nombre, Detalles, Url } = platillo
         setPlatilloSeleccionado({
             Nombre,
-            Precio,
             Detalles,
             Url,
         })
@@ -138,10 +137,6 @@ export default function ListaMenu() {
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
-                                    <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
-                                        <h2 className="text-black pl-4">{Precio}</h2>
-                                    </div>
                                     <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                         <h2 className="text-blue-500 font-semibold cursor-default">Detalles</h2>
                                         {

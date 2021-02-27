@@ -10,7 +10,6 @@ function ModificarMenu(props) {
 
     const [todos, setTodos] = useState([]);
     const [nombre, setNombre] = useState("");
-    const [precio, setPrecio] = useState("");
     const [url, setUrl] = useState([]);
     const [files, setFiles] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -138,7 +137,6 @@ function ModificarMenu(props) {
 
         db.collection("Menu").doc(nombre).set({
             Nombre: nombre,
-            Precio: precio,
             Detalles: todos,
             Url: dirFotos,
             Resena: [],
@@ -160,7 +158,6 @@ function ModificarMenu(props) {
                 querySnapshot.forEach((doc) => {
                     setNombre(doc.data().Nombre)
                     setTodos(doc.data().Detalles)
-                    setPrecio(doc.data().Precio)
                     setUrl(doc.data().Url)
                 });
             })
@@ -245,8 +242,6 @@ function ModificarMenu(props) {
                                 <form onSubmit={handleUpload} className="mt-6">
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre del Menu</label>
                                     <input value={nombre} onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" disabled required />
-                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
-                                    <input value={precio} onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
 
                                     <Form onSubmit={addTodo} />

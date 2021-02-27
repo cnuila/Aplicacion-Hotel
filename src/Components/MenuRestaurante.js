@@ -25,7 +25,7 @@ export default function MenuRestaurante() {
                     {
                         platillos.map(p => {
                             return (<div>
-                                <Platillo nombre={p.Nombre} url={p.Url} detalles={p.Detalles} precio={p.Precio} />
+                                <Platillo nombre={p.Nombre} url={p.Url} detalles={p.Detalles}  />
                             </div>)
                         })
                     }
