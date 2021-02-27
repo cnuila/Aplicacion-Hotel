@@ -3,6 +3,7 @@ import { db, auth } from '../firebase'
 import moment from 'moment'
 import swal from 'sweetalert'
 import Navbar from './Navbar'
+import PaypalButton from './PaypalButton'
 
 export default function MisReservas() {
 
@@ -153,18 +154,23 @@ export default function MisReservas() {
                                             </div>
                                         )
                                     }
-                                    <div className="flex flex-row justify-end mt-6">
+                                    <div className="flex flex-row justify-left mt-6">
                                         {pagada
                                             ? <></>
                                             : (
-                                                <div className="py-1 px-3 mx-3 bg-green-400 hover:bg-green-500 rounded-sm cursor-pointer text-gray-900 font-medium" onClick={() => clickPago(iniciarPago(reserva))}>
-                                                    Pagar
+                                                <div className="">
+                                                    <div className="py-1 px-3 bg-green-400 hover:bg-green-500 rounded-lg cursor-pointer text-gray-900 font-medium" onClick={() => clickPago(iniciarPago(reserva))}>
+                                                        Pagar con Tarjeta
+                                                    </div>
+                                                    <div className="pt-4">
+                                                        <PaypalButton />
+                                                    </div>
                                                 </div>
                                             )
                                         }
                                         {fechaMaxCancelar !== ""
                                             ? (
-                                                <div className="py-1 px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-medium" onClick={() => cancelarReserva(id)}>
+                                                <div className="py-1 px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-medium h-9" onClick={() => cancelarReserva(id)}>
                                                     Cancelar
                                                 </div>
                                             )
