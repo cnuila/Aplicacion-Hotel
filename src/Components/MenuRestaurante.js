@@ -27,7 +27,6 @@ export default function MenuRestaurante() {
                             return (<div>
                                 <Platillo nombre={p.Nombre} url={p.Url} detalles={p.Detalles} precio={p.Precio} />
                             </div>)
-
                         })
                     }
                 </div>

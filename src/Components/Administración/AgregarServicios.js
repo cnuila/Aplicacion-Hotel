@@ -217,6 +217,7 @@ function AgregarServicios(props) {
     };
 
     return (
+
         <>
             {
                 showModal ? <Loading showModal={showModal} setShowModal={setShowModal} />
@@ -252,6 +253,7 @@ function AgregarServicios(props) {
                                 <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Agregar Servicio</button>
                             </form>
                         </div>
+
                     </div>
             }
         </>
