@@ -27,7 +27,7 @@ export default function Habitaciones() {
         <div className="bg-gray-100 h-screen">
             <Navbar />
             <div class="space-y-4">
-                <div className="text-3xl text-center font-bold mt-3">
+                <div className="text-4xl  text-center font-bold  mt-5">
                     Habitaciones
                 </div>
                 {habitaciones.map((habitacion, index) => {
