@@ -279,7 +279,7 @@ function ModificarMenu(props) {
                 showModal ? <Loading showModal={showModal} setShowModal={setShowModal} />
                     : <div>
                         <div className="grid min-h-screen place-items-center">
-                            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-11/12">
+                            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-full">
                                 <h1 className="text-xl font-semibold text-center">Modifique la información sobre el Menu</h1>
                                 <form onSubmit={handleUpload} className="mt-6">
 
