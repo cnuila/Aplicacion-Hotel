@@ -163,7 +163,7 @@ export default function MisReservas() {
                                                         Pagar con Tarjeta
                                                     </div>
                                                     <div className="pt-4">
-                                                        <PaypalButton />
+                                                        <PaypalButton total={precioPagar}/>
                                                     </div>
                                                 </div>
                                             )
