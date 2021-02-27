@@ -8,6 +8,7 @@ import RecuperarContraseña from './Components/LogIn/RecuperarContra'
 import Servicos from './Components/Servicios'
 import Habitaciones from './Components/Habitaciones'
 import Restaurante from './Components/RestaurantePrincipal'
+import MisReservas from './Components/MisReservas'
 import { AuthProvider } from './Components/Rutas Privadas/Auth';
 import PrivateRoute from "./Components/Rutas Privadas/RutaPrivada"
 import InfoHabitacion from "./Components/InformacionHabitacion"
@@ -28,6 +29,7 @@ function App() {
         <Route path="/restaurante" component={Restaurante} />
         <Route path="/habitaciones/:nombre" component={InfoHabitacion} />
         <Route path="/menu" component={Menu} />
+        <Route path="/misReservas" component={MisReservas}/>
       </Switch>
     </Router>
   );

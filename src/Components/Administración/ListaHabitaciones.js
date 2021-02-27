@@ -28,7 +28,12 @@ export default function ListaHabitaciones() {
                         listaReseñas.push({ ...doc2.data(), id: doc2.id })
                     })
                 })
-                listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas: listaReseñas })
+                if (listaReseñas.length === 0){
+                    listaHabitaciones.push({ ...doc.data(), id: doc.id})
+                } else {
+                    listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas:listaReseñas})
+                }
+                
             });
             setHabitaciones(listaHabitaciones)
         })
@@ -110,8 +115,6 @@ export default function ListaHabitaciones() {
     }
 
     const { Nombre, Precio, Complementos, Url, reseñas } = habitacionSeleccionada
-    console.log(habitaciones.reseñas)
-
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -165,9 +168,9 @@ export default function ListaHabitaciones() {
                                             <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
                                             <div className="grid grid-cols-2 place-items-center">
                                                 {
-                                                    Url.map(foto => {
+                                                    Url.map((foto,index) => {
                                                         return (
-                                                            <img
+                                                            <img key ={index} 
                                                                 className="h-40 w-40 p-2 object-cover rounded-xl"
                                                                 alt="Habitacion"
                                                                 src={foto}
