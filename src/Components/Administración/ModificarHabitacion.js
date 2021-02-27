@@ -14,6 +14,13 @@ function ModificarHabitacion(props) {
     const [url, setUrl] = useState([]);
     const [files, setFiles] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [visible, setVisible] = useState(true);
+    const [cantidad, setCantidad] = useState(0);
+    const [tempVisible, setTempVisible] = useState(true);
+    const [detallesDrop, setDetallesDrop] = useState(() => {
+        return []
+    })
+    const [open, setOpen] = useState(false);
 
     const {
         getRootProps,
@@ -121,11 +128,30 @@ function ModificarHabitacion(props) {
                     setTodos(doc.data().Complementos)
                     setPrecio(doc.data().Precio)
                     setUrl(doc.data().Url)
+                    setCantidad(doc.data().Cantidad)
+                    setVisible(doc.data().Visible)
+                    setTempVisible(doc.data().Visible)
                 });
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
+
+        const lista = []
+        const listaHabitaciones = props.habitaciones
+        listaHabitaciones.map((h) => {
+            const Complementos = h.Complementos
+            Complementos.map((deta) => {
+                const { text } = deta
+                lista.push(text)
+            })
+        })
+
+        const lista2 = lista.filter(function (elem, pos) {
+            return lista.indexOf(elem) == pos;
+        });
+
+        setDetallesDrop(lista2)
     }, [])
 
 
@@ -221,7 +247,8 @@ function ModificarHabitacion(props) {
             Precio: precio,
             Complementos: todos,
             Url: dirFotos,
-            Resena: [],
+            Cantidad: cantidad,
+            Visible: visible
         }).then(() => {
             setShowModal(prev => !prev);
             alertaSuccess()
@@ -231,20 +258,76 @@ function ModificarHabitacion(props) {
         })
     }
 
+    const habitacionVisible = (e) => {
+        if (e.target.value === "Si") {
+            setVisible(false)
+        } else {
+            setVisible(true)
+        }
+    }
+
+    const agregarDelDrop = (e) => {
+        const t = { id: Math.floor(Math.random() * 10000), text: e.target.name }
+        addTodo(t)
+    }
+
+    const handleOpen = () => {
+        setOpen(prevOpen => !prevOpen)
+    }
+
     return (
         <>
             {
                 showModal ? <Loading showModal={showModal} setShowModal={setShowModal} />
                     : <div>
                         <div className="grid min-h-screen place-items-center">
-                            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-11/12">
+                            <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-full">
                                 <h1 className="text-xl font-semibold text-center">Modifique la información sobre la habitación</h1>
                                 <form onSubmit={handleUpload} className="mt-6">
+                                    <label class="block">
+                                        <span class="text-gray-700">Ocultar Habitacion</span>
+                                        <select onChange={habitacionVisible} class="form-select block w-full mt-1 bg-gray-200">
+                                            <>
+                                                {tempVisible ?
+                                                    <>
+                                                        <option>No</option>
+                                                        <option>Si</option>
+                                                    </> :
+                                                    <>
+                                                        <option>Si</option>
+                                                        <option>No</option>
+                                                    </>
+                                                }
+                                            </>
+                                        </select>
+                                    </label>
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre de la habitación</label>
                                     <input value={nombre} onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" disabled required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
                                     <input value={precio} onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Cantidad</label>
+                                    <input value={cantidad} onChange={event => setPrecio(event.target.value)} type="number" name="cantidad" placeholder="5" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
+
+                                    <div class="relative group inline-block">
+                                        <div onClick={handleOpen} class="inline-flex justify-center w-full rounded-md shadow-sm px-40 py-2 bg-blue-900 text-sm font-medium text-white my-2">
+                                            Detalles Pasados
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+
+                                        <div class={open ? ("px-40 py-1 w-full absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5") : "hidden"}>
+                                            {
+                                                detallesDrop.map((text) => {
+                                                    return (
+                                                        <a onClick={agregarDelDrop} name={text} class="block px-12 flex text-sm text-black border-b-2 border-transparent hover:border-blue-800">{text}</a>
+                                                    )
+                                                })
+                                            }
+                                        </div>
+
+                                    </div>
 
                                     <Form onSubmit={addTodo} />
                                     <Items

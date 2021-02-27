@@ -7,7 +7,6 @@ import Items from '../AgregarItems/Items'
 import Form from '../AgregarItems/Form'
 import { TiMediaPlayOutline } from 'react-icons/ti';
 import Loading from './Loading'
-import DropdownDetalles from './DropdownDetalles'
 
 function AgregarHabitaciones(props) {
 
@@ -21,7 +20,9 @@ function AgregarHabitaciones(props) {
     const [detallesDrop, setDetallesDrop] = useState(() => {
         return []
     })
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [cantidad, setCantidad] = useState(0);
+    const [visible, setVisible] = useState(true);
 
     const handleOpen = () => {
         setOpen(prevOpen => !prevOpen)
@@ -158,7 +159,9 @@ function AgregarHabitaciones(props) {
                 Nombre: Nombre,
                 Precio: Precio,
                 Complementos: todos,
-                Url: dirFotos
+                Url: dirFotos,
+                Cantidad: cantidad,
+                Visible: visible
             }).then(() => {
                 setShowModal(prev => !prev);
                 alertaSuccess()
@@ -260,6 +263,8 @@ function AgregarHabitaciones(props) {
                                     <input onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
                                     <input onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                    <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Cantidad de habitaciones</label>
+                                    <input onChange={event => setCantidad(event.target.value)} type="number" name="cantidad" placeholder="5" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
                                     <div className="py-1" />
 
@@ -271,7 +276,7 @@ function AgregarHabitaciones(props) {
                                             </svg>
                                         </div>
 
-                                        <div class={open ? ("px-40 py-1 absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5") : "hidden"}>
+                                        <div class={open ? ("px-40 py-1 w-full absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5") : "hidden"}>
                                             {
                                                 detallesDrop.map((text) => {
                                                     return (
