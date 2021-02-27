@@ -12,7 +12,7 @@ export default function ListaHabitaciones() {
         Complementos: [{ id: 100, text: "Camas Dobles" }, { id: 200, text: "TV 55 pulgadas" }],
         Url: undefined,
         Cantidad: 5,
-        Visible: true
+        Visible: "Si"
     }
 
     const [habitaciones, setHabitaciones] = useState([])
@@ -30,12 +30,12 @@ export default function ListaHabitaciones() {
                         listaReseñas.push({ ...doc2.data(), id: doc2.id })
                     })
                 })
-                if (listaReseñas.length === 0){
-                    listaHabitaciones.push({ ...doc.data(), id: doc.id})
+                if (listaReseñas.length === 0) {
+                    listaHabitaciones.push({ ...doc.data(), id: doc.id })
                 } else {
-                    listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas:listaReseñas})
+                    listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas: listaReseñas })
                 }
-                
+
             });
             setHabitaciones(listaHabitaciones)
         })
@@ -156,7 +156,22 @@ export default function ListaHabitaciones() {
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
-                                    
+
+                                    {Visible 
+                                        ?
+                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
+                                            <h2 className="text-black pl-4">Si</h2>
+                                        </div>
+
+                                        :
+
+                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
+                                            <h2 className="text-black pl-4">No</h2>
+                                        </div>
+                                    }
+
                                     <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
                                         <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
                                         <h2 className="text-black pl-4">Lps.{Precio}.00</h2>
@@ -179,9 +194,9 @@ export default function ListaHabitaciones() {
                                             <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
                                             <div className="grid grid-cols-2 place-items-center">
                                                 {
-                                                    Url.map((foto,index) => {
+                                                    Url.map((foto, index) => {
                                                         return (
-                                                            <img key ={index} 
+                                                            <img key={index}
                                                                 className="h-40 w-40 p-2 object-cover rounded-xl"
                                                                 alt="Habitacion"
                                                                 src={foto}

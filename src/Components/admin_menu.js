@@ -40,7 +40,7 @@ const AdminMenu = function () {
                       <Link to="/administracion/Habitaciones" className="btn btn-primary">Habitaciones</Link>
                     </li>
                     <li className="p-3 hover:bg-gray-400">
-                      <Link to="/administracion/Restaurante" className="btn btn-primary">Restaurante</Link>
+                      <Link to="/administracion/Restaurante" className="btn btn-primary">Menus</Link>
                     </li>
                     <li className="p-3 hover:bg-gray-400">
                       <Link to="/administracion/Servicios" className="btn btn-primary">Servicios</Link>

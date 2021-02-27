@@ -9,7 +9,8 @@ export default function ListaServicios() {
     const estadoInicial = {
         Nombre: "Nombre del Servicio",
         Precio: 1000,
-        Detalles: [{ id: 1, text: "Comida gratis" }]
+        Detalles: [{ id: 1, text: "Comida gratis" }],
+        Visible: "Si"
     }
 
     const [servicios, setServicios] = useState([])
@@ -32,12 +33,13 @@ export default function ListaServicios() {
     }, [])
 
     const handleServicio = servicio => {
-        const { Nombre, Precio, Detalles, Url } = servicio
+        const { Nombre, Precio, Detalles, Url, Visible } = servicio
         setServicioSeleccionado({
             Nombre,
             Precio,
             Detalles,
             Url,
+            Visible
         })
         setMostrarAgregar(false)
         setMostrarModificar(false)
@@ -101,7 +103,7 @@ export default function ListaServicios() {
         setMostrarModificar(true)
     }
 
-    const { Nombre, Precio, Detalles, Url } = servicioSeleccionado
+    const { Nombre, Precio, Detalles, Url, Visible } = servicioSeleccionado
 
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
@@ -132,12 +134,26 @@ export default function ListaServicios() {
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     {mostrarAgregar
-                        ? (<AgregarServicios mostrarInicial={mostrarInicial} servicios={servicios}/>)
+                        ? (<AgregarServicios mostrarInicial={mostrarInicial} servicios={servicios} />)
                         : mostrarModificar
                             ? <ModificarServicios nombre={servicioSeleccionado.Nombre} mostrarInicial={mostrarInicial} servicios={servicios} />
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+
+                                    {Visible
+                                        ?
+                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
+                                            <h2 className="text-black pl-4">Si</h2>
+                                        </div>
+                                        :
+                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
+                                            <h2 className="text-black pl-4">No</h2>
+                                        </div>
+                                    }
+
                                     <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
                                         <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
                                         <h2 className="text-black pl-4">{Precio}</h2>

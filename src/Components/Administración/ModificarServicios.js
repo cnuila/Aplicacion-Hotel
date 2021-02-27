@@ -14,8 +14,8 @@ function ModificarServicios(props) {
     const [url, setUrl] = useState([]);
     const [files, setFiles] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [visible, setVisible] = useState(true);
-    const [tempVisible, setTempVisible] = useState(true);
+    const [visible, setVisible] = useState();
+    const [tempVisible, setTempVisible] = useState();
     const [detallesDrop, setDetallesDrop] = useState(() => {
         return []
     })
@@ -168,6 +168,7 @@ function ModificarServicios(props) {
                     setTodos(doc.data().Detalles)
                     setPrecio(doc.data().Precio)
                     setUrl(doc.data().Url)
+                    setTempVisible(doc.data().Visible)
                 });
             })
             .catch((error) => {
@@ -284,7 +285,7 @@ function ModificarServicios(props) {
                                 <form onSubmit={handleUpload} className="mt-6">
 
                                     <label class="block">
-                                        <span class="text-gray-700">Ocultar Habitacion</span>
+                                        <span class="text-gray-700">Ocultar Servicio</span>
                                         <select onChange={habitacionVisible} class="form-select block w-full mt-1 bg-gray-200">
                                             <>
                                                 {tempVisible ?

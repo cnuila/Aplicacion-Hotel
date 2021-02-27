@@ -257,7 +257,6 @@ function AgregarMenu(props) {
                             <form onSubmit={handleUpload} className="mt-6">
                                 <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre del Menu</label>
                                 <input onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
-                                <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
                                 <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
 
                                 <div class="relative group inline-block">
