@@ -146,7 +146,7 @@ export default function ListaMenu() {
                                         <h2 className="text-blue-500 font-semibold cursor-default">Detalles</h2>
                                         {
                                             Detalles.map(detalle => {
-                                                return <h2 className="text-black pl-4">{detalle.id} | {detalle.text}</h2>
+                                                return <h2 className="text-black pl-4">{detalle.text}</h2>
                                             })
                                         }
                                     </div>
