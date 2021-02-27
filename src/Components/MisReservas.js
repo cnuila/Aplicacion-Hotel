@@ -22,7 +22,11 @@ export default function MisReservas() {
         // realistic. Add a 2 second delay to make it seem more real.
         window.setTimeout(
             respuesta.complete('success').then(
-                document.getElementById('result').innerHTML = instrumentToJsonString(respuesta)
+                swal({
+                    text: instrumentToJsonString(respuesta),
+                    icon: "info",
+                    button: "Aceptar"
+                })
             ).catch(error => {
                 console.log(error)
             }), 3000);
