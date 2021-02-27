@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react'
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import { Calendar, utils } from "react-modern-calendar-datepicker";
+import swal from 'sweetalert'
 import { db, auth } from "../firebase"
+import moment from 'moment'
 import Navbar from './Navbar';
 import Reseña from './Reseña';
 import { Carousel } from 'react-responsive-carousel';
 import CrearReseña from './CrearReseña';
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 
-import { Calendar, utils } from "react-modern-calendar-datepicker";
-
-export default function InfoHabitacion({ location }) {
+export default function InfoHabitacion({ location, history }) {
   const nombre = location.state.props.nombre
   const complementos = location.state.props.complementos
   const precio = location.state.props.precio
   const fotos = location.state.fotos
-  const [value, onChange] = useState();
   const [reseñas, setReseña] = useState([])
+  const [diasReservados, setDiasReservados] = useState([])
+  const [selectedDayRange, setSelectedDayRange] = useState({
+    from: null,
+    to: null
+  });
 
   useEffect(() => {
+    getReservas()
     getReseñas()
   }, [])
 
@@ -29,11 +35,102 @@ export default function InfoHabitacion({ location }) {
       setReseña(listaReseñas)
     })
   }
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null ,
-    to: null
-  });
-  
+
+  const getReservas = () => {
+    db.collection("Reservas").where("idHabitacion", "==", nombre).get().then(querySnapshot => {
+      const diasDeshabilitados = []
+      querySnapshot.forEach((doc) => {
+        let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
+        let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
+        let moment1 = moment(fechaInicial)
+        let moment2 = moment(fechaFinal)
+        let diferenciaDias = moment2.diff(moment1, 'days') + 1
+        console.log("vuelta")
+        for (let i = 0; i < diferenciaDias; i++) {
+          console.log(moment1.format())
+          diasDeshabilitados.push({
+            year: parseInt(moment1.format('YYYY')),
+            month: parseInt(moment1.format('MM')),
+            day: parseInt(moment1.format('D')),
+          })
+          //incrementar un dia
+          moment1.add(1, 'days')
+        }
+      })
+      setDiasReservados(diasDeshabilitados)
+    })
+  }
+
+  const handleDisabledSelect = () => {
+    swal({
+      text: "Intentaste elegir un día ya reservado",
+      icon: "warning",
+      button: "Aceptar"
+    });
+  };
+
+  const reservar = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      if (selectedDayRange.to === null && selectedDayRange.from === null) {
+        swal({
+          text: "Debes seleccionar una fecha primero",
+          icon: "warning",
+          button: "Aceptar"
+        });
+      } else {
+        if (selectedDayRange.to === null && selectedDayRange.from !== null) {
+          swal({
+            text: "Debes seleccionar una fecha final o darle click de nuevo al día si solo quieres reservar un día",
+            icon: "warning",
+            button: "Aceptar"
+          });
+        } else {
+          let idCliente = ""
+          await db.collection("Usuarios").where("Email", "==", user.email).get().then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              idCliente = doc.id;
+            })
+          })
+          if (idCliente === "") {
+            swal({
+              text: "No tenemos registrado tu ID, elimina tu cuenta, y asegúrate de terminar el proceso de registro",
+              icon: "warning",
+              button: "Aceptar"
+            });
+          } else {
+            const { to, from } = selectedDayRange
+            let emailCliente = user.email
+            let fechaFinal = new Date(to.year, to.month - 1, to.day)
+            let fechaInicial = new Date(from.year, from.month - 1, from.day)
+            db.collection("Reservas").add({
+              idHabitacion: nombre,
+              idCliente,
+              emailCliente,
+              fechaFinal,
+              fechaInicial
+            }).then(() => {
+              swal({
+                text: "Reservaste con éxito",
+                icon: "success",
+                button: "Aceptar"
+              }).then(() => {
+                history.push("/misReservas");
+              });
+            })
+          }
+        }
+      }
+    } else {
+      swal({
+        text: "Debes iniciar sesión para hacer una reseña",
+        icon: "warning",
+        button: "Aceptar"
+      });
+    }
+  }
+
+
   return (
     <div>
       <Navbar />
@@ -42,43 +139,14 @@ export default function InfoHabitacion({ location }) {
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
             <div class="flex flex-col md:flex-row -mx-4">
               <div class="md:flex-1 px-4">
-                <div x-data="{ image: 1 }" x-cloak>
-                  <div class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4">
-                    <div x-show="image === 1" class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
-                      <Carousel autoPlay={3} infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
-
-                        {/*fotos.map((f, index) => {
-                          <div>
-                            <img key={index} src={f} alt="foto" className="absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100" />
-                          </div>
-                        })*/}
-                        <div>
-                          <img src={fotos[0]} alt="" className="inset-0 w-64 h-72 object-cover rounded-lg bg-gray-100" />
-                        </div>
-                        <div>
-                          <img src={fotos[1]} alt="" className="inset-0 w-64 h-72 object-cover rounded-lg bg-gray-100" />
-                        </div>
-                        <div>
-                          <img src={fotos[2]} alt="" className="inset-0 w-64 h-72 object-cover rounded-lg bg-gray-100" />
-                        </div>
-                        <div>
-                          <img src={fotos[3]} alt="" className="inset-0 w-64 h-72 object-cover rounded-lg bg-gray-100" />
-                        </div>
-                        <div>
-                          <img src={fotos[4]} alt="" className="inset-0 w-64 h-72 object-cover rounded-lg bg-gray-100" />
-                        </div>
-                      </Carousel>
-                    </div>
-                  </div>
-                  <div class="flex -mx-2 mb-4">
-                    <template x-for="i in 4">
-                      <div class="flex-1 px-2">
-                        <button x-on click="image = i" class="{ 'ring-2 ring-indigo-300 ring-inset': image === i }" class="focus:outline-none w-full rounded-lg h-24 md:h-32 bg-gray-100 flex items-center justify-center">
-                          <span x-text="i" class="text-2xl"></span>
-                        </button>
-                      </div>
-                    </template>
-                  </div>
+                <div class="rounded-lg bg-gray-100 mb-4">
+                  <Carousel autoPlay infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
+                    {fotos.map((url, index) => {
+                      return (<div key={index}>
+                        <img src={url} alt="foto" />
+                      </div>)
+                    })}
+                  </Carousel>
                 </div>
               </div>
               <div class="md:flex-1 px-4">
@@ -86,10 +154,13 @@ export default function InfoHabitacion({ location }) {
                 <div class="flex items-center space-x-4 my-4">
                   <div>
                     <div class="rounded-lg bg-gray-100 flex py-2 px-3">
-                      <span class="text-indigo-400 mr-1 mt-1">Lps.</span>
-                      <span class="font-bold text-indigo-600 text-3xl">{precio}.00</span>
+                      <span class="text-blue-700 mr-1 mt-1">Lps.</span>
+                      <span class="font-bold text-blue-900 text-3xl">{precio}.00</span>
                     </div>
                   </div>
+                  <button type="button" class="h-14 px-6 py-2 font-semibold rounded-xl bg-blue-900 hover:bg-blue-800 text-white outline-none focus:outline-none" onClick={() => reservar()}>
+                    Reservar
+                  </button>
                   <div class="flex-1">
                     {
                       //<p class="text-green-500 text-xl font-semibold">Descuento</p>
@@ -98,27 +169,19 @@ export default function InfoHabitacion({ location }) {
 
                   </div>
                 </div>
-                <p class="text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                 <div class="flex py-4 space-x-4">
                   <div>
-                    {/*  
-                    npm i react-modern-calendar-datepicker 
-                    https://kiarash-z.github.io/react-modern-calendar-datepicker/docs/props-list
-                    https://kiarash-z.github.io/react-modern-calendar-datepicker/docs/getting-started
-                    */ }
                     <Calendar
                       value={selectedDayRange}
-                      colorPrimaryLight="#cfedfc"
-                      colorPrimary="#9ad7f5"
+                      colorPrimaryLight="#60A5FA"
+                      colorPrimary="#1E3A8A"
                       onChange={setSelectedDayRange}
-                      shouldHighlightWeekends
+                      disabledDays={diasReservados}
                       minimumDate={utils().getToday()}
+                      onDisabledDayError={handleDisabledSelect}
+                      shouldHighlightWeekends
                     />
-                    {/* https://www.npmjs.com/package/@wojtekmaj/react-daterange-picker */}
                   </div>
-                  <button type="button" class="h-14 px-6 py-2 font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white">
-                    Reservar
-                  </button>
                 </div>
               </div>
             </div>
@@ -138,7 +201,7 @@ export default function InfoHabitacion({ location }) {
           <div class=" mt-2 flex justify-center container w-full">
           </div>
         </div>
-        <div class=" bg-indigo-700">
+        <div class=" bg-blue-900">
           <div class="py-3">
             {reseñas !== undefined ? (
               reseñas.map((reseña, index) => {
