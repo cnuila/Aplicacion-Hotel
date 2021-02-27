@@ -23,7 +23,6 @@ export default function Habitaciones() {
             setHabitaciones(listaHabitaciones)
         })
     }, [])
-    console.log(habitaciones)
     return (
         <div className="bg-gray-100 h-screen">
             <Navbar />

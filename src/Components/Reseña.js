@@ -56,7 +56,7 @@ export default function Reseña(props) {
                             <div className="mx-5 mb-1">
                                 <ReactStarRating numberOfStar={5} numberOfSelectedStar={resena.rating} colorFilledStar="yellow" colorEmptyStar="blue" starSize="25px" spaceBetweenStar="8px" disableOnSelect={true} />
                             </div>
-                            <textarea name="comentario" value={resena.comentario} className="rounded-md bg-gray-200 text-xl leading-normal resize-none w-full h-20 py-2 px-3 font-medium text-gray-700 focus:outline-none "></textarea>
+                            <textarea name="comentario" disabled value={resena.comentario}  className="rounded-md bg-gray-200 text-xl leading-normal resize-none w-full h-20 py-2 px-3 font-medium text-gray-700 focus:outline-none "></textarea>
                         </div>
                     </div>
                     
