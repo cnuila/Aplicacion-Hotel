@@ -301,6 +301,7 @@ function ModificarHabitacion(props) {
                                             </>
                                         </select>
                                     </label>
+
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre de la habitación</label>
                                     <input value={nombre} onChange={event => setNombre(event.target.value)} type="text" name="nombre" placeholder="Premium" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" disabled required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
