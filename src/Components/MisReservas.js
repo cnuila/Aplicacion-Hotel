@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { db, auth } from '../firebase'
 import moment from 'moment'
+import swal from 'sweetalert'
 import Navbar from './Navbar'
 
 export default function MisReservas() {
@@ -26,6 +27,29 @@ export default function MisReservas() {
         }
     }
 
+    const cancelarReserva = (idReservacion) => {
+        swal({
+            title: "¿Seguro quieres cancelar tu reservación?",
+            text: "Una vez elimines tu reservación, no podrás deshacer la acción",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((seElimina) => {
+            if (seElimina) {
+                console.log(idReservacion)
+                db.collection("Reservas").doc(idReservacion).delete().then(() => {
+                    getMisReservas()
+                    swal({
+                        text: "Se canceló tu reservación con éxito",
+                        icon: "warning",
+                        button: "Aceptar"
+                    });
+                })
+            }
+        });
+    }
+
+    console.log(misReservas)
     return (
         <>
             <Navbar />
@@ -34,7 +58,7 @@ export default function MisReservas() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-2 lg:pt-8 px-2 lg:px-12">
                     {
                         misReservas.map((reserva, index) => {
-                            const { idHabitacion, fechaInicial, pagada, precioPagar } = reserva
+                            const { idHabitacion, fechaInicial, pagada, precioPagar, id } = reserva
                             let fechaActual = moment(new Date())
                             let fechaInicialMoment = moment(new Date(fechaInicial.seconds * 1000))
                             let diferenciaDias = fechaInicialMoment.diff(fechaActual, 'days') + 1
@@ -81,7 +105,7 @@ export default function MisReservas() {
                                         }
                                         {fechaMaxCancelar !== ""
                                             ? (
-                                                <div className="py-1 px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-medium">
+                                                <div className="py-1 px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-medium" onClick={() => cancelarReserva(id)}>
                                                     Cancelar
                                                 </div>
                                             )
