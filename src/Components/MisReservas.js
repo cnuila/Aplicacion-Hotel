@@ -118,9 +118,12 @@ export default function MisReservas() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-2 lg:pt-8 px-2 lg:px-12">
                     {
                         misReservas.map((reserva, index) => {
-                            const { idHabitacion, fechaInicial, pagada, precioPagar, id } = reserva
+                            const { idHabitacion, fechaInicial, fechaFinal, pagada, precioPagar, id } = reserva
                             let fechaActual = moment(new Date())
                             let fechaInicialMoment = moment(new Date(fechaInicial.seconds * 1000))
+                            let fechaFinalMoment = moment(new Date(fechaFinal.seconds * 1000))
+
+                            let diasReserva = fechaFinalMoment.diff(fechaInicialMoment, "days") + 1
                             let diferenciaDias = fechaInicialMoment.diff(fechaActual, 'days') + 1
 
                             let fechaMaxCancelar = ""
@@ -129,6 +132,7 @@ export default function MisReservas() {
                             }
 
                             let fechaInicialFormat = fechaInicialMoment.format('DD/MM/YYYY')
+                            let fechaFinalFormat = fechaFinalMoment.format("DD/MM/YYYY")
                             return (
                                 <div key={index} className="bg-gray-900 mx-3 mb-3 p-8 rounded-sm">
                                     <h2 className="text-xl font-bold mb-3 text-white">{idHabitacion}</h2>
@@ -138,8 +142,16 @@ export default function MisReservas() {
                                         <h2>.00</h2>
                                     </div>
                                     <div className="flex flex-row text-white">
-                                        <h2 className="font-semibold">Fecha de la reservación:</h2>
-                                        <h2 className="px-1">{fechaInicialFormat}</h2>
+                                        <h2 className="font-semibold">Fecha:</h2>
+                                        <h2 className="px-1">{fechaInicialFormat} - {fechaFinalFormat}</h2>
+                                    </div>
+                                    <div className="flex flex-row text-white">
+                                        <h2 className="font-semibold">Dias reservados:</h2>
+                                        {diasReserva > 1
+                                            ? <h2 className="px-1">{diasReserva} días</h2>
+                                            : <h2 className="px-1">1 día</h2>
+                                        }
+
                                     </div>
                                     {fechaMaxCancelar !== ""
                                         ? (
@@ -159,11 +171,11 @@ export default function MisReservas() {
                                             ? <></>
                                             : (
                                                 <div className="">
-                                                    <div className="py-1 px-3 bg-green-400 hover:bg-green-500 rounded-lg cursor-pointer text-gray-900 font-medium" onClick={() => clickPago(iniciarPago(reserva))}>
+                                                    <div className="py-1 px-3 bg-green-400 hover:bg-green-500 rounded-sm cursor-pointer text-gray-900 font-medium" onClick={() => clickPago(iniciarPago(reserva))}>
                                                         Pagar con Tarjeta
                                                     </div>
                                                     <div className="pt-4">
-                                                        <PaypalButton total={precioPagar}/>
+                                                        <PaypalButton total={precioPagar} />
                                                     </div>
                                                 </div>
                                             )

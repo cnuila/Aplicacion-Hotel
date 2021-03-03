@@ -23,19 +23,15 @@ export default function ListaHabitaciones() {
     const getHabitaciones = () => {
         db.collection("Habitaciones").onSnapshot((querySnapshot) => {
             const listaHabitaciones = []
-            const listaReseñas = []
             querySnapshot.forEach((doc) => {
+                const listaReseñas = []
                 db.collection("Habitaciones").doc(doc.id).collection("Reseñas").onSnapshot((querySnapshot2) => {
                     querySnapshot2.forEach((doc2) => {
+                        console.log("entro")
                         listaReseñas.push({ ...doc2.data(), id: doc2.id })
-                    })
+                    })                    
                 })
-                if (listaReseñas.length === 0) {
-                    listaHabitaciones.push({ ...doc.data(), id: doc.id })
-                } else {
-                    listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas: listaReseñas })
-                }
-
+                listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas: listaReseñas })
             });
             setHabitaciones(listaHabitaciones)
         })
@@ -119,8 +115,7 @@ export default function ListaHabitaciones() {
     }
 
     const { Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacionSeleccionada
-    //console.log(habitaciones.reseñas)
-
+    console.log(habitacionSeleccionada.reseñas)
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -157,7 +152,7 @@ export default function ListaHabitaciones() {
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
 
-                                    {Visible 
+                                    {Visible
                                         ?
                                         <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
                                             <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
@@ -206,7 +201,7 @@ export default function ListaHabitaciones() {
                                             </div>
                                         </div>)
                                         : <></>}
-                                    {reseñas !== undefined
+                                    {reseñas !== undefined && reseñas.length !== 0
                                         ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                             <h2 className="text-blue-500 font-semibold cursor-default mb-2">Reseñas</h2>
                                             <div className="grid">
@@ -217,7 +212,7 @@ export default function ListaHabitaciones() {
                                                         if (visualizar) {
                                                             text = "Sí"
                                                         }
-                                                        return (<div className="ml-4 bg-gray-200 p-3 rounded-md my-1">
+                                                        return (<div className="ml-4 bg-gray-200 p-3 rounded-md my-1 overflow-x-auto">
                                                             <div className="flex flex-row">
                                                                 <h2 className="font-bold">Visible:</h2>
                                                                 <h2 className="pl-1"> {text}</h2>

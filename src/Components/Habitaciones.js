@@ -10,9 +10,9 @@ export default function Habitaciones() {
 
     useEffect(() => {
         db.collection("Habitaciones").onSnapshot((querySnapshot) => {
-            const listaHabitaciones = []
-            const listaReseñas = []
+            const listaHabitaciones = []            
             querySnapshot.forEach((doc) => {
+                const listaReseñas = []
                 db.collection("Habitaciones").doc(doc.id).collection("Reseñas").onSnapshot((querySnapshot2) => {
                     querySnapshot2.forEach((doc2) => {
                         listaReseñas.push({ ...doc2.data(), id: doc2.id })
@@ -23,6 +23,7 @@ export default function Habitaciones() {
             setHabitaciones(listaHabitaciones)
         })
     }, [])
+    
     return (
         <div className="bg-gray-100 h-screen">
             <Navbar />
