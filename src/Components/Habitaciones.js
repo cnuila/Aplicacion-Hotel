@@ -34,9 +34,10 @@ export default function Habitaciones() {
                 {habitaciones.map((habitacion, index) => {
                     if (habitacion.Visible) {
                         return (
-                            <Habitacion key={index} reseñas={habitacion.reseñas} precio={habitacion.Precio} complementos={habitacion.Complementos} url={habitacion.Url} nombre={habitacion.Nombre} />
+                            <Habitacion key={index} cantidad={habitacion.Cantidad} reseñas={habitacion.reseñas} precio={habitacion.Precio} complementos={habitacion.Complementos} url={habitacion.Url} nombre={habitacion.Nombre} />
                         )
                     }
+                    return <></>
                 })}
 
             </div>
