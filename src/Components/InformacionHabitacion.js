@@ -35,19 +35,15 @@ export default function InfoHabitacion({ location, history }) {
       })
       setReseña(listaReseñas)
     })
-
-
   }
 
-  const getReservas = () => {
+  const getReservas = async () => {
     let cantidadHabitaciones = 0
-    db.collection("Habitaciones").doc(id).get().then(querySnapshot2 => {
-      querySnapshot2.forEach(habitacion => {
-        cantidadHabitaciones = habitacion.data().Cantidad
-      })
+    await db.collection("Habitaciones").doc(id).get().then(querySnapshot2 => {
+      cantidadHabitaciones = querySnapshot2.data().Cantidad
     })
     const fechasReservadas = []
-    db.collection("Reservas").where("idHabitacion", "==", id).get().then(querySnapshot => {
+    await db.collection("Reservas").where("idHabitacion", "==", id).get().then(querySnapshot => {
       querySnapshot.forEach(doc => {
         let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
         let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
@@ -65,10 +61,26 @@ export default function InfoHabitacion({ location, history }) {
         }
       })
     })
-    /*const nuevasFechas = []
-    fechasReservadas
-    const diasDeshabilitados = []*/
+    
+    /*const nuevasFechas = fechasReservadas.sort(compare)
+    nuevasFechas.forEach(fecha1 => {
+      nuevasFechas.forEach(fecha2 => {
+      })
+    })*/
+    /*const diasDeshabilitados = []*/
     //setDiasReservados(diasDeshabilitados)
+  }
+
+  const compare = (fecha1, fecha2) => {
+    const dia1 = fecha1.day
+    const dia2 = fecha2.day 
+    let comparador = 0
+    if (dia1 > dia2){
+      comparador = 1
+    } else {
+      comparador = -1
+    }
+    return comparador
   }
 
   const handleDisabledSelect = () => {
