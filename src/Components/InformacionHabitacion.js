@@ -13,6 +13,7 @@ export default function InfoHabitacion({ location, history }) {
   const nombre = location.state.props.nombre
   const complementos = location.state.props.complementos
   const precio = location.state.props.precio
+  const id = location.state.props.id
   const fotos = location.state.fotos
   const [reseñas, setReseña] = useState([])
   const [diasReservados, setDiasReservados] = useState([])
@@ -27,64 +28,59 @@ export default function InfoHabitacion({ location, history }) {
   }, [])
 
   const getReseñas = () => {
-    db.collection("Habitaciones").doc(nombre).collection("Reseñas").orderBy("rating", "desc").get().then(querySnapshot => {
-
+    db.collection("Habitaciones").doc(id).collection("Reseñas").orderBy("rating", "desc").get().then(querySnapshot => {
       const listaReseñas = []
       querySnapshot.forEach((doc) => {
         listaReseñas.push({ ...doc.data(), id: doc.id })
       })
       setReseña(listaReseñas)
     })
-
-
   }
 
-  const getReservas = () => {
-    db.collection("Reservas").where("idHabitacion", "==", nombre).get().then(async querySnapshot => {
-      let cantidadHabitaciones = 0
-      await db.collection("Habitaciones").where("Nombre", "==", nombre).get().then(querySnapshot2 => {
-        querySnapshot2.forEach((habitacion) => {
-          cantidadHabitaciones = habitacion.data().Cantidad
-        })
-      })
-      console.log(cantidadHabitaciones)
-      const diasReservados = []
-      /*querySnapshot.forEach((doc) => {
-        let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
-        let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
-        let moment1 = moment(fechaInicial)
-        let moment2 = moment(fechaFinal)
-        let diferenciaDias = moment2.diff(moment1, 'days') + 1
-        for (let i = 0; i < diferenciaDias; i++) {
-          diasReservados.push({
-            year: parseInt(moment1.format('YYYY')),
-            month: parseInt(moment1.format('MM')),
-            day: parseInt(moment1.format('D')),
-            cantidad:
-          })
-          //incrementar un dia
-          moment1.add(1, 'days')
-        }
-      })*/
-      const diasDeshabilitados = []
-      querySnapshot.forEach((doc) => {
-        let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
-        let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
-        let moment1 = moment(fechaInicial)
-        let moment2 = moment(fechaFinal)
-        let diferenciaDias = moment2.diff(moment1, 'days') + 1
-        for (let i = 0; i < diferenciaDias; i++) {
-          diasDeshabilitados.push({
-            year: parseInt(moment1.format('YYYY')),
-            month: parseInt(moment1.format('MM')),
-            day: parseInt(moment1.format('D')),
-          })
-          //incrementar un dia
-          moment1.add(1, 'days')
-        }
-      })
-      setDiasReservados(diasDeshabilitados)
+  const getReservas = async () => {
+    let cantidadHabitaciones = 0
+    await db.collection("Habitaciones").doc(id).get().then(querySnapshot2 => {
+      cantidadHabitaciones = querySnapshot2.data().Cantidad
     })
+    const fechasReservadas = []
+    await db.collection("Reservas").where("idHabitacion", "==", id).get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
+        let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
+        let moment1 = moment(fechaInicial)
+        let moment2 = moment(fechaFinal)
+        let diferenciaDias = moment2.diff(moment1, 'days') + 1
+        for (let i = 0; i < diferenciaDias; i++) {
+          fechasReservadas.push({
+            year: parseInt(moment1.format('YYYY')),
+            month: parseInt(moment1.format('MM')),
+            day: parseInt(moment1.format('D')),
+          })
+          //incrementar un dia
+          moment1.add(1, 'days')
+        }
+      })
+    })
+    
+    /*const nuevasFechas = fechasReservadas.sort(compare)
+    nuevasFechas.forEach(fecha1 => {
+      nuevasFechas.forEach(fecha2 => {
+      })
+    })*/
+    /*const diasDeshabilitados = []*/
+    //setDiasReservados(diasDeshabilitados)
+  }
+
+  const compare = (fecha1, fecha2) => {
+    const dia1 = fecha1.day
+    const dia2 = fecha2.day 
+    let comparador = 0
+    if (dia1 > dia2){
+      comparador = 1
+    } else {
+      comparador = -1
+    }
+    return comparador
   }
 
   const handleDisabledSelect = () => {
@@ -134,7 +130,7 @@ export default function InfoHabitacion({ location, history }) {
             let diferenciaDias = moment2.diff(moment1, 'days') + 1
             let precioPagar = precio * diferenciaDias
             db.collection("Reservas").add({
-              idHabitacion: nombre,
+              idHabitacion: id,
               idCliente,
               emailCliente,
               fechaFinal,
