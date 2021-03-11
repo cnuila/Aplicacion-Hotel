@@ -29,7 +29,7 @@ export default function ListaHabitaciones() {
                     querySnapshot2.forEach((doc2) => {
                         console.log("entro")
                         listaReseñas.push({ ...doc2.data(), id: doc2.id })
-                    })                    
+                    })
                 })
                 listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas: listaReseñas })
             });
@@ -42,8 +42,9 @@ export default function ListaHabitaciones() {
     }, [])
 
     const handleHabitacion = habitacion => {
-        const { Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacion
+        const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacion
         setHabitacionSeleccionada({
+            id,
             Nombre,
             Precio,
             Complementos,
@@ -114,7 +115,7 @@ export default function ListaHabitaciones() {
         setMostrarModificar(true)
     }
 
-    const { Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacionSeleccionada
+    const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacionSeleccionada
     console.log(habitacionSeleccionada.reseñas)
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
@@ -151,6 +152,19 @@ export default function ListaHabitaciones() {
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+
+                                    <div class="grid grid-cols-5">
+                                        <div>
+                                            <button className="bg-red-500 h-10 w-24 text-white rounded-md" onClick={() => handleEliminarHabitacion(id, Url)}>
+                                                Eliminar
+                                                </button>
+                                        </div>
+                                        <div>
+                                            <button className="bg-blue-500 text-white h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
+                                                Modificar
+                                                </button>
+                                        </div>
+                                    </div>
 
                                     {Visible
                                         ?
@@ -236,23 +250,6 @@ export default function ListaHabitaciones() {
                                             </div>
                                         </div>)
                                         : <></>}
-                                    {Nombre !== "Nombre de la Habitación" ? (
-                                        <div class="grid grid-cols-2">
-                                            <div>
-                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
-                                                    Eliminar
-                                                </button>
-                                            </div>
-                                            <div>
-                                                <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
-                                                    Modificar
-                                                </button>
-                                            </div>
-                                        </div>) : (
-                                            <div>
-                                            </div>
-                                        )
-                                    }
                                 </div>)
                     }
                 </div>
