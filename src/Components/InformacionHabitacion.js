@@ -81,10 +81,10 @@ export default function InfoHabitacion({ location, history }) {
     })
     const diasDeshabilitados = []
     nuevasFechas.forEach(fecha => {
-      if (fecha.cant === cantidadHabitaciones){
+      if (fecha.cant === cantidadHabitaciones) {
         diasDeshabilitados.push(fecha)
       }
-    })    
+    })
     setDiasReservados(diasDeshabilitados)
   }
 
@@ -251,9 +251,11 @@ export default function InfoHabitacion({ location, history }) {
           <div class="py-3">
             {reseñas !== undefined ? (
               reseñas.map((reseña, index) => {
-                return (
-                  <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas} />
-                )
+                if (reseña.visualizar) {
+                  return (
+                    <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas} />
+                  )
+                }
               })) : (<></>)
             }
 

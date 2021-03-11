@@ -141,6 +141,24 @@ export default function ListaServicios() {
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
 
+                                    {Nombre !== "Nombre del Servicio" ? (
+                                        <div class="grid grid-cols-6 gap-x-2">
+                                            <div className="col-span-3">
+                                                <button className="bg-red-600 text-white h-10 w-full rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
+                                                    Eliminar
+                                            </button>
+                                            </div>
+                                            <div className="col-span-3">
+                                                <button className="bg-blue-700 text-white h-10 w-full rounded-md" onClick={handleOnClickModificar}>
+                                                    Modificar
+                                            </button>
+                                            </div>
+                                        </div>) : (
+                                        <div>
+                                        </div>
+                                    )
+                                    }
+
                                     {Visible
                                         ?
                                         <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
@@ -183,23 +201,7 @@ export default function ListaServicios() {
                                             </div>
                                         </div>)
                                         : <></>}
-                                    {Nombre !== "Nombre del Servicio" ? (
-                                        <div class="grid grid-cols-2">
-                                            <div>
-                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
-                                                    Eliminar
-                                            </button>
-                                            </div>
-                                            <div>
-                                                <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
-                                                    Modificar
-                                            </button>
-                                            </div>
-                                        </div>) : (
-                                            <div>
-                                            </div>
-                                        )
-                                    }
+
                                 </div>)
                     }
                 </div>

@@ -3,6 +3,7 @@ import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
 import AgregarHabitaciones from './AgregarHabitaciones'
 import ModificarHabitacion from './ModificarHabitacion'
+import ReseñasVisibles from './ReseñasVisibles'
 
 export default function ListaHabitaciones() {
 
@@ -19,6 +20,8 @@ export default function ListaHabitaciones() {
     const [habitacionSeleccionada, setHabitacionSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
     const [mostrarModificar, setMostrarModificar] = useState(false)
+    const [mostrarModificarReseñas, setMostrarModificarReseñas] = useState(false)
+    const [check, setCheck] = useState()
 
     const getHabitaciones = () => {
         db.collection("Habitaciones").onSnapshot((querySnapshot) => {
@@ -53,8 +56,10 @@ export default function ListaHabitaciones() {
             Cantidad,
             Visible
         })
+        setCheck(reseñas)
         setMostrarAgregar(false)
         setMostrarModificar(false)
+        setMostrarModificarReseñas(false)
     }
 
     const handleOnClickAgregar = () => {
@@ -107,12 +112,17 @@ export default function ListaHabitaciones() {
     const mostrarInicial = () => {
         setMostrarAgregar(false)
         setMostrarModificar(false)
+        setMostrarModificarReseñas(false)
         setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
         getHabitaciones()
     }
 
     const handleOnClickModificar = () => {
         setMostrarModificar(true)
+    }
+
+    const handleOnClickModificarReseña = () => {
+        setMostrarModificarReseñas(true)
     }
 
     const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacionSeleccionada
@@ -149,113 +159,120 @@ export default function ListaHabitaciones() {
                         ? (<AgregarHabitaciones mostrarInicial={mostrarInicial} habitaciones={habitaciones} />)
                         : mostrarModificar
                             ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} mostrarInicial={mostrarInicial} habitaciones={habitaciones} />
-                            : (
-                                <div className="h-full w-10/12 px-20 py-8">
-                                    <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+                            : mostrarModificarReseñas
+                                ? <ReseñasVisibles reseña={check} id={id} mostrarInicial={mostrarInicial} nombre={habitacionSeleccionada.Nombre}/>
+                                : (
+                                    <div className="h-full w-10/12 px-20 py-8">
+                                        <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
 
-                                    {Nombre !== "Nombre de la Habitación" ? (
-                                        <div class="grid grid-cols-5">
-                                            <div>
-                                                <button className="bg-red-500 text-white h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
-                                                    Eliminar
+                                        {Nombre !== "Nombre de la Habitación" ? (
+                                            <div class="grid grid-cols-6 gap-x-2">
+                                                <div className="col-span-2">
+                                                    <button className="bg-red-600 text-white h-10 w-full rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
+                                                        Eliminar Habitacion
                                                 </button>
-                                            </div>
-                                            <div>
-                                                <button className="bg-blue-500 text-white h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
-                                                    Modificar
+                                                </div>
+                                                <div className="col-span-2">
+                                                    <button className="bg-blue-700 text-white h-10 w-full rounded-md" onClick={handleOnClickModificar}>
+                                                        Modificar Habitacion
                                                 </button>
-                                            </div>
-                                        </div>) : (
+                                                </div>
+                                                <div className="col-span-2">
+                                                    <button className="bg-blue-700 text-white h-10 w-full rounded-md" onClick={handleOnClickModificarReseña}>
+                                                        Modificar Reseñas
+                                                </button>
+                                                </div>
+                                            </div>) : (
                                             <div>
                                             </div>
                                         )
-                                    }
-
-                                    {Visible
-                                        ?
-                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                            <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
-                                            <h2 className="text-black pl-4">Si</h2>
-                                        </div>
-
-                                        :
-
-                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                            <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
-                                            <h2 className="text-black pl-4">No</h2>
-                                        </div>
-                                    }
-
-                                    <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
-                                        <h2 className="text-black pl-4">Lps.{Precio}.00</h2>
-                                    </div>
-                                    <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default">Cantidad de Habitacones</h2>
-                                        <h2 className="text-black pl-4">{Cantidad}</h2>
-                                    </div>
-                                    <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
-                                        {
-                                            Complementos.map(complemento => {
-                                                const { text } = complemento
-                                                return <h2 className="text-black pl-4">{text}</h2>
-                                            })
                                         }
-                                    </div>
-                                    {Url !== undefined
-                                        ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                            <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
-                                            <div className="grid grid-cols-2 place-items-center">
-                                                {
-                                                    Url.map((foto, index) => {
-                                                        return (
-                                                            <img key={index}
-                                                                className="h-40 w-40 p-2 object-cover rounded-xl"
-                                                                alt="Habitacion"
-                                                                src={foto}
-                                                            />)
-                                                    })
-                                                }
+
+                                        {Visible
+                                            ?
+                                            <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                                <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
+                                                <h2 className="text-black pl-4">Si</h2>
                                             </div>
-                                        </div>)
-                                        : <></>}
-                                    {reseñas !== undefined && reseñas.length !== 0
-                                        ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                            <h2 className="text-blue-500 font-semibold cursor-default mb-2">Reseñas</h2>
-                                            <div className="grid">
-                                                {
-                                                    reseñas.map(reseña => {
-                                                        const { usuario, rating, visualizar, comentario } = reseña
-                                                        let text = "No"
-                                                        if (visualizar) {
-                                                            text = "Sí"
-                                                        }
-                                                        return (<div className="ml-4 bg-gray-200 p-3 rounded-md my-1 overflow-x-auto">
-                                                            <div className="flex flex-row">
-                                                                <h2 className="font-bold">Visible:</h2>
-                                                                <h2 className="pl-1"> {text}</h2>
-                                                            </div>
-                                                            <div className="flex flex-row">
-                                                                <h2 className="font-bold">Rating:</h2>
-                                                                <h2 className="px-1"> {rating}</h2>
-                                                                <h2>de 5 estrellas</h2>
-                                                            </div>
-                                                            <div className="flex flex-row">
-                                                                <h2 className="font-bold">Comentario:</h2>
-                                                                <h2 className="pl-1"> {comentario}</h2>
-                                                            </div>
-                                                            <div className="flex flex-row">
-                                                                <h2 className="font-bold">Usuario:</h2>
-                                                                <h2 className="pl-1"> {usuario}</h2>
-                                                            </div>
-                                                        </div>)
-                                                    })
-                                                }
+
+                                            :
+
+                                            <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                                <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
+                                                <h2 className="text-black pl-4">No</h2>
                                             </div>
-                                        </div>)
-                                        : <></>}
-                                </div>)
+                                        }
+
+                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
+                                            <h2 className="text-black pl-4">Lps.{Precio}.00</h2>
+                                        </div>
+                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default">Cantidad de Habitacones</h2>
+                                            <h2 className="text-black pl-4">{Cantidad}</h2>
+                                        </div>
+                                        <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                            <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
+                                            {
+                                                Complementos.map(complemento => {
+                                                    const { text } = complemento
+                                                    return <h2 className="text-black pl-4">{text}</h2>
+                                                })
+                                            }
+                                        </div>
+                                        {Url !== undefined
+                                            ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                                <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
+                                                <div className="grid grid-cols-2 place-items-center">
+                                                    {
+                                                        Url.map((foto, index) => {
+                                                            return (
+                                                                <img key={index}
+                                                                    className="h-40 w-40 p-2 object-cover rounded-xl"
+                                                                    alt="Habitacion"
+                                                                    src={foto}
+                                                                />)
+                                                        })
+                                                    }
+                                                </div>
+                                            </div>)
+                                            : <></>}
+                                        {reseñas !== undefined && reseñas.length !== 0
+                                            ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                                <h2 className="text-blue-500 font-semibold cursor-default mb-2">Reseñas</h2>
+                                                <div className="grid">
+                                                    {
+                                                        check.map(reseña => {
+                                                            let text = "No"
+                                                            if (reseña.visualizar) {
+                                                                text = "Sí"
+                                                            }
+                                                            return (
+                                                                <div className="ml-4 bg-gray-200 p-3 rounded-md my-1 overflow-x-auto" id={reseña.id}>
+                                                                    <div className="flex flex-row">
+                                                                        <h2 className="font-bold">Visible:</h2>
+                                                                        <h2 className="px-1"> {text}</h2>
+                                                                    </div>
+                                                                    <div className="flex flex-row">
+                                                                        <h2 className="font-bold">Rating:</h2>
+                                                                        <h2 className="px-1"> {reseña.rating}</h2>
+                                                                        <h2>de 5 estrellas</h2>
+                                                                    </div>
+                                                                    <div className="flex flex-row">
+                                                                        <h2 className="font-bold">Comentario:</h2>
+                                                                        <h2 className="pl-1"> {reseña.comentario}</h2>
+                                                                    </div>
+                                                                    <div className="flex flex-row">
+                                                                        <h2 className="font-bold">Usuario:</h2>
+                                                                        <h2 className="pl-1"> {reseña.usuario}</h2>
+                                                                    </div>
+                                                                </div>)
+                                                        })
+                                                    }
+                                                </div>
+                                            </div>)
+                                            : <></>}
+                                    </div>)
                     }
                 </div>
             </div>
