@@ -153,18 +153,23 @@ export default function ListaHabitaciones() {
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
 
-                                    <div class="grid grid-cols-5">
-                                        <div>
-                                            <button className="bg-red-500 h-10 w-24 text-white rounded-md" onClick={() => handleEliminarHabitacion(id, Url)}>
-                                                Eliminar
+                                    {Nombre !== "Nombre de la Habitación" ? (
+                                        <div class="grid grid-cols-5">
+                                            <div>
+                                                <button className="bg-red-500 text-white h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
+                                                    Eliminar
                                                 </button>
-                                        </div>
-                                        <div>
-                                            <button className="bg-blue-500 text-white h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
-                                                Modificar
+                                            </div>
+                                            <div>
+                                                <button className="bg-blue-500 text-white h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
+                                                    Modificar
                                                 </button>
-                                        </div>
-                                    </div>
+                                            </div>
+                                        </div>) : (
+                                            <div>
+                                            </div>
+                                        )
+                                    }
 
                                     {Visible
                                         ?
