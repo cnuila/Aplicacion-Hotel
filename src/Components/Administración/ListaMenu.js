@@ -142,12 +142,12 @@ export default function ListaMenu() {
                                         <div class="grid grid-cols-6 gap-x-2">
                                             <div className="col-span-3">
                                                 <button className="bg-red-600 text-white h-10 w-full rounded-md" onClick={() => handleEliminarMenu(Nombre, Url)}>
-                                                    Eliminar
+                                                    Eliminar Menu
                                             </button>
                                             </div>
                                             <div className="col-span-3">
                                                 <button className="bg-blue-700 text-white h-10 w-full rounded-md" onClick={handleOnClickModificar}>
-                                                    Modificar
+                                                    Modificar Menu
                                             </button>
                                             </div>
                                         </div>) : (

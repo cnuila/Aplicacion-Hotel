@@ -145,12 +145,12 @@ export default function ListaServicios() {
                                         <div class="grid grid-cols-6 gap-x-2">
                                             <div className="col-span-3">
                                                 <button className="bg-red-600 text-white h-10 w-full rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
-                                                    Eliminar
+                                                    Eliminar Servicio
                                             </button>
                                             </div>
                                             <div className="col-span-3">
                                                 <button className="bg-blue-700 text-white h-10 w-full rounded-md" onClick={handleOnClickModificar}>
-                                                    Modificar
+                                                    Modificar Servicio
                                             </button>
                                             </div>
                                         </div>) : (
