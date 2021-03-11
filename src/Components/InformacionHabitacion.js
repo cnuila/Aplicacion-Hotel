@@ -40,7 +40,7 @@ export default function InfoHabitacion({ location, history }) {
   const getReservas = async () => {
     let cantidadHabitaciones = 0
     await db.collection("Habitaciones").doc(id).get().then(querySnapshot2 => {
-      cantidadHabitaciones = querySnapshot2.data().Cantidad
+      cantidadHabitaciones = parseInt(querySnapshot2.data().Cantidad)
     })
     const fechasReservadas = []
     await db.collection("Reservas").where("idHabitacion", "==", id).get().then(querySnapshot => {
@@ -61,21 +61,38 @@ export default function InfoHabitacion({ location, history }) {
         }
       })
     })
-    
-    /*const nuevasFechas = fechasReservadas.sort(compare)
-    nuevasFechas.forEach(fecha1 => {
-      nuevasFechas.forEach(fecha2 => {
-      })
-    })*/
-    /*const diasDeshabilitados = []*/
-    //setDiasReservados(diasDeshabilitados)
+
+    const fechasOrdenadas = fechasReservadas.sort(compare)
+    const nuevasFechas = []
+    fechasOrdenadas.forEach(fecha1 => {
+      for (let i = 0; i < fechasOrdenadas.length; i++) {
+        if (fecha1.month === fechasOrdenadas[i].month && fecha1.year === fechasOrdenadas[i].year && fecha1.day === fechasOrdenadas[i].day) {
+          let index = nuevasFechas.findIndex(x => x.day === fecha1.day && x.month === fecha1.month && x.year === fecha1.year)
+          if (index === -1) {
+            nuevasFechas.push({ ...fecha1, cant: 1 })
+          } else {
+            let { cant } = nuevasFechas[index]
+            let nuevaCant = cant + 1
+            nuevasFechas[index] = { ...fecha1, cant: nuevaCant }
+          }
+          i = fechasOrdenadas.length
+        }
+      }
+    })
+    const diasDeshabilitados = []
+    nuevasFechas.forEach(fecha => {
+      if (fecha.cant === cantidadHabitaciones){
+        diasDeshabilitados.push(fecha)
+      }
+    })    
+    setDiasReservados(diasDeshabilitados)
   }
 
   const compare = (fecha1, fecha2) => {
     const dia1 = fecha1.day
-    const dia2 = fecha2.day 
+    const dia2 = fecha2.day
     let comparador = 0
-    if (dia1 > dia2){
+    if (dia1 > dia2) {
       comparador = 1
     } else {
       comparador = -1
