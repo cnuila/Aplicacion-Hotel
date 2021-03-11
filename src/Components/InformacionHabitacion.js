@@ -240,7 +240,7 @@ export default function InfoHabitacion({ location, history }) {
               })) : (<></>)
             }
 
-            <CrearReseña nombre={nombre} getReseñas={getReseñas} />
+            <CrearReseña nombre={nombre} id={id} getReseñas={getReseñas} />
           </div>
         </div>
       </body>
