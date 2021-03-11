@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { db, auth } from '../firebase'
 import moment from 'moment'
 import swal from 'sweetalert'
-import Navbar from './Navbar'
 import PaypalButton from './PaypalButton'
+import Navbar from './Navbar'
 
 export default function MisReservas() {
 
@@ -14,7 +14,6 @@ export default function MisReservas() {
             getMisReservas()
         }, 1000)
     }, [])
-
 
 
     const enviarPagoAlServidor = (respuesta) => {
@@ -73,7 +72,7 @@ export default function MisReservas() {
         })
     }
 
-
+    //función que consulta las reservas del usuario actual y las prepara para la variable mostrarReservas
     const getMisReservas = async () => {
         let user = auth.currentUser;
         if (user) {
@@ -94,6 +93,7 @@ export default function MisReservas() {
         }
     }
 
+    //función que cancela una reserva y una vez cancelada se vuelven a leer las reservas del usuario
     const cancelarReserva = (idReservacion) => {
         swal({
             title: "¿Seguro quieres cancelar tu reservación?",
@@ -103,7 +103,6 @@ export default function MisReservas() {
             dangerMode: true,
         }).then((seElimina) => {
             if (seElimina) {
-                console.log(idReservacion)
                 db.collection("Reservas").doc(idReservacion).delete().then(() => {
                     getMisReservas()
                     swal({
@@ -116,6 +115,7 @@ export default function MisReservas() {
         });
     }
 
+    //variable que prepara las reserva leidas y las formatea para ser mostradas en pantalla
     const mostrarReservas = misReservas.map((reserva, index) => {
         const { nombreHabitacion, fechaInicial, fechaFinal, pagada, precioPagar, id } = reserva
         let fechaActual = moment(new Date())
@@ -125,11 +125,13 @@ export default function MisReservas() {
         let diasReserva = fechaFinalMoment.diff(fechaInicialMoment, "days") + 1
         let diferenciaDias = fechaInicialMoment.diff(fechaActual, 'days') + 1
 
+        //si existe una diferencia mayor a 3 días la reserva se puede cancelar si no, no
         let fechaMaxCancelar = ""
         if (diferenciaDias > 3) {
             fechaMaxCancelar = moment(new Date(fechaInicial.seconds * 1000)).subtract(3, "days").format('DD/MM/YYYY')
         }
 
+        //con la librería moment se formatea la fecha
         let fechaInicialFormat = fechaInicialMoment.format('DD/MM/YYYY')
         let fechaFinalFormat = fechaFinalMoment.format("DD/MM/YYYY")
         return (

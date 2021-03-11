@@ -13,6 +13,9 @@ export default function ListaClientes() {
     const [telefono, setTelefono] = useState("9999-9999")
     const [clienteSeleccionado, setCliente] = useState({})
 
+    /*funcion que de acuerdo a cómo el usuario hace scroll, genera más datos para mostrar.
+        Se llama en el div de la lista, recibe un event que es el que maneja del scroll
+    */
     const handleScroll = event => {
         if (ultimo !== undefined) {
             const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
@@ -24,6 +27,7 @@ export default function ListaClientes() {
         }
     }
 
+    //funcion que hace la query de 10 usuarios más que siguen en después del último
     function nextPage(ultimo) {
         if (ultimo !== undefined) {
             let query = db.collection("Usuarios").orderBy("Nombre").startAfter(ultimo).limit(10)
@@ -31,6 +35,7 @@ export default function ListaClientes() {
         }
     }
 
+    //función asincrona que recibe un query la realiza y prepara los datos para ser mostrados
     const mostrarQuery = async (query) => {
         query.onSnapshot((querySnapshot) => {
             const clientes = []
@@ -46,6 +51,7 @@ export default function ListaClientes() {
         setCargando(false);
     }
 
+    //función asíncrona que se llama justo al cargarse el componente, muestra 20 usuarios
     const getClientes = async () => {
         let query = db.collection("Usuarios").orderBy("Nombre").limit(20)
         mostrarQuery(query)
@@ -55,6 +61,8 @@ export default function ListaClientes() {
         getClientes()
     }, [])
 
+    //función que recibe un cliente y prepara todos sus datos para ser mostrados en el panel derecho
+    //los usarios que tengan *Pendiente* deben borrar su cuenta y volver a crearla
     const handleCliente = cliente => {
         setNombre(cliente.Nombre)
         setApellido(cliente.Apellido)

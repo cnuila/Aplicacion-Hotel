@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import AgregarServicios from './AgregarServicios'
 import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
+import AgregarServicios from './AgregarServicios'
 import ModificarServicios from './ModificarServicios'
 
 export default function ListaServicios() {
@@ -18,6 +18,7 @@ export default function ListaServicios() {
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
     const [mostrarModificar, setMostrarModificar] = useState(false)
 
+    //función asíncrona que recupera los servicios de la db y los prepara para mostrarlos en la lista del panel izquierdo
     const getServicios = async () => {
         await db.collection("Servicios").orderBy("Nombre").get().then(querySnapshot => {
             const serviciosAgregar = []
@@ -32,6 +33,7 @@ export default function ListaServicios() {
         getServicios()
     }, [])
 
+    //función que recibe un servicio y lo prepara para ser mostrado en el panel derecho
     const handleServicio = servicio => {
         const { Nombre, Precio, Detalles, Url, Visible } = servicio
         setServicioSeleccionado({
@@ -45,6 +47,7 @@ export default function ListaServicios() {
         setMostrarModificar(false)
     }
 
+    //función que prepara la interfaz para poder agregar un servicio
     const handleOnClickAgregar = () => {
         setMostrarAgregar(true)
         setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })

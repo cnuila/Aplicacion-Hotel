@@ -10,6 +10,7 @@ import { Carousel } from 'react-responsive-carousel';
 import CrearReseña from './CrearReseña';
 
 export default function InfoHabitacion({ location, history }) {
+  
   const nombre = location.state.props.nombre
   const complementos = location.state.props.complementos
   const precio = location.state.props.precio
@@ -27,6 +28,7 @@ export default function InfoHabitacion({ location, history }) {
     getReseñas()
   }, [])
 
+  //función que recupera todas las reseñas de la habitación actual
   const getReseñas = () => {
     db.collection("Habitaciones").doc(id).collection("Reseñas").orderBy("rating", "desc").get().then(querySnapshot => {
       const listaReseñas = []
@@ -37,14 +39,17 @@ export default function InfoHabitacion({ location, history }) {
     })
   }
 
+  //función asíncrona que lee todas las reservas y deshabilita los días según su la cantidad de habitaciones disponibles
   const getReservas = async () => {
-    let cantidadHabitaciones = 0
+    let cantidadHabitaciones = 0    
     await db.collection("Habitaciones").doc(id).get().then(querySnapshot2 => {
       cantidadHabitaciones = parseInt(querySnapshot2.data().Cantidad)
     })
     const fechasReservadas = []
     await db.collection("Reservas").where("idHabitacion", "==", id).get().then(querySnapshot => {
       querySnapshot.forEach(doc => {
+
+        //se guarda en fechasReservadas todas las fechas entre dos limites(fechaInicial-fechaFinal)
         let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
         let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
         let moment1 = moment(fechaInicial)
@@ -62,8 +67,12 @@ export default function InfoHabitacion({ location, history }) {
       })
     })
 
+    //ordena las fechas según compare(leer compare para saber cómo ordena)
     const fechasOrdenadas = fechasReservadas.sort(compare)
     const nuevasFechas = []
+
+    //por cada fecha en fechasOrdenadas si la fecha no está en nuevasFechas la agrega con cantidad 1
+    //si la fecha ya está se incrementa la cantidad
     fechasOrdenadas.forEach(fecha1 => {
       for (let i = 0; i < fechasOrdenadas.length; i++) {
         if (fecha1.month === fechasOrdenadas[i].month && fecha1.year === fechasOrdenadas[i].year && fecha1.day === fechasOrdenadas[i].day) {
@@ -79,6 +88,9 @@ export default function InfoHabitacion({ location, history }) {
         }
       }
     })
+
+    //por cada fecha en nuevasFechas, si la fecha tiene la misma cantidad que la cantidad de habitaciones
+    //la fecha se deshabilita porque se concluye que las habitaciones en ese limite de fechas ya están reservadas
     const diasDeshabilitados = []
     nuevasFechas.forEach(fecha => {
       if (fecha.cant === cantidadHabitaciones) {
@@ -88,6 +100,7 @@ export default function InfoHabitacion({ location, history }) {
     setDiasReservados(diasDeshabilitados)
   }
 
+  //función que recibe dos fechas y según el día ordena de manera no descendente
   const compare = (fecha1, fecha2) => {
     const dia1 = fecha1.day
     const dia2 = fecha2.day
@@ -100,6 +113,7 @@ export default function InfoHabitacion({ location, history }) {
     return comparador
   }
 
+  //función que muestra un mensaje al momento de tratar de elegir un día deshabilitado
   const handleDisabledSelect = () => {
     swal({
       text: "Intentaste elegir un día ya reservado",
@@ -108,6 +122,7 @@ export default function InfoHabitacion({ location, history }) {
     });
   };
 
+  //función asíncrona que reserva una habitación y redirige a página de mis reservas
   const reservar = async () => {
     const user = auth.currentUser;
     if (user) {
@@ -179,12 +194,12 @@ export default function InfoHabitacion({ location, history }) {
   return (
     <div>
       <Navbar />
-      <body class="antialiased">
-        <div class="py-6 bg-gray-200">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-            <div class="flex flex-col md:flex-row -mx-4">
-              <div class="md:flex-1 px-4">
-                <div class="rounded-lg bg-gray-100 mb-4">
+      <body className="antialiased">
+        <div className="py-6 bg-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+            <div className="flex flex-col md:flex-row -mx-4">
+              <div className="md:flex-1 px-4">
+                <div className="rounded-lg bg-gray-100 mb-4">
                   <Carousel autoPlay infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
                     {fotos.map((url, index) => {
                       return (<div key={index}>
@@ -194,27 +209,20 @@ export default function InfoHabitacion({ location, history }) {
                   </Carousel>
                 </div>
               </div>
-              <div class="md:flex-1 px-4">
-                <h2 class="mb-2 leading-tight tracking-tight font-bold text-gray-800 text-2xl md:text-3xl">{nombre}</h2>
-                <div class="flex items-center space-x-4 my-4">
+              <div className="md:flex-1 px-4">
+                <h2 className="mb-2 leading-tight tracking-tight font-bold text-gray-800 text-2xl md:text-3xl">{nombre}</h2>
+                <div className="flex items-center space-x-4 my-4">
                   <div>
-                    <div class="rounded-lg bg-gray-100 flex py-2 px-3">
-                      <span class="text-blue-700 mr-1 mt-1">Lps.</span>
-                      <span class="font-bold text-blue-900 text-3xl">{precio}.00</span>
+                    <div className="rounded-lg bg-gray-100 flex py-2 px-3">
+                      <span className="text-blue-700 mr-1 mt-1">Lps.</span>
+                      <span className="font-bold text-blue-900 text-3xl">{precio}.00</span>
                     </div>
                   </div>
-                  <button type="button" class="h-14 px-6 py-2 font-semibold rounded-xl bg-blue-900 hover:bg-blue-800 text-white outline-none focus:outline-none" onClick={() => reservar()}>
+                  <button type="button" className="h-14 px-6 py-2 font-semibold rounded-xl bg-blue-900 hover:bg-blue-800 text-white outline-none focus:outline-none" onClick={() => reservar()}>
                     Reservar
                   </button>
-                  <div class="flex-1">
-                    {
-                      //<p class="text-green-500 text-xl font-semibold">Descuento</p>
-                      //<p class="text-gray-400 text-sm">Precio Por la Habitacion.</p>
-                    }
-
-                  </div>
                 </div>
-                <div class="flex py-4 space-x-4">
+                <div className="flex py-4 space-x-4">
                   <div>
                     <Calendar
                       value={selectedDayRange}
@@ -225,18 +233,17 @@ export default function InfoHabitacion({ location, history }) {
                       minimumDate={utils().getToday()}
                       onDisabledDayError={handleDisabledSelect}
                       shouldHighlightWeekends
-
                     />
                   </div>
                 </div>
               </div>
             </div>
-            <div class=" w-1/2">
+            <div className=" w-1/2">
 
               {complementos.map(c => {
                 return (
                   <div>
-                    <p class="text-gray-500">
+                    <p className="text-gray-500">
                       <li>{c.text}</li></p>
                   </div>
                 )
@@ -244,11 +251,11 @@ export default function InfoHabitacion({ location, history }) {
 
             </div>
           </div>
-          <div class=" mt-2 flex justify-center container w-full">
+          <div className=" mt-2 flex justify-center container w-full">
           </div>
         </div>
-        <div class=" bg-blue-900">
-          <div class="py-3">
+        <div className=" bg-blue-900">
+          <div className="py-3">
             {reseñas !== undefined ? (
               reseñas.map((reseña, index) => {
                 if (reseña.visualizar) {
@@ -256,9 +263,9 @@ export default function InfoHabitacion({ location, history }) {
                     <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas} />
                   )
                 }
+                return <></>
               })) : (<></>)
             }
-
             <CrearReseña nombre={nombre} id={id} getReseñas={getReseñas} />
           </div>
         </div>

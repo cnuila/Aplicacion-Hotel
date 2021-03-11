@@ -6,9 +6,9 @@ import { db } from '../firebase'
 export default function Habitaciones() {
 
     const [habitaciones, setHabitaciones] = useState([])
-
-
+    
     useEffect(() => {
+        //función que lee todas las habitaciones y prepara su información para enviarla al componente Habitación
         db.collection("Habitaciones").onSnapshot((querySnapshot) => {
             const listaHabitaciones = []            
             querySnapshot.forEach((doc) => {

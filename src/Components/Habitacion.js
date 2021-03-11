@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react'
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Link } from 'react-router-dom';
 import { storage } from '../firebase';
-import InfoHabitacion from './InformacionHabitacion';
 
 export default function Habitacion(props) {
     const [fotos, setFotos] = useState([])
+
     useEffect(() => {
+        //funcion que prepara las fotos para mostrarlas
         async function descargarFotos() {
             let arreglofotos = []
             for (let i = 0; i < props.url.length; i++) {
@@ -21,6 +22,7 @@ export default function Habitacion(props) {
         }
         descargarFotos()
     }, [props.url])
+
     return (
         <div>
             <div className="grid grid-cols-1 m-3 md:m-6 sm:grid-cols-2 sm:px-8 sm:gap-x-8 pb-4 md:py-12  bg-local bg-white rounded-xl shadow-lg ">

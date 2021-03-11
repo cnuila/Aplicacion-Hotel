@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import AgregarMenu from './AgregarMenu'
-import ModificarMenu from './ModificarMenu'
 import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
+import AgregarMenu from './AgregarMenu'
+import ModificarMenu from './ModificarMenu'
 
 export default function ListaMenu() {
 
@@ -100,7 +100,7 @@ export default function ListaMenu() {
         setMostrarModificar(true)
     }
 
-    const { Nombre, Precio, Detalles, Url } = platilloSeleccionado
+    const { Nombre, Detalles, Url } = platilloSeleccionado
 
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
