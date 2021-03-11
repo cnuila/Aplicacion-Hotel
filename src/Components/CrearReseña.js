@@ -54,7 +54,7 @@ class CrearReseña extends React.Component {
                     button: "Aceptar"
                 });
             } else {
-                const resAn = db.collection("Habitaciones").doc(this.props.nombre).collection("Reseñas")
+                const resAn = db.collection("Habitaciones").doc(this.props.id).collection("Reseñas")
                 const email = user.email;
                 resAn.add({
                     comentario: this.state.comentario,
