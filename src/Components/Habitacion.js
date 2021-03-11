@@ -57,8 +57,8 @@ export default function Habitacion(props) {
                     }
                     }>
                         <button type="button" className="bg-blue-900 hover:bg-blue-700 text-white text-sm md:text-base font-semibold px-6 py-2 rounded-lg focus:outline-none focus:shadow-outline">
-                            Mas Información
-                            </button>
+                            Reservar
+                        </button>
                     </Link>
                 </div>
 

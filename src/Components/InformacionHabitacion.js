@@ -61,7 +61,7 @@ export default function InfoHabitacion({ location, history }) {
         }
       })
     })
-    
+
     /*const nuevasFechas = fechasReservadas.sort(compare)
     nuevasFechas.forEach(fecha1 => {
       nuevasFechas.forEach(fecha2 => {
@@ -73,9 +73,9 @@ export default function InfoHabitacion({ location, history }) {
 
   const compare = (fecha1, fecha2) => {
     const dia1 = fecha1.day
-    const dia2 = fecha2.day 
+    const dia2 = fecha2.day
     let comparador = 0
-    if (dia1 > dia2){
+    if (dia1 > dia2) {
       comparador = 1
     } else {
       comparador = -1
@@ -166,15 +166,29 @@ export default function InfoHabitacion({ location, history }) {
         <div class="py-6 bg-gray-200">
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
             <div class="flex flex-col md:flex-row -mx-4">
-              <div class="md:flex-1 px-4">
-                <div class="rounded-lg bg-gray-100 mb-4">
-                  <Carousel autoPlay infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
+              <div class="md:flex-1 px-4 w-full h-auto">
+                <div class="rounded-lg bg-gray-100 mb-4 w-full h-80 object-cover">
+                  <Carousel className="w-full h-64" autoPlay infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
                     {fotos.map((url, index) => {
-                      return (<div key={index}>
-                        <img src={url} alt="foto" />
-                      </div>)
+                      return (
+                        <div className="w-full h-80" key={index}>
+                          <img className="object-cover h-full w-full" src={url} alt="foto" />
+                        </div>
+                      )
                     })}
                   </Carousel>
+                </div>
+                <div class=" w-1/2">
+
+                  {complementos.map(c => {
+                    return (
+                      <div>
+                        <p class="text-gray-500">
+                          <li>{c.text}</li></p>
+                      </div>
+                    )
+                  })}
+
                 </div>
               </div>
               <div class="md:flex-1 px-4">
@@ -187,7 +201,7 @@ export default function InfoHabitacion({ location, history }) {
                     </div>
                   </div>
                   <button type="button" class="h-14 px-6 py-2 font-semibold rounded-xl bg-blue-900 hover:bg-blue-800 text-white outline-none focus:outline-none" onClick={() => reservar()}>
-                    Reservar
+                    Confirmar Reserva
                   </button>
                   <div class="flex-1">
                     {
@@ -213,18 +227,6 @@ export default function InfoHabitacion({ location, history }) {
                   </div>
                 </div>
               </div>
-            </div>
-            <div class=" w-1/2">
-
-              {complementos.map(c => {
-                return (
-                  <div>
-                    <p class="text-gray-500">
-                      <li>{c.text}</li></p>
-                  </div>
-                )
-              })}
-
             </div>
           </div>
           <div class=" mt-2 flex justify-center container w-full">

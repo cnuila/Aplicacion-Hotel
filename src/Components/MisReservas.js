@@ -9,14 +9,41 @@ export default function MisReservas() {
 
     const [misReservas, setMisReservas] = useState([])
 
-    useEffect(() => {        
+    useEffect(() => {
         setTimeout(() => {
             getMisReservas()
         }, 1000)
     }, [])
 
 
-
+    const clickPagar = (reserva, precioPagar) => {
+        swal({
+            title: "Pagar la Reserva",
+            text: "Seleccione la opcion con la que desea pagar",
+            buttons: {
+                Paypal: {
+                    text: "Paypal",
+                    value: "paypal",
+                    className: "bg-blue-600 hover:bg-blue-100",
+                },
+                TC: {
+                    text: "Tarjeta",
+                    value: "tc",
+                    className: "hover:bg-yellow-100 bg-yellow-500 ",
+                },
+                cancel: true,
+            },
+        }).then((value) => {
+            switch (value) {
+                case "paypal":
+                    <PaypalButton total={precioPagar} />
+                    break;
+                case "tc":
+                    clickPago(iniciarPago(reserva))
+                    break;
+            }
+        });
+    }
     const enviarPagoAlServidor = (respuesta) => {
         // There's no server-side component of these samples. No transactions are
         // processed and no money exchanged hands. Instantaneous transactions are not
@@ -89,7 +116,7 @@ export default function MisReservas() {
                 })
                 setTimeout(() => {
                     setMisReservas(listaReserva)
-                }, 1000)                
+                }, 1000)
             })
         }
     }
@@ -169,21 +196,16 @@ export default function MisReservas() {
                     {pagada
                         ? <></>
                         : (
-                            <div className="">
-                                <div className="py-1 px-3 bg-green-400 hover:bg-green-500 rounded-sm cursor-pointer text-gray-900 font-medium" onClick={() => clickPago(iniciarPago(reserva))}>
-                                    Pagar con Tarjeta
-                                </div>
-                                <div className="pt-4">
-                                    <PaypalButton total={precioPagar} />
-                                </div>
-                            </div>
+                            <button type="button" className="bg-blue-400 h-10 w-20 hover:bg-blue-500" onClick={() => clickPagar(reserva, precioPagar)}>
+                                Pagar
+                            </button>
                         )
                     }
                     {fechaMaxCancelar !== ""
                         ? (
-                            <div className="py-1 px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-medium h-9" onClick={() => cancelarReserva(id)}>
+                            <button type="button" className="py-1 px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-medium h-10" onClick={() => cancelarReserva(id)}>
                                 Cancelar
-                            </div>
+                            </button>
                         )
                         : <></>}
                 </div>
