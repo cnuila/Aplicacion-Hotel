@@ -10,7 +10,7 @@ import { Carousel } from 'react-responsive-carousel';
 import CrearReseña from './CrearReseña';
 
 export default function InfoHabitacion({ location, history }) {
-  
+
   const nombre = location.state.props.nombre
   const complementos = location.state.props.complementos
   const precio = location.state.props.precio
@@ -22,10 +22,23 @@ export default function InfoHabitacion({ location, history }) {
     from: null,
     to: null
   });
+  const [administrador, setAdministrador] = useState(false)
+  const [nombreCliente, setNombreCliente] = useState("")
 
   useEffect(() => {
     getReservas()
     getReseñas()
+
+    if (auth.currentUser) {
+      var docRef = db.collection("Admin").doc(auth.currentUser.email);
+      docRef.get().then((doc) => {
+        if (doc.exists) {
+          setAdministrador(prevAdmin => !prevAdmin)
+        }
+      }).catch(() => {
+      });
+    }
+
   }, [])
 
   //función que recupera todas las reseñas de la habitación actual
@@ -41,7 +54,7 @@ export default function InfoHabitacion({ location, history }) {
 
   //función asíncrona que lee todas las reservas y deshabilita los días según su la cantidad de habitaciones disponibles
   const getReservas = async () => {
-    let cantidadHabitaciones = 0    
+    let cantidadHabitaciones = 0
     await db.collection("Habitaciones").doc(id).get().then(querySnapshot2 => {
       cantidadHabitaciones = parseInt(querySnapshot2.data().Cantidad)
     })
@@ -169,6 +182,8 @@ export default function InfoHabitacion({ location, history }) {
             let diferenciaDias = moment2.diff(moment1, 'days') + 1
             let precioPagar = precio * diferenciaDias
             db.collection("Reservas").add({
+              administrador: administrador,
+              nombreCliente: nombreCliente,
               idHabitacion: id,
               idCliente,
               emailCliente,
@@ -243,6 +258,18 @@ export default function InfoHabitacion({ location, history }) {
                     Confirmar Reserva
                   </button>
                 </div>
+
+                {
+                  administrador
+                    ?
+                    <div>
+                      <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre del Cliente</label>
+                      <input onChange={event => setNombreCliente(event.target.value)} type="text" name="nombre" placeholder="Carlos Alberto" className="block w-80 p-3 mt-2 text-black bg-white appearance-none focus:outline-none focus:shadow-inner" required />
+                    </div>
+                    :
+                    <></>
+                }
+
                 <div className="flex py-4 space-x-4">
                   <div>
                     <Calendar
@@ -260,7 +287,7 @@ export default function InfoHabitacion({ location, history }) {
               </div>
             </div>
             <div class=" w-1/2">
-            <p>Incluye:</p>
+              <p>Incluye:</p>
               {complementos.map(c => {
                 return (
                   <div>

@@ -172,7 +172,7 @@ export default function ListaHabitaciones() {
                                             {Nombre !== "Nombre de la Habitación" ? (
                                                 <div class="grid grid-cols-6 gap-x-2">
                                                     <div className="col-span-2">
-                                                        <button className="bg-red-600 text-white h-10 w-full rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
+                                                        <button className="bg-red-600 text-white h-10 w-full rounded-md" onClick={() => handleEliminarHabitacion(id, Url)}>
                                                             Eliminar Habitacion
                                                 </button>
                                                     </div>
