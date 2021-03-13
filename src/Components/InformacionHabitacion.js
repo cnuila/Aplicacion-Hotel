@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { Calendar, utils } from "react-modern-calendar-datepicker";
-import swal from 'sweetalert'
+import { Carousel } from 'react-responsive-carousel';
 import { db, auth } from "../firebase"
+import swal from 'sweetalert'
 import moment from 'moment'
+import CrearReseña from './CrearReseña';
 import Navbar from './Navbar';
 import Reseña from './Reseña';
-import { Carousel } from 'react-responsive-carousel';
-import CrearReseña from './CrearReseña';
 
 export default function InfoHabitacion({ location, history }) {
 
@@ -80,13 +80,6 @@ export default function InfoHabitacion({ location, history }) {
       })
     })
 
-    /*const nuevasFechas = fechasReservadas.sort(compare)
-    nuevasFechas.forEach(fecha1 => {
-      nuevasFechas.forEach(fecha2 => {
-      })
-    })*/
-    /*const diasDeshabilitados = []*/
-    //setDiasReservados(diasDeshabilitados)
     //ordena las fechas según compare(leer compare para saber cómo ordena)
     const fechasOrdenadas = fechasReservadas.sort(compare)
     const nuevasFechas = []
