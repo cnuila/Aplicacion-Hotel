@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { db, storage } from '../../firebase'
+import { Calendar, utils } from "react-modern-calendar-datepicker";
 import swal from 'sweetalert'
+import moment from 'moment'
 import AgregarHabitaciones from './AgregarHabitaciones'
 import ModificarHabitacion from './ModificarHabitacion'
 import ReseñasVisibles from './ReseñasVisibles'
+
 
 export default function ListaHabitaciones() {
 
@@ -18,6 +22,7 @@ export default function ListaHabitaciones() {
 
     const [habitaciones, setHabitaciones] = useState([])
     const [habitacionSeleccionada, setHabitacionSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+    const [diasReservados, setDiasReservados] = useState([])
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
     const [mostrarModificar, setMostrarModificar] = useState(false)
     const [mostrarModificarReseñas, setMostrarModificarReseñas] = useState(false)
@@ -46,6 +51,77 @@ export default function ListaHabitaciones() {
         getHabitaciones()
     }, [])
 
+    //función asíncrona que lee todas las reservas y deshabilita los días según su la cantidad de habitaciones disponibles
+    const getReservas = async (id, cantidad) => {
+        let cantidadHabitaciones = parseInt(cantidad)
+        const fechasReservadas = []
+        await db.collection("Reservas").where("idHabitacion", "==", id).get().then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                //se guarda en fechasReservadas todas las fechas entre dos limites(fechaInicial-fechaFinal)
+                let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
+                let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
+                let moment1 = moment(fechaInicial)
+                let moment2 = moment(fechaFinal)
+                let diferenciaDias = moment2.diff(moment1, 'days') + 1
+                for (let i = 0; i < diferenciaDias; i++) {
+                    fechasReservadas.push({
+                        year: parseInt(moment1.format('YYYY')),
+                        month: parseInt(moment1.format('MM')),
+                        day: parseInt(moment1.format('D')),
+                    })
+                    //incrementar un dia
+                    moment1.add(1, 'days')
+                }
+            })
+        })
+
+        //ordena las fechas según compare(leer compare para saber cómo ordena)
+        const fechasOrdenadas = fechasReservadas.sort(compare)
+        const nuevasFechas = []
+
+        //por cada fecha en fechasOrdenadas si la fecha no está en nuevasFechas la agrega con cantidad 1
+        //si la fecha ya está se incrementa la cantidad
+        fechasOrdenadas.forEach(fecha1 => {
+            for (let i = 0; i < fechasOrdenadas.length; i++) {
+                if (fecha1.month === fechasOrdenadas[i].month && fecha1.year === fechasOrdenadas[i].year && fecha1.day === fechasOrdenadas[i].day) {
+                    let index = nuevasFechas.findIndex(x => x.day === fecha1.day && x.month === fecha1.month && x.year === fecha1.year)
+                    if (index === -1) {
+                        nuevasFechas.push({ ...fecha1, cant: 1 })
+                    } else {
+                        let { cant } = nuevasFechas[index]
+                        let nuevaCant = cant + 1
+                        nuevasFechas[index] = { ...fecha1, cant: nuevaCant }
+                    }
+                    i = fechasOrdenadas.length
+                }
+            }
+        })
+
+        //por cada fecha en nuevasFechas, si la fecha tiene la misma cantidad que la cantidad de habitaciones
+        //la fecha se deshabilita porque se concluye que las habitaciones en ese limite de fechas ya están reservadas
+        const diasDeshabilitados = []
+        nuevasFechas.forEach(fecha => {
+            if (fecha.cant === cantidadHabitaciones) {
+                diasDeshabilitados.push(fecha)
+            }
+        })
+        setDiasReservados(diasDeshabilitados)
+    }
+
+    //función que recibe dos fechas y según el día ordena de manera no descendente
+    const compare = (fecha1, fecha2) => {
+        const dia1 = fecha1.day
+        const dia2 = fecha2.day
+        let comparador = 0
+        if (dia1 > dia2) {
+            comparador = 1
+        } else {
+            comparador = -1
+        }
+        return comparador
+    }
+
+
     //funcion que recibe una habitacion y preparas sus datos para ser mostrados en el panel derecho
     const handleHabitacion = habitacion => {
         const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacion
@@ -59,6 +135,7 @@ export default function ListaHabitaciones() {
             Cantidad,
             Visible
         })
+        getReservas(id, Cantidad)
         setCheck(reseñas)
         setMostrarAgregar(false)
         setMostrarModificar(false)
@@ -116,6 +193,7 @@ export default function ListaHabitaciones() {
         setMostrarAgregar(false)
         setMostrarModificar(false)
         setMostrarModificarReseñas(false)
+        setDiasReservados([])
         setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
         getHabitaciones()
     }
@@ -186,10 +264,7 @@ export default function ListaHabitaciones() {
                                                             Modificar Reseñas
                                                 </button>
                                                     </div>
-                                                </div>) : (
-                                                <div>
-                                                </div>
-                                            )
+                                                </div>) : (<></>)
                                             }
 
                                             {Visible
@@ -241,6 +316,21 @@ export default function ListaHabitaciones() {
                                                     </div>
                                                 </div>)
                                                 : <></>}
+                                            {
+                                                Nombre !== "Nombre de la Habitación" ?
+                                                    (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fechas Reservadas</h2>
+                                                        <div className="grid place-items-center">
+                                                            <Calendar
+                                                                colorPrimaryLight="#60A5FA"
+                                                                colorPrimary="#1E3A8A"
+                                                                disabledDays={diasReservados}
+                                                                minimumDate={utils().getToday()}
+                                                                shouldHighlightWeekends
+                                                            />
+                                                        </div>
+                                                    </div>) : <></>
+                                            }
                                             {reseñas !== undefined && reseñas.length !== 0
                                                 ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                                     <h2 className="text-blue-500 font-semibold cursor-default mb-2">Reseñas</h2>
