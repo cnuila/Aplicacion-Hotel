@@ -122,7 +122,7 @@ export default function MisReservas() {
 
     //variable que prepara las reserva leidas y las formatea para ser mostradas en pantalla
     const mostrarReservas = misReservas.map((reserva, index) => {
-        const { nombreHabitacion, fechaInicial, fechaFinal, pagada, precioPagar, id } = reserva
+        const { administrador, nombreCliente, nombreHabitacion, fechaInicial, fechaFinal, pagada, precioPagar, id } = reserva
         let fechaActual = moment(new Date())
         let fechaInicialMoment = moment(new Date(fechaInicial.seconds * 1000))
         let fechaFinalMoment = moment(new Date(fechaFinal.seconds * 1000))
@@ -142,6 +142,18 @@ export default function MisReservas() {
         return (
             <div key={index} className="bg-gray-900 mx-3 mb-3 p-8 rounded-sm">
                 <h2 className="text-xl font-bold mb-3 text-white">{nombreHabitacion}</h2>
+
+                {
+                    administrador
+                        ?
+                        <div className="flex flex-row text-white">
+                            <h2 className="font-semibold">Nombre del cliente:</h2>
+                            <h2 className="px-1">{nombreCliente}</h2>
+                        </div>
+                        :
+                        <></>
+                }
+
                 <div className="flex flex-row text-white">
                     <h2>Lps.</h2>
                     <h2 className="pl-0.5">{precioPagar}</h2>
