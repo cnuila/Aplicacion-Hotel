@@ -15,49 +15,26 @@ export default function MisReservas() {
         }, 1000)
     }, [])
 
-
-    const clickPagar = (reserva, precioPagar) => {
-        swal({
-            title: "Pagar la Reserva",
-            text: "Seleccione la opcion con la que desea pagar",
-            buttons: {
-                Paypal: {
-                    text: "Paypal",
-                    value: "paypal",
-                    className: "bg-blue-600 hover:bg-blue-100",
-                },
-                TC: {
-                    text: "Tarjeta",
-                    value: "tc",
-                    className: "hover:bg-yellow-100 bg-yellow-500 ",
-                },
-                cancel: true,
-            },
-        }).then((value) => {
-            switch (value) {
-                case "paypal":
-                    <PaypalButton total={precioPagar} />
-                    break;
-                case "tc":
-                    clickPago(iniciarPago(reserva))
-                    break;
-            }
-        });
-    }
-    const enviarPagoAlServidor = (respuesta) => {
+    const enviarPagoAlServidor = (respuesta, id) => {
         // There's no server-side component of these samples. No transactions are
         // processed and no money exchanged hands. Instantaneous transactions are not
         // realistic. Add a 2 second delay to make it seem more real.
         window.setTimeout(
             respuesta.complete('success').then(
                 swal({
+                    title: "Objeto que se envia al servidor de pago",
                     text: instrumentToJsonString(respuesta),
                     icon: "info",
                     button: "Aceptar"
                 })
             ).catch(error => {
                 console.log(error)
-            }), 3000);
+            }), 3000
+        );
+        const resRef = db.collection("Reservas").doc(id)
+        return resRef.update({
+            pagada: true
+        }).then(() => getMisReservas())
     }
     function instrumentToJsonString(instrument) {
         let details = instrument.details;
@@ -92,9 +69,9 @@ export default function MisReservas() {
         };
         return new PaymentRequest(methodData, details);
     }
-    const clickPago = (requestPago) => {
+    const clickPago = (requestPago, id) => {
         requestPago.show().then(respuesta => {
-            enviarPagoAlServidor(respuesta);
+            enviarPagoAlServidor(respuesta, id);
         }).catch(error => {
             console.log(error)
         })
@@ -195,20 +172,25 @@ export default function MisReservas() {
                         </div>
                     )
                 }
-                <div className="flex flex-row justify-left mt-6">
+                <div className="mt-6">
                     {pagada
                         ? <></>
                         : (
-                            <button type="button" className="bg-blue-400 h-10 w-20 hover:bg-blue-500" onClick={() => clickPagar(reserva, precioPagar)}>
-                                Pagar
-                            </button>
+                            <div className="flex justify-center">
+                                <button type="button" className="bg-blue-400 h-6 w-36 hover:bg-blue-500 ml-4 mr-4 rounded-lg font-small" onClick={() => clickPago(iniciarPago(reserva), id)}>
+                                    Pagar con TC
+                                </button>
+                                <PaypalButton total={precioPagar} idRes={id} misReservas={() => getMisReservas()} />
+                            </div>
                         )
                     }
                     {fechaMaxCancelar !== ""
                         ? (
-                            <button type="button" className="py-1 px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-medium h-10" onClick={() => cancelarReserva(id)}>
-                                Cancelar
+                            <div className="flex justify-center">
+                                <button type="button" className=" px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-small h-6 w-40 rounded-lg" onClick={() => cancelarReserva(id)}>
+                                    Cancelar
                             </button>
+                            </div>
                         )
                         : <></>}
                 </div>
