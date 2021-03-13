@@ -3,29 +3,32 @@ import { Link } from 'react-router-dom';
 import { db, auth } from "../firebase"
 
 class Dropdown extends Component {
+    /*Estados:
+    open -> si el menú destá abierto
+    dispName -> el nombre que se muestra en el botón
+    admin -> si el usuario es un administrador
+    */
     constructor() {
         super()
         this.state = {
             open: false,
             dispName: 'Perfil',
             admin: false,
-            typeCheck: false
         }
     }
 
+    /*compara el correo del usuario actual con la lista de administradores*/
     revisarAdmin() {
         if (auth.currentUser) {
             var docRef = db.collection("Admin").doc(auth.currentUser.email);
             docRef.get().then((doc) => {
                 if (doc.exists) {
                     this.setState({
-                        admin: true,
-                        typeCheck: true
+                        admin: true
                     });
                 } else {
                     this.setState({
-                        admin: false,
-                        typeCheck: true
+                        admin: false
                     });
                 }
             }).catch((error) => {
@@ -35,11 +38,11 @@ class Dropdown extends Component {
             });
         } else {
             this.setState({
-                admin: false,
-                typeCheck: true
+                admin: false
             });
         }
     }
+    //Cambia el nombre en el botón al primer nombre del usuario o a 'Perfil'
     setDisplayName() {
         if (auth.currentUser) {
             db.collection("Usuarios").where("Email", "==", auth.currentUser.email)
@@ -62,11 +65,14 @@ class Dropdown extends Component {
             });
         }
     }
+    //Cuando se monta el componente se cambian los estados
+    componentDidMount() {
+        this.setDisplayName()
+        this.revisarAdmin();
+    }
 
+    //cerrar sesión en firebase. Cuando se llama se refresca la página
     cerrarSesion = () => {
-        this.setState({
-            typeCheck: false
-        });
         auth.signOut().then(function () {
             window.location.reload();
         }).catch(function (error) {
@@ -74,11 +80,8 @@ class Dropdown extends Component {
         });
     }
 
+    //Abre y cierra el menú
     toggle() {
-        if (!this.state.typeCheck) {
-            this.revisarAdmin();
-            this.setDisplayName();
-        }
         this.setState(prevState => ({
             open: !prevState.open
         }))
@@ -98,13 +101,10 @@ class Dropdown extends Component {
                     </div>
                     <div class={(this.state.open ? "origin-top-right z-40 absolute lg:right-0 mt-2 lg:mt-0 w-48 rounded-md shadow-lg bg-blue-900 ring-1 ring-black ring-opacity-5" : "hidden")}>
                         <div class="py-1">
-                            <Link to="/administracion" class={this.state.admin ? "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" : "hidden"} role="menuitem">Admin</Link>                            
-                            {auth.currentUser
-                                ? (<>
-                                        <Link to="/miInfo" class="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" role="menuitem">Mi Perfil</Link>
-                                        <Link to="/misReservas" class="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" role="menuitem">Mis Reservas</Link>
-                                    </>)
-                                : <></>}
+                            <Link to="/administracion" class={this.state.admin ? "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" : "hidden"} role="menuitem">Admin</Link>
+                            <Link to="/login" className={(auth.currentUser ? "hidden" : "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200")}>Iniciar Sesión</Link>                       
+                            <Link to="/miInfo" class={(auth.currentUser ? "hidden" : "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200")} role="menuitem">Mi Perfil</Link>
+                            <Link to="/misReservas" class="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" role="menuitem">Mis Reservas</Link>
                             <Link to="/" class={(auth.currentUser ? "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" : "hidden")} role="menuitem" onClick={this.cerrarSesion}>Cerrar Sesión</Link>
                         </div>
                     </div>

@@ -10,9 +10,11 @@ import { Carousel } from 'react-responsive-carousel';
 import CrearReseña from './CrearReseña';
 
 export default function InfoHabitacion({ location, history }) {
+  
   const nombre = location.state.props.nombre
   const complementos = location.state.props.complementos
   const precio = location.state.props.precio
+  const id = location.state.props.id
   const fotos = location.state.fotos
   const [reseñas, setReseña] = useState([])
   const [diasReservados, setDiasReservados] = useState([])
@@ -26,67 +28,99 @@ export default function InfoHabitacion({ location, history }) {
     getReseñas()
   }, [])
 
+  //función que recupera todas las reseñas de la habitación actual
   const getReseñas = () => {
-    db.collection("Habitaciones").doc(nombre).collection("Reseñas").orderBy("rating", "desc").get().then(querySnapshot => {
-
+    db.collection("Habitaciones").doc(id).collection("Reseñas").orderBy("rating", "desc").get().then(querySnapshot => {
       const listaReseñas = []
       querySnapshot.forEach((doc) => {
         listaReseñas.push({ ...doc.data(), id: doc.id })
       })
       setReseña(listaReseñas)
     })
-
-
   }
 
-  const getReservas = () => {
-    db.collection("Reservas").where("idHabitacion", "==", nombre).get().then(async querySnapshot => {
-      let cantidadHabitaciones = 0
-      await db.collection("Habitaciones").where("Nombre", "==", nombre).get().then(querySnapshot2 => {
-        querySnapshot2.forEach((habitacion) => {
-          cantidadHabitaciones = habitacion.data().Cantidad
-        })
-      })
-      console.log(cantidadHabitaciones)
-      const diasReservados = []
-      /*querySnapshot.forEach((doc) => {
-        let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
-        let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
-        let moment1 = moment(fechaInicial)
-        let moment2 = moment(fechaFinal)
-        let diferenciaDias = moment2.diff(moment1, 'days') + 1
-        for (let i = 0; i < diferenciaDias; i++) {
-          diasReservados.push({
-            year: parseInt(moment1.format('YYYY')),
-            month: parseInt(moment1.format('MM')),
-            day: parseInt(moment1.format('D')),
-            cantidad:
-          })
-          //incrementar un dia
-          moment1.add(1, 'days')
-        }
-      })*/
-      const diasDeshabilitados = []
-      querySnapshot.forEach((doc) => {
-        let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
-        let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
-        let moment1 = moment(fechaInicial)
-        let moment2 = moment(fechaFinal)
-        let diferenciaDias = moment2.diff(moment1, 'days') + 1
-        for (let i = 0; i < diferenciaDias; i++) {
-          diasDeshabilitados.push({
-            year: parseInt(moment1.format('YYYY')),
-            month: parseInt(moment1.format('MM')),
-            day: parseInt(moment1.format('D')),
-          })
-          //incrementar un dia
-          moment1.add(1, 'days')
-        }
-      })
-      setDiasReservados(diasDeshabilitados)
+  //función asíncrona que lee todas las reservas y deshabilita los días según su la cantidad de habitaciones disponibles
+  const getReservas = async () => {
+    let cantidadHabitaciones = 0    
+    await db.collection("Habitaciones").doc(id).get().then(querySnapshot2 => {
+      cantidadHabitaciones = parseInt(querySnapshot2.data().Cantidad)
     })
+    const fechasReservadas = []
+    await db.collection("Reservas").where("idHabitacion", "==", id).get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+
+        //se guarda en fechasReservadas todas las fechas entre dos limites(fechaInicial-fechaFinal)
+        let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
+        let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
+        let moment1 = moment(fechaInicial)
+        let moment2 = moment(fechaFinal)
+        let diferenciaDias = moment2.diff(moment1, 'days') + 1
+        for (let i = 0; i < diferenciaDias; i++) {
+          fechasReservadas.push({
+            year: parseInt(moment1.format('YYYY')),
+            month: parseInt(moment1.format('MM')),
+            day: parseInt(moment1.format('D')),
+          })
+          //incrementar un dia
+          moment1.add(1, 'days')
+        }
+      })
+    })
+
+    /*const nuevasFechas = fechasReservadas.sort(compare)
+    nuevasFechas.forEach(fecha1 => {
+      nuevasFechas.forEach(fecha2 => {
+      })
+    })*/
+    /*const diasDeshabilitados = []*/
+    //setDiasReservados(diasDeshabilitados)
+    //ordena las fechas según compare(leer compare para saber cómo ordena)
+    const fechasOrdenadas = fechasReservadas.sort(compare)
+    const nuevasFechas = []
+
+    //por cada fecha en fechasOrdenadas si la fecha no está en nuevasFechas la agrega con cantidad 1
+    //si la fecha ya está se incrementa la cantidad
+    fechasOrdenadas.forEach(fecha1 => {
+      for (let i = 0; i < fechasOrdenadas.length; i++) {
+        if (fecha1.month === fechasOrdenadas[i].month && fecha1.year === fechasOrdenadas[i].year && fecha1.day === fechasOrdenadas[i].day) {
+          let index = nuevasFechas.findIndex(x => x.day === fecha1.day && x.month === fecha1.month && x.year === fecha1.year)
+          if (index === -1) {
+            nuevasFechas.push({ ...fecha1, cant: 1 })
+          } else {
+            let { cant } = nuevasFechas[index]
+            let nuevaCant = cant + 1
+            nuevasFechas[index] = { ...fecha1, cant: nuevaCant }
+          }
+          i = fechasOrdenadas.length
+        }
+      }
+    })
+
+    //por cada fecha en nuevasFechas, si la fecha tiene la misma cantidad que la cantidad de habitaciones
+    //la fecha se deshabilita porque se concluye que las habitaciones en ese limite de fechas ya están reservadas
+    const diasDeshabilitados = []
+    nuevasFechas.forEach(fecha => {
+      if (fecha.cant === cantidadHabitaciones) {
+        diasDeshabilitados.push(fecha)
+      }
+    })
+    setDiasReservados(diasDeshabilitados)
   }
 
+  //función que recibe dos fechas y según el día ordena de manera no descendente
+  const compare = (fecha1, fecha2) => {
+    const dia1 = fecha1.day
+    const dia2 = fecha2.day
+    let comparador = 0
+    if (dia1 > dia2) {
+      comparador = 1
+    } else {
+      comparador = -1
+    }
+    return comparador
+  }
+
+  //función que muestra un mensaje al momento de tratar de elegir un día deshabilitado
   const handleDisabledSelect = () => {
     swal({
       text: "Intentaste elegir un día ya reservado",
@@ -95,6 +129,7 @@ export default function InfoHabitacion({ location, history }) {
     });
   };
 
+  //función asíncrona que reserva una habitación y redirige a página de mis reservas
   const reservar = async () => {
     const user = auth.currentUser;
     if (user) {
@@ -134,7 +169,7 @@ export default function InfoHabitacion({ location, history }) {
             let diferenciaDias = moment2.diff(moment1, 'days') + 1
             let precioPagar = precio * diferenciaDias
             db.collection("Reservas").add({
-              idHabitacion: nombre,
+              idHabitacion: id,
               idCliente,
               emailCliente,
               fechaFinal,
@@ -170,38 +205,45 @@ export default function InfoHabitacion({ location, history }) {
         <div class="py-6 bg-gray-200">
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
             <div class="flex flex-col md:flex-row -mx-4">
-              <div class="md:flex-1 px-4">
-                <div class="rounded-lg bg-gray-100 mb-4">
-                  <Carousel autoPlay infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
+              <div class="md:flex-1 px-4 w-full h-auto">
+                <div class="rounded-lg bg-gray-100 mb-4 w-full h-80 object-cover">
+                  <Carousel className="w-full h-64" autoPlay infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
                     {fotos.map((url, index) => {
-                      return (<div key={index}>
-                        <img src={url} alt="foto" />
-                      </div>)
+                      return (
+                        <div className="w-full h-80" key={index}>
+                          <img className="object-cover h-full w-full" src={url} alt="foto" />
+                        </div>
+                      )
                     })}
                   </Carousel>
                 </div>
+                <div class=" w-1/2">
+
+                  {complementos.map(c => {
+                    return (
+                      <div>
+                        <p class="text-gray-500">
+                          <li>{c.text}</li></p>
+                      </div>
+                    )
+                  })}
+
+                </div>
               </div>
-              <div class="md:flex-1 px-4">
-                <h2 class="mb-2 leading-tight tracking-tight font-bold text-gray-800 text-2xl md:text-3xl">{nombre}</h2>
-                <div class="flex items-center space-x-4 my-4">
+              <div className="md:flex-1 px-4">
+                <h2 className="mb-2 leading-tight tracking-tight font-bold text-gray-800 text-2xl md:text-3xl">{nombre}</h2>
+                <div className="flex items-center space-x-4 my-4">
                   <div>
-                    <div class="rounded-lg bg-gray-100 flex py-2 px-3">
-                      <span class="text-blue-700 mr-1 mt-1">Lps.</span>
-                      <span class="font-bold text-blue-900 text-3xl">{precio}.00</span>
+                    <div className="rounded-lg bg-gray-100 flex py-2 px-3">
+                      <span className="text-blue-700 mr-1 mt-1">Lps.</span>
+                      <span className="font-bold text-blue-900 text-3xl">{precio}.00</span>
                     </div>
                   </div>
                   <button type="button" class="h-14 px-6 py-2 font-semibold rounded-xl bg-blue-900 hover:bg-blue-800 text-white outline-none focus:outline-none" onClick={() => reservar()}>
-                    Reservar
+                    Confirmar Reserva
                   </button>
-                  <div class="flex-1">
-                    {
-                      //<p class="text-green-500 text-xl font-semibold">Descuento</p>
-                      //<p class="text-gray-400 text-sm">Precio Por la Habitacion.</p>
-                    }
-
-                  </div>
                 </div>
-                <div class="flex py-4 space-x-4">
+                <div className="flex py-4 space-x-4">
                   <div>
                     <Calendar
                       value={selectedDayRange}
@@ -212,7 +254,6 @@ export default function InfoHabitacion({ location, history }) {
                       minimumDate={utils().getToday()}
                       onDisabledDayError={handleDisabledSelect}
                       shouldHighlightWeekends
-
                     />
                   </div>
                 </div>
@@ -223,7 +264,7 @@ export default function InfoHabitacion({ location, history }) {
               {complementos.map(c => {
                 return (
                   <div>
-                    <p class="text-gray-500">
+                    <p className="text-gray-500">
                       <li>{c.text}</li></p>
                   </div>
                 )
@@ -231,20 +272,22 @@ export default function InfoHabitacion({ location, history }) {
 
             </div>
           </div>
-          <div class=" mt-2 flex justify-center container w-full">
+          <div className=" mt-2 flex justify-center container w-full">
           </div>
         </div>
-        <div class=" bg-blue-900">
-          <div class="py-3">
+        <div className=" bg-blue-900">
+          <div className="py-3">
             {reseñas !== undefined ? (
               reseñas.map((reseña, index) => {
-                return (
-                  <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas} />
-                )
+                if (reseña.visualizar) {
+                  return (
+                    <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas} />
+                  )
+                }
+                return <></>
               })) : (<></>)
             }
-
-            <CrearReseña nombre={nombre} getReseñas={getReseñas} />
+            <CrearReseña nombre={nombre} id={id} getReseñas={getReseñas} />
           </div>
         </div>
       </body>

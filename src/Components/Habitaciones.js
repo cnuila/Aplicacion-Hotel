@@ -6,9 +6,9 @@ import { db } from '../firebase'
 export default function Habitaciones() {
 
     const [habitaciones, setHabitaciones] = useState([])
-
-
+    
     useEffect(() => {
+        //función que lee todas las habitaciones y prepara su información para enviarla al componente Habitación
         db.collection("Habitaciones").onSnapshot((querySnapshot) => {
             const listaHabitaciones = []            
             querySnapshot.forEach((doc) => {
@@ -34,7 +34,7 @@ export default function Habitaciones() {
                 {habitaciones.map((habitacion, index) => {
                     if (habitacion.Visible) {
                         return (
-                            <Habitacion key={index} cantidad={habitacion.Cantidad} reseñas={habitacion.reseñas} precio={habitacion.Precio} complementos={habitacion.Complementos} url={habitacion.Url} nombre={habitacion.Nombre} />
+                            <Habitacion key={index} id={habitacion.id} cantidad={habitacion.Cantidad} reseñas={habitacion.reseñas} precio={habitacion.Precio} complementos={habitacion.Complementos} url={habitacion.Url} nombre={habitacion.Nombre} />
                         )
                     }
                     return <></>

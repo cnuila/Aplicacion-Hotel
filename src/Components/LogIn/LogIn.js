@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import { auth } from '../../firebase'
+import swal from 'sweetalert'
 import React, { useCallback, useContext } from 'react'
 import { Redirect } from "react-router";
 import { AuthContext } from "../Rutas Privadas/Auth"
@@ -8,11 +9,15 @@ import imagen from "./loginImagen.jpg"
 
 export default function LogIn({ history }) {
 
-    //funcion que autentica por google
+    //función que autentica por google y si es primera vez lo envía al signup si no inicia sesión
     const authGoogle = async () => {
         var user = auth.currentUser;
         if (user) {
-            alert("Debes cerrar sesión primero")
+            swal({
+                text: "Debes cerrar sesión primero",
+                icon: "warning",
+                button: "Aceptar"
+            });
         } else {
             const provider = new firebase.auth.GoogleAuthProvider();
             await auth.signInWithPopup(provider).then(result => {
@@ -22,7 +27,11 @@ export default function LogIn({ history }) {
                     history.push("/");
                 }
             }).catch(err => {
-                console.log(err)
+                swal({
+                    text: `Error: ${err}`,
+                    icon: "warning",
+                    button: "Aceptar"
+                });
             })
         }
     }

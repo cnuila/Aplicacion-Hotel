@@ -15,6 +15,7 @@ export default function ListarUsuario({ history }) {
         }, 1000)
     }, [])
 
+    //función asíncrona que recupera la información del usuario actual
     const infoUsuario = async () => {
         const email = auth.currentUser.email;
         const query = await db.collection("Usuarios").where("Email", "==", email).get();
@@ -29,11 +30,13 @@ export default function ListarUsuario({ history }) {
         })
     }
 
+    //función que actualiza los campos que se cambian
     const handleInputChange = ({ target }) => {
         const { name, value } = target
         setInfo(prevInfo => ({ ...prevInfo, [name]: value }))
     }
 
+    //función que actualiza la información que se cambió en la interfaz
     const handleOnSubmit = (e) => {
         e.preventDefault()
         const { Identidad, Nombre, Apellido, Telefono } = info
@@ -48,18 +51,31 @@ export default function ListarUsuario({ history }) {
                 button: "Aceptar"
             });
         }).catch(error => {
-            console.log(error)
+            swal({
+                text: `Error: ${error}`,
+                icon: "warning",
+                button: "Aceptar"
+            });
         })
     }
 
+    //función que elimina la cuenta de un usario si no tiene reservas vigentes
     const eliminarCuenta = () => {
         db.collection("Usuarios").doc(info.Identidad).delete().then(() => {
             auth.currentUser.delete().then(() => {
-                console.log("Se eliminó el usuario")
+                swal({
+                    text: "Se eliminó tu usuario",
+                    icon: "success",
+                    button: "Aceptar"
+                });
                 history.push("/")
             })
         }).catch(error => {
-            console.log(error)
+            swal({
+                text: `Error: ${error}`,
+                icon: "warning",
+                button: "Aceptar"
+            });
         })
     }
 

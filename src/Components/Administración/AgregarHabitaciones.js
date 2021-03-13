@@ -155,7 +155,7 @@ function AgregarHabitaciones(props) {
                     });
             }
 
-            db.collection("Habitaciones").doc(Nombre).set({
+            db.collection("Habitaciones").doc().set({
                 Nombre: Nombre,
                 Precio: Precio,
                 Complementos: todos,
