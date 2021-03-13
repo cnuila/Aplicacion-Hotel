@@ -141,12 +141,12 @@ export default function ListaMenu() {
                                     {Nombre !== "Platillo" ? (
                                         <div class="grid grid-cols-6 gap-x-2">
                                             <div className="col-span-3">
-                                                <button className="bg-red-600 text-white h-10 w-full rounded-md" onClick={() => handleEliminarMenu(Nombre, Url)}>
+                                                <button className="bg-red-600 text-sm text-white h-10 w-full rounded-md" onClick={() => handleEliminarMenu(Nombre, Url)}>
                                                     Eliminar Menu
                                             </button>
                                             </div>
                                             <div className="col-span-3">
-                                                <button className="bg-blue-700 text-white h-10 w-full rounded-md" onClick={handleOnClickModificar}>
+                                                <button className="bg-blue-700 text-sm text-white h-10 w-full rounded-md" onClick={handleOnClickModificar}>
                                                     Modificar Menu
                                             </button>
                                             </div>
