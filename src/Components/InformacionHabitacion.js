@@ -219,7 +219,7 @@ export default function InfoHabitacion({ location, history }) {
               </div>
             </div>
             <div class=" w-1/2">
-
+            <p>Incluye:</p>
               {complementos.map(c => {
                 return (
                   <div>

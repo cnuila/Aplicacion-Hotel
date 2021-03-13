@@ -20,6 +20,7 @@
     "react-input-mask": "^2.0.4",
     "react-modern-calendar-datepicker": "^3.1.6",
     "react-paypal-express-checkout": "^1.0.5",
+    "react-prismazoom": "^2.0.1-rc0",
     "react-responsive": "^8.1.1",
     "react-responsive-carousel": "^3.2.10",
     "react-router-dom": "^5.2.0",

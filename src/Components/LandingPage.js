@@ -4,19 +4,21 @@ import { Carousel } from 'react-responsive-carousel';
 import Iframe from 'react-iframe';
 import Navbar from './Navbar';
 
-import img_carousel_1 from '../imagenes/ban222.jpg';
-import img_carousel_2 from '../imagenes/ban3.jpg';
-import img_carousel_3 from '../imagenes/ban4.jpg';
+import img_carousel_1 from '../imagenes/hotel01.jpg';
+import img_carousel_2 from '../imagenes/hotel02.jpg'; 
+import img_carousel_3 from '../imagenes/hotel03.jpg';
+import img_carousel_4 from '../imagenes/hotel04.jpg';
+import img_carousel_5 from '../imagenes/hotel05.jpg';
+import img_carousel_6 from '../imagenes/hotel06.jpg';
 import img_icono_wifi from '../imagenes/wifi.jpg';
 import img_icono_carro from '../imagenes/carro.jpg';
 import img_icono_ubicacion from '../imagenes/ubicacion.jpg';
 import img_icono_piscina from '../imagenes/piscina.jpg';
-import img_cuartos from '../imagenes/cuartos.jpg';
-import img_salon from '../imagenes/salon.jpg';
-import img_comida_1 from '../imagenes/ab4.jpg';
-import img_comida_2 from '../imagenes/ab5.jpg';
+import img_cuartos from '../imagenes/cuartos.png';
 import img_servicios from '../imagenes/servicios.png';
-import img_logo from '../imagenes/Logo.png';
+import img_comida_1 from '../imagenes/restaurante1.jpg';
+import img_comida_2 from '../imagenes/restaurante2.jpg';
+import img_logo from '../imagenes/hotel_posada.jpg';
 import img_facebook from '../imagenes/facebook.png';
 import { Link } from 'react-router-dom';
 
@@ -26,7 +28,7 @@ export default function Landing(){
             <div>
                 <Navbar />
             </div>
-            <Carousel autoPlay={2} infiniteLoop swipeable showThumbs={false} dynamicHeight={true} showStatus={false}>
+            <Carousel autoPlay={2} infiniteLoop swipeable showThumbs={false} dynamicHeight={false} showStatus={false}>
                 <div>
                     <img src={img_carousel_1} alt="Primera imagen"/>
                 </div>
@@ -35,6 +37,15 @@ export default function Landing(){
                 </div>
                 <div>
                     <img src={img_carousel_3} alt="Tercera imagen"/>
+                </div>
+                <div>
+                    <img src={img_carousel_4} alt="Cuarta imagen"/>
+                </div>
+                <div>
+                    <img src={img_carousel_5} alt="Quinta imagen"/>
+                </div>
+                <div>
+                    <img src={img_carousel_6} alt="Sexta imagen"/>
                 </div>
             </Carousel>
             <div class="container mx-auto p-2">
@@ -68,7 +79,7 @@ export default function Landing(){
             </div>
             <div class="mt-2 container mx-auto p-2 bg-gray-900">
                 <h1 class="mt-1 text-yellow-300 text-xl text-center font-semibold">Ofrecemos</h1>
-                <h1 class="text-white text-4xl text-center font-semibold">Habitaciones sencillas, dobles y triples</h1>
+                <h1 class="text-white text-4xl text-center font-semibold">Habitaciones sencillas, dobles o triples</h1>
                 <img class="mt-2" src={img_cuartos} alt="Imagen cuartos" />
                 <div class="grid grid-cols-1">
                     <button class="mt-2 justify-self-center bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-4 rounded">
@@ -79,16 +90,17 @@ export default function Landing(){
             <div class="mt-9 container mx-auto bg-gray-300">
                 <div class="grid md:grid-cols-2 sm:grid-cols-1">
                     <div class="flex-wrap">
-                        <img class="mb-1 h-full w-full" src={img_salon} alt="Imagen del salón" />
+                        <img class="mb-1 h-full w-full" src={img_servicios} alt="Imagen del salón" />
                     </div>
                     <div class="mt-2">
-                        <h1 class="mt-4 text-black text-3xl sm:text-md text-center font-semibold">¿Necesitas organizar un evento?</h1>
+                        <h1 class="mt-4 text-black text-3xl sm:text-md text-center font-semibold">Servicios</h1>
+                        <h1 class="mt-4 text-black text-xl sm:text-md text-center font-semibold">¿Necesitas organizar un evento?</h1>
                         <p class="m-10 text-xl text-center break-normal">Atención para seminarios de capacitación, eventos sociales, bodas,
                             incluyen banquete, decoración, luces, forros de sillas, centros de mesas, mantelería y mucho más.
                         </p>
                         <div class="flex justify-center">
                             <button class="mt-5 mb-4 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
-                                <Link to ="/conferencias">MÁS INFORMACIÓN</Link>
+                                <Link to ="/servicios">MÁS INFORMACIÓN</Link>
                             </button>
                         </div> 
                     </div>
@@ -100,37 +112,18 @@ export default function Landing(){
                         <img class="mb-1 h-full w-full" src={img_comida_1} alt="Imagen de comida" />
                     </div>
                     <div class="mt-2">
-                        <h1 class="mt-6 text-black text-3xl sm:text-md text-center font-semibold">Restaurante</h1>
-                        <p class="m-10 text-xl text-center break-normal">Te podemos preparar nuestra tradicional y sabrosa comida hondureña, además de la extranjera si quisieras adentrarte en sabores del exterior,
-                            ambas con manos especializadas en la alta cocina.
+                        <h1 class="mt-8 text-black text-3xl sm:text-md text-center font-semibold">Restaurante</h1>
+                        <p class="mt-14 m-12 text-xl text-center break-normal">Te podemos preparar nuestra tradicional y sabrosa comida hondureña, además de la extranjera si quisieras adentrarte en sabores del exterior,
+                            ambas con manos especializadas en la alta cocina acompañado de una refrescante bebida.
                         </p>
                         <div class="flex justify-center">
-                            <button class="mt-5 mb-2 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
+                            <button class="mt-10 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
                             <Link to="/restaurante">MÁS INFORMACIÓN</Link>
                             </button>
                         </div>
                     </div>
                     <div class="flex-wrap">
                         <img class="mb-1 h-full w-full" src={img_comida_2}  alt="Imagen de comida" />
-                    </div>
-                </div>
-            </div>
-            <div class="mt-9 container mx-auto bg-gray-300">
-                <div class="grid md:grid-cols-2 sm:grid-cols-1">
-                    <div class="mt-2">
-                        <h1 class="mt-4 text-black text-3xl sm:text-md text-center font-semibold">Servicios</h1>
-                        <p class="m-10 text-xl text-center break-normal">Dentro de nuestro complejo hotelero, puedes ser visitante u hospedador. 
-                            Entre las actividades familiares que ofrecemos, están: fogata por las noches, senderismo, cancha de fútbol techada con grama artificial, 
-                            piscina y bar.
-                        </p>
-                        <div class="flex justify-center">
-                            <button class="mt-5 mb-4 bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-3 rounded">
-                                <Link to="/servicios">MÁS INFORMACIÓN</Link>
-                            </button>
-                        </div> 
-                    </div>
-                    <div class="flex-wrap">
-                        <img class="mb-1 h-full w-full" src={img_servicios} alt="Imagen de los servicios" />
                     </div>
                 </div>
             </div>
@@ -145,7 +138,7 @@ export default function Landing(){
                 <div class="container">
                     <div class="flex flex-wrap overflow-hidden sm:-mx-1 md:-mx-px lg:-mx-2 xl:-mx-2">
                         <div class="w-full overflow-hidden sm:my-1 sm:px-1 sm:w-1/2 md:my-px md:px-px md:w-1/2 lg:my-2 lg:px-2 lg:w-1/4 xl:my-2 xl:px-2 xl:w-1/4 pb-6">
-                            <img class="mb-1" src={img_logo}  alt="Logo" />
+                            <img class="mt-10 mb-1" src={img_logo}  alt="Logo" />
                         </div>
                         <div class="w-full overflow-hidden sm:my-1 sm:px-1 sm:w-1/2 md:my-px md:px-px md:w-1/2 lg:my-2 lg:px-2 lg:w-1/4 xl:my-2 xl:px-2 xl:w-1/4 pb-6">
                             <h4 class="text-white text-center mt-2">Contáctanos</h4>
