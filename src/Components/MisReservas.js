@@ -199,7 +199,7 @@ export default function MisReservas() {
                     {fechaMaxCancelar !== ""
                         ? (
                             <div className="flex justify-center">
-                                <button type="button" className=" px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-small h-6 w-40 rounded-lg" onClick={() => cancelarReserva(id)}>
+                                <button type="button" className=" px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-small h-6 w-40" onClick={() => cancelarReserva(id)}>
                                     Cancelar
                             </button>
                             </div>
