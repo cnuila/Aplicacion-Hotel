@@ -4,6 +4,7 @@ import InputMask from "react-input-mask"
 import Navbar from './Navbar'
 import { db, auth } from "../firebase"
 import swal from 'sweetalert'
+import moment from 'moment'
 import { Link } from 'react-router-dom'
 
 export default function ListarUsuario({ history }) {
@@ -12,7 +13,7 @@ export default function ListarUsuario({ history }) {
     useEffect(() => {
         setTimeout(() => {
             infoUsuario()
-        }, 1000)
+        }, 2000)
     }, [])
 
     //función asíncrona que recupera la información del usuario actual
@@ -60,23 +61,43 @@ export default function ListarUsuario({ history }) {
     }
 
     //función que elimina la cuenta de un usario si no tiene reservas vigentes
-    const eliminarCuenta = () => {
-        db.collection("Usuarios").doc(info.Identidad).delete().then(() => {
-            auth.currentUser.delete().then(() => {
-                swal({
-                    text: "Se eliminó tu usuario",
-                    icon: "success",
-                    button: "Aceptar"
-                });
-                history.push("/")
+    const eliminarCuenta = async () => {
+        let tieneReservas = false
+        await db.collection("Reservas").where("emailCliente", "==", info.Email).get().then((querySnapshot) => {
+            let fechaActual = moment(new Date())
+            querySnapshot.forEach((doc) => {
+                const { fechaFinal } = doc.data()
+                let fechaFinalMoment = moment(new Date(fechaFinal.seconds * 1000))                
+                let diferenciaDias = fechaFinalMoment.diff(fechaActual, 'days') + 1
+                if (diferenciaDias > 0) {
+                    tieneReservas = true
+                }
             })
-        }).catch(error => {
+        })
+        if (tieneReservas) {
             swal({
-                text: `Error: ${error}`,
+                text: "No puedes eliminar tu usuario porque tienes una reserva activa",
                 icon: "warning",
                 button: "Aceptar"
             });
-        })
+        } else {
+            db.collection("Usuarios").doc(info.Identidad).delete().then(() => {
+                auth.currentUser.delete().then(() => {
+                    swal({
+                        text: "Se eliminó tu usuario",
+                        icon: "success",
+                        button: "Aceptar"
+                    });
+                    history.push("/")
+                })
+            }).catch(error => {
+                swal({
+                    text: `Error: ${error}`,
+                    icon: "warning",
+                    button: "Aceptar"
+                });
+            })
+        }
     }
 
     return (
