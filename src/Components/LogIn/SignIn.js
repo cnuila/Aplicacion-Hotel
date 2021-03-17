@@ -143,11 +143,11 @@ export default function SignIn({ history }) {
     } else {
         inputEmail = <input id="email" type="email" name="email" minlengt="12" onChange={handleemail} placeholder="john.doe@company.com" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
         contraseña = (<>
-            <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Confirmar Contraseña</label>
+            <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Contraseña</label>
             <input id="password" type="password" minlengt="8" name="password" onChange={handlecontra} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
         </>)
         confirmarContra = <>
-            <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Contraseña</label>
+            <label for="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Confirmar Contraseña</label>
             <input id="Cpassword" type="password" minlengt="8" name="Cpassword" onChange={handleconfirma} placeholder="********" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
         </>
     }
