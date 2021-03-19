@@ -46,7 +46,7 @@ export default function ListaHabitaciones() {
             setHabitaciones(listaHabitaciones)
         })
     }
-
+console.log(habitaciones)
     useEffect(() => {
         getHabitaciones()
     }, [])

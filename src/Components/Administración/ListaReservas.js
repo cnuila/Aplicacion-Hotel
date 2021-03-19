@@ -17,17 +17,20 @@ export default function ListaReservas() {
     }
 
     const [reservas, setReservas] = useState([])
-    const [habitacionSeleccionada, setHabitacionSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
-    const [diasReservados, setDiasReservados] = useState([])
+    const [reservaSeleccionada, setReservaSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
 
-    /*función que prepara todas las habitaciones para ser mostradas en la lista del panel izquierdo
-        por cada habitación se hace el query para solicitar las reseñas que tiene esa habitación
-    */
+    //función que prepara todas las reservas para ser mostradas en la lista del panel izquierdo        
     const getReservas = () => {
         db.collection("Reservas").onSnapshot((querySnapshot) => {
             const listaReservas = []
             querySnapshot.forEach((doc) => {
-                listaReservas.push({ ...doc.data(), id: doc.id })
+                let nombreHabitacion = ""
+                let idHabitacion = doc.data().idHabitacion
+                db.collection("Habitaciones").doc(idHabitacion).get().then(habitacion => {
+                    console.log(habitacion.data().Nombre)
+                    nombreHabitacion = habitacion.data().Nombre
+                })
+                listaReservas.push({ ...doc.data(), id: doc.id, nombreHabitacion })
             });
             setReservas(listaReservas)
         })
@@ -38,10 +41,10 @@ export default function ListaReservas() {
     }, [])
 
 
-    //funcion que recibe una habitacion y preparas sus datos para ser mostrados en el panel derecho
-    const handleHabitacion = habitacion => {
-        const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacion
-        setHabitacionSeleccionada({
+    //funcion que recibe una reserva y prepara sus datos para ser mostrados en el panel derecho
+    const handleReserva = reserva => {
+        const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = reserva
+        setReservaSeleccionada({
             id,
             Nombre,
             Precio,
@@ -55,13 +58,12 @@ export default function ListaReservas() {
     }
 
     const mostrarInicial = () => {
-        setDiasReservados([])
-        setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+        setReservaSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
         getReservas()
     }
 
-    const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacionSeleccionada
-
+    const { id, Nombre, Precio, Cantidad } = reservaSeleccionada
+    console.log(reservas)
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -73,12 +75,12 @@ export default function ListaReservas() {
                     </div>
 
                     {reservas.map((reserva, index) => {
-                        return (habitacionSeleccionada.Nombre === reserva.Nombre ?
-                            (<div key={index} className="mx-1 p-4 text-xs text-white font-semibold bg-gray-700 relative cursor-pointer" onClick={() => handleHabitacion(reserva)}>
+                        return (reservaSeleccionada.id === reserva.id ?
+                            (<div key={index} className="mx-1 p-4 text-xs text-white font-semibold bg-gray-700 relative cursor-pointer" onClick={() => handleReserva(reserva)}>
                                 {reserva.emailCliente}
                             </div>)
                             :
-                            (<div key={index} className="mx-1 p-4 text-xs font-semibold hover:bg-gray-200 relative cursor-pointer" onClick={() => handleHabitacion(reserva)}>
+                            (<div key={index} className="mx-1 p-4 text-xs font-semibold hover:bg-gray-200 relative cursor-pointer" onClick={() => handleReserva(reserva)}>
                                 {reserva.emailCliente}
                             </div>)
                         )
