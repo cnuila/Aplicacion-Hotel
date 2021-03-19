@@ -10,6 +10,7 @@ import ListaClientes from './Administración/ListaClientes'
 import ListaHabitaciones from './Administración/ListaHabitaciones'
 import ListaServicios from './Administración/ListaServicios'
 import ListaMenu from './Administración/ListaMenu'
+import ListaReservas from './Administración/ListaReservas'
 import Navbar from './Navbar'
 
 const AdminMenu = function () {
@@ -40,11 +41,14 @@ const AdminMenu = function () {
                       <Link to="/administracion/Habitaciones" className="btn btn-primary">Habitaciones</Link>
                     </li>
                     <li className="p-3 hover:bg-gray-400">
+                      <Link to="/administracion/Reservas" className="btn btn-primary">Reservas</Link>
+                    </li>
+                    <li className="p-3 hover:bg-gray-400">
                       <Link to="/administracion/Restaurante" className="btn btn-primary">Menus</Link>
                     </li>
                     <li className="p-3 hover:bg-gray-400">
                       <Link to="/administracion/Servicios" className="btn btn-primary">Servicios</Link>
-                    </li>
+                    </li>                    
                   </ul>
                 </nav>
 
@@ -61,12 +65,15 @@ const AdminMenu = function () {
               <Route path="/administracion/Habitaciones">
                 <Habitaciones />
               </Route>
+              <Route path="/administracion/Reservas">
+                <Reservas />
+              </Route>
               <Route path="/administracion/Restaurante">
                 <Restaurante />
               </Route>
               <Route path="/administracion/Servicios">
                 <Servicios />
-              </Route>
+              </Route>              
             </Switch>
           </main>
         </div>
@@ -99,7 +106,11 @@ function Habitaciones() {
   )
 }
 
-
+function Reservas() {
+  return (
+    <ListaReservas />
+  )
+}
 
 export default AdminMenu;
 

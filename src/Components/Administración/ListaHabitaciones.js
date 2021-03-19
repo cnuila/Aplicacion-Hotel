@@ -13,11 +13,11 @@ export default function ListaHabitaciones() {
 
     const estadoInicial = {
         Nombre: "Nombre de la Habitación",
-        Precio: 1000,
-        Complementos: [{ id: 100, text: "Camas Dobles" }, { id: 200, text: "TV 55 pulgadas" }],
+        Precio: 0,
+        Complementos: [{ text: "Complemento 1" }, { text: "Complemento 2" }],
         Url: undefined,
-        Cantidad: 5,
-        Visible: "Si"
+        Cantidad: 0,
+        Visible: false
     }
 
     const [habitaciones, setHabitaciones] = useState([])
