@@ -8,31 +8,41 @@ import moment from 'moment'
 export default function ListaReservas() {
 
     const estadoInicial = {
-        Nombre: "Nombre de la Habitación",
-        Precio: 1000,
-        Complementos: [{ id: 100, text: "Camas Dobles" }, { id: 200, text: "TV 55 pulgadas" }],
-        Url: undefined,
-        Cantidad: 5,
-        Visible: "Si"
+        nombreCliente: "Nombre Cliente",
+        nombreHabitacion: "Nombre Habitación",
+        pagada: false,
+        fechaInicial: "00/00/0000",
     }
 
     const [reservas, setReservas] = useState([])
-    const [reservaSeleccionada, setReservaSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+    const [reservaSeleccionada, setReservaSeleccionada] = useState({ ...estadoInicial })
 
-    //función que prepara todas las reservas para ser mostradas en la lista del panel izquierdo        
+    //función que prepara todas las reservas para ser mostradas en la lista del panel izquierdo, hace query a usuario y a las habitaciones        
     const getReservas = () => {
         db.collection("Reservas").onSnapshot((querySnapshot) => {
             const listaReservas = []
-            querySnapshot.forEach((doc) => {
+            querySnapshot.forEach(async (doc) => {
                 let nombreHabitacion = ""
-                let idHabitacion = doc.data().idHabitacion
-                db.collection("Habitaciones").doc(idHabitacion).get().then(habitacion => {
-                    console.log(habitacion.data().Nombre)
+                let celCliente = ""
+                let nombreCliente = ""
+                if (doc.data().administrador) {
+                    nombreCliente = doc.data().nombreCliente
+                } else {
+                    await db.collection("Usuarios").where("Email", "==", doc.data().emailCliente).get().then(usuarios => {
+                        usuarios.forEach(usuario => {
+                            celCliente = usuario.data().Telefono
+                            nombreCliente = usuario.data().Nombre + " " + usuario.data().Apellido
+                        })
+                    })
+                }
+                await db.collection("Habitaciones").doc(doc.data().idHabitacion).get().then(habitacion => {
                     nombreHabitacion = habitacion.data().Nombre
                 })
-                listaReservas.push({ ...doc.data(), id: doc.id, nombreHabitacion })
+                listaReservas.push({ ...doc.data(), id: doc.id, nombreHabitacion, nombreCliente, celCliente })
             });
-            setReservas(listaReservas)
+            setTimeout(() => {
+                setReservas(listaReservas)
+            }, 1000)
         })
     }
 
@@ -62,7 +72,7 @@ export default function ListaReservas() {
         getReservas()
     }
 
-    const { id, Nombre, Precio, Cantidad } = reservaSeleccionada
+    const { id, nombreCliente, nombreHabitacion, Precio, Cantidad, emailCliente, fechaInicial } = reservaSeleccionada
     console.log(reservas)
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
@@ -75,28 +85,28 @@ export default function ListaReservas() {
                     </div>
 
                     {reservas.map((reserva, index) => {
-                        return (reservaSeleccionada.id === reserva.id ?
+                        return (id === reserva.id ?
                             (<div key={index} className="mx-1 p-4 text-xs text-white font-semibold bg-gray-700 relative cursor-pointer" onClick={() => handleReserva(reserva)}>
-                                {reserva.emailCliente}
+                                {reserva.nombreCliente + "  -  " + reserva.nombreHabitacion}
                             </div>)
                             :
                             (<div key={index} className="mx-1 p-4 text-xs font-semibold hover:bg-gray-200 relative cursor-pointer" onClick={() => handleReserva(reserva)}>
-                                {reserva.emailCliente}
+                                {reserva.nombreCliente + "  -  " + reserva.nombreHabitacion}
                             </div>)
                         )
                     })}
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     <div className="h-full w-10/12 px-20 py-8">
-                        <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+                        <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {nombreCliente + " - " + nombreHabitacion} </h1>
 
                         <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                            <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
-                            <h2 className="text-black pl-4">Lps.{Precio}.00</h2>
+                            <h2 className="text-blue-500 font-semibold cursor-default">Pagada</h2>
+                            <h2 className="text-black pl-4">No</h2>
                         </div>
                         <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                            <h2 className="text-blue-500 font-semibold cursor-default">Cantidad de Habitacones</h2>
-                            <h2 className="text-black pl-4">{Cantidad}</h2>
+                            <h2 className="text-blue-500 font-semibold cursor-default">Fecha Inicial</h2>
+                            <h2 className="text-black pl-4">{fechaInicial}</h2>
                         </div>
                     </div>
                 </div>
