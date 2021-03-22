@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { db } from '../../firebase'
-import { Calendar, utils } from "react-modern-calendar-datepicker";
-import swal from 'sweetalert'
 import moment from 'moment'
 
 export default function ListaReservas() {
@@ -12,6 +10,7 @@ export default function ListaReservas() {
         nombreHabitacion: "Nombre Habitación",
         pagada: false,
         fechaInicial: "00/00/0000",
+        idCliente:"0000-0000-0000"
     }
 
     const [reservas, setReservas] = useState([])
@@ -19,7 +18,7 @@ export default function ListaReservas() {
 
     //función que prepara todas las reservas para ser mostradas en la lista del panel izquierdo, hace query a usuario y a las habitaciones        
     const getReservas = () => {
-        db.collection("Reservas").onSnapshot((querySnapshot) => {
+        db.collection("Reservas").orderBy("fechaInicial","desc").onSnapshot((querySnapshot) => {
             const listaReservas = []
             querySnapshot.forEach(async (doc) => {
                 let nombreHabitacion = ""
@@ -39,7 +38,7 @@ export default function ListaReservas() {
                     nombreHabitacion = habitacion.data().Nombre
                 })
                 listaReservas.push({ ...doc.data(), id: doc.id, nombreHabitacion, nombreCliente, celCliente })
-            });
+            });            
             setTimeout(() => {
                 setReservas(listaReservas)
             }, 1000)
@@ -53,27 +52,26 @@ export default function ListaReservas() {
 
     //funcion que recibe una reserva y prepara sus datos para ser mostrados en el panel derecho
     const handleReserva = reserva => {
-        const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = reserva
+        const { id, celCliente, fechaFinal, fechaInicial, emailCliente, idCliente, nombreCliente, pagada, precioPagar, nombreHabitacion } = reserva
+        let fechaInicialMoment = moment(new Date(fechaInicial.seconds * 1000))
+        let fechaFinalMoment = moment(new Date(fechaFinal.seconds * 1000))
+        let fechaInicialFormat = fechaInicialMoment.format('DD/MM/YYYY')
+        let fechaFinalFormat = fechaFinalMoment.format("DD/MM/YYYY")
         setReservaSeleccionada({
             id,
-            Nombre,
-            Precio,
-            Complementos,
-            Url,
-            reseñas,
-            Cantidad,
-            Visible
+            celCliente,
+            fechaInicial:fechaInicialFormat,
+            fechaFinal:fechaFinalFormat,
+            emailCliente,
+            idCliente,
+            nombreCliente,
+            pagada,
+            precioPagar,
+            nombreHabitacion
         })
-        getReservas(id, Cantidad)
     }
 
-    const mostrarInicial = () => {
-        setReservaSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
-        getReservas()
-    }
-
-    const { id, nombreCliente, nombreHabitacion, Precio, Cantidad, emailCliente, fechaInicial } = reservaSeleccionada
-    console.log(reservas)
+    const { id, nombreCliente, idCliente, nombreHabitacion, emailCliente, celCliente , fechaInicial, fechaFinal, precioPagar } = reservaSeleccionada
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -99,15 +97,39 @@ export default function ListaReservas() {
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
                     <div className="h-full w-10/12 px-20 py-8">
                         <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {nombreCliente + " - " + nombreHabitacion} </h1>
-
+                        {
+                            precioPagar !== undefined ?
+                                <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                    <h2 className="text-blue-500 font-semibold cursor-default">Precio a pagar</h2>
+                                    <h2 className="text-black pl-4">Lps.{precioPagar}.00</h2>
+                                </div> : <></>
+                        }
                         <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
                             <h2 className="text-blue-500 font-semibold cursor-default">Pagada</h2>
                             <h2 className="text-black pl-4">No</h2>
+                        </div>
+                        <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                            <h2 className="text-blue-500 font-semibold cursor-default">Información del Cliente</h2>
+                            <h2 className="text-black pl-4">{idCliente}</h2>
+                            <h2 className="text-black pl-4">{emailCliente}</h2>
+                            { nombreCliente !== "" ? 
+                                <h2 className="text-black pl-4">{nombreCliente}</h2>:<></>
+                            }
+                            { celCliente !== undefined && celCliente !== "" ? 
+                                <h2 className="text-black pl-4">{celCliente}</h2>:<></>
+                            }
                         </div>
                         <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
                             <h2 className="text-blue-500 font-semibold cursor-default">Fecha Inicial</h2>
                             <h2 className="text-black pl-4">{fechaInicial}</h2>
                         </div>
+                        {
+                            fechaFinal !== undefined ?
+                                <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                    <h2 className="text-blue-500 font-semibold cursor-default">Fecha Final</h2>
+                                    <h2 className="text-black pl-4">{fechaFinal}</h2>
+                                </div> : <></>
+                        }
                     </div>
                 </div>
             </div>
