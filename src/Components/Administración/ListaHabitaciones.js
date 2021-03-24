@@ -46,7 +46,7 @@ export default function ListaHabitaciones() {
             setHabitaciones(listaHabitaciones)
         })
     }
-console.log(habitaciones)
+    console.log(habitaciones)
     useEffect(() => {
         getHabitaciones()
     }, [])
@@ -320,15 +320,11 @@ console.log(habitaciones)
                                                 Nombre !== "Nombre de la Habitación" ?
                                                     (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                                         <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fechas Reservadas</h2>
-                                                        <div className="grid place-items-center">
-                                                            <Calendar
-                                                                colorPrimaryLight="#60A5FA"
-                                                                colorPrimary="#1E3A8A"
-                                                                disabledDays={diasReservados}
-                                                                minimumDate={utils().getToday()}
-                                                                shouldHighlightWeekends
-                                                            />
-                                                        </div>
+                                                        
+                                                        <input type="date" id="start" name="trip-start"
+                                                            value="2018-07-22"
+                                                            min="2018-01-01" max="2018-12-31">
+                                                        </input>
                                                     </div>) : <></>
                                             }
                                             {reseñas !== undefined && reseñas.length !== 0
