@@ -28,12 +28,12 @@ export default function ListaHabitaciones() {
                         listaReseñas.push({ ...doc2.data(), id: doc2.id })
                     })
                 })
-                if (listaReseñas.length === 0){
-                    listaHabitaciones.push({ ...doc.data(), id: doc.id})
+                if (listaReseñas.length === 0) {
+                    listaHabitaciones.push({ ...doc.data(), id: doc.id })
                 } else {
-                    listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas:listaReseñas})
+                    listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas: listaReseñas })
                 }
-                
+
             });
             setHabitaciones(listaHabitaciones)
         })
@@ -44,8 +44,9 @@ export default function ListaHabitaciones() {
     }, [])
 
     const handleHabitacion = habitacion => {
-        const { Nombre, Precio, Complementos, Url, reseñas } = habitacion
+        const { id, Nombre, Precio, Complementos, Url, reseñas } = habitacion
         setHabitacionSeleccionada({
+            id,
             Nombre,
             Precio,
             Complementos,
@@ -62,45 +63,31 @@ export default function ListaHabitaciones() {
     }
 
     const handleEliminarHabitacion = async (id, fotos) => {
-        let habitacion = db.collection("Habitaciones").doc(id)
-        swal({
-            title: "Esta seguro?",
-            text: "La habitacion sera borrada permanentemente!",
-            icon: "warning",
-            buttons: {
-                cancel: true,
-                confirm: true,
-            }
-        }).then(async result => {
-            console.log(result)
-            if (result) {
-                await habitacion.delete().then(() => {
-                    if (fotos !== undefined) {
-                        let deleteRef
-                        for (let i = 0; i < fotos.length; i++) {
-                            deleteRef = storage.refFromURL(fotos[i])
-                            deleteRef.delete()
-                        }
-                    }
-                }).then(() => {
-                    swal({
-                        text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
-                        icon: "success",
-                        button: "Aceptar"
-                    });
-                    setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
-                    getHabitaciones()
-                }).catch(function (error) {
-                    swal({
-                        icon: "error",
-                        title: "Error al Eliminar",
-                        text: "Error: " + error
-                    })
-                });
-            } else {
-                swal("Cancelado", "La habitacion no se borro");
-            }
-        });
+        let flag = true
+        db.collection("Reservas").onSnapshot((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                let idHabitacion = doc.get("idHabitacion")
+                if (idHabitacion === id) {
+                    console.log("Pasa")
+                    flag = false
+                }
+            })
+        })
+        console.log(flag)
+        if (flag === true) {
+            swal({
+                title: "Habitacion Eliminada",
+                icon: "warning",
+                button: "Aceptar"
+            });
+        } else {
+            swal({
+                title: "Reservas Activas",
+                text: "La Habitacion " + Nombre + " no puede ser eliminada debido a que tiene reservas activas",
+                icon: "warning",
+                button: "Aceptar"
+            });
+        }
     }
 
     const mostrarInicial = () => {
@@ -114,7 +101,7 @@ export default function ListaHabitaciones() {
         setMostrarModificar(true)
     }
 
-    const { Nombre, Precio, Complementos, Url, reseñas } = habitacionSeleccionada
+    const { id, Nombre, Precio, Complementos, Url, reseñas } = habitacionSeleccionada
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -168,9 +155,9 @@ export default function ListaHabitaciones() {
                                             <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
                                             <div className="grid grid-cols-2 place-items-center">
                                                 {
-                                                    Url.map((foto,index) => {
+                                                    Url.map((foto, index) => {
                                                         return (
-                                                            <img key ={index} 
+                                                            <img key={index}
                                                                 className="h-40 w-40 p-2 object-cover rounded-xl"
                                                                 alt="Habitacion"
                                                                 src={foto}
@@ -195,7 +182,7 @@ export default function ListaHabitaciones() {
                                                             <div className="flex flex-row">
                                                                 <h2 className="font-bold">Visible:</h2>
                                                                 <h2 className="pl-1"> {text}</h2>
-                                                            </div>                                                            
+                                                            </div>
                                                             <div className="flex flex-row">
                                                                 <h2 className="font-bold">Rating:</h2>
                                                                 <h2 className="px-1"> {rating}</h2>
@@ -218,7 +205,7 @@ export default function ListaHabitaciones() {
                                     {Nombre !== "Nombre de la Habitación" ? (
                                         <div class="grid grid-cols-2">
                                             <div>
-                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
+                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(id, Url)}>
                                                     Eliminar
                                                 </button>
                                             </div>
@@ -228,9 +215,9 @@ export default function ListaHabitaciones() {
                                                 </button>
                                             </div>
                                         </div>) : (
-                                            <div>
-                                            </div>
-                                        )
+                                        <div>
+                                        </div>
+                                    )
                                     }
                                 </div>)
                     }
