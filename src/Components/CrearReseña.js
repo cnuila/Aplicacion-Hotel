@@ -54,11 +54,13 @@ class CrearReseña extends React.Component {
                 //se agrega la reseña actual
                 const resAn = db.collection("Habitaciones").doc(this.props.id).collection("Reseñas")
                 const email = user.email;
+                const fecha = new Date().toLocaleDateString();
                 resAn.add({
                     comentario: this.state.comentario,
                     rating: this.state.rating,
                     visualizar: true,
                     usuario: email,
+                    fecha: fecha,
                 }).then(() => {
                     swal({
                         text: "La reseña fue enviada exitosamente",
