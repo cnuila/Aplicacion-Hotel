@@ -301,7 +301,7 @@ export default function InfoHabitacion({ location, history }) {
               reseñas.map((reseña, index) => {
                 if (reseña.visualizar) {
                   return (
-                    <Reseña key={index} resena={reseña} nombre={nombre} getReseñas={getReseñas} />
+                    <Reseña key={index} resena={reseña} id={id}  nombre={nombre} getReseñas={getReseñas} />
                   )
                 }
                 return <></>
