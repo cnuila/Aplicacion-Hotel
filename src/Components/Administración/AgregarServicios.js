@@ -196,7 +196,7 @@ function AgregarServicios(props) {
                 })
             })
 
-            const lista2 = lista.filter(function(elem, pos) {
+            const lista2 = lista.filter(function (elem, pos) {
                 return lista.indexOf(elem) == pos;
             });
 
@@ -304,7 +304,10 @@ function AgregarServicios(props) {
                                         </aside>
                                     </section>
                                 </div>
-                                <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Agregar Servicio</button>
+                                <div>
+                                    <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Agregar Servicio</button>
+                                    <button class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-red-600 shadow-lg focus:outline-none hover:bg-red-900 hover:shadow-none" onClick={() => { props.mostrarInicial() }}>Cancelar</button>
+                                </div>
                             </form>
                         </div>
 
