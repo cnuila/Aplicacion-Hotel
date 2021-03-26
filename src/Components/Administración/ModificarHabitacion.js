@@ -12,6 +12,7 @@ function ModificarHabitacion(props) {
     const [nombre, setNombre] = useState("");
     const [precio, setPrecio] = useState("");
     const [url, setUrl] = useState([]);
+    const [urlElimadas, setUrlEliminadas] = useState([]);
     const [files, setFiles] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [visible, setVisible] = useState(true);
@@ -208,9 +209,9 @@ function ModificarHabitacion(props) {
             }
         }
 
-        let deleteRef
-        deleteRef = storage.refFromURL(element)
-        deleteRef.delete()
+        const temp1 = [];
+        temp1.push(element);
+        setUrlEliminadas(temp1)
 
         const temp = [...url];
         temp.splice(index, 1);
@@ -223,10 +224,18 @@ function ModificarHabitacion(props) {
         let dirFotos = [];
         let uploadTask = null;
 
+        urlElimadas.map(foto => {
+            let deleteRef
+            deleteRef = storage.refFromURL(foto)
+            deleteRef.delete()
+        })
+
         url.map(ur => {
             dirFotos.push(ur)
         })
+
         setShowModal(prev => !prev);
+
         if (files.length >= 0) {
             for (var i = 0; i < files.length; i++) {
                 const nombreFoto = files[i].name;
@@ -242,7 +251,7 @@ function ModificarHabitacion(props) {
             }
         }
 
-        db.collection("Habitaciones").doc(nombre).set({
+        db.collection("Habitaciones").doc(props.id).set({
             Nombre: nombre,
             Precio: precio,
             Complementos: todos,
@@ -376,7 +385,10 @@ function ModificarHabitacion(props) {
                                         </section>
                                     </div>
 
-                                    <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Modificar Habitacion</button>
+                                    <div>
+                                        <button type="submit" class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">Modificar Habitacion</button>
+                                        <button class="w-full py-3 mt-10 font-medium tracking-widest text-white uppercase bg-red-600 shadow-lg focus:outline-none hover:bg-red-900 hover:shadow-none" onClick={() => { props.mostrarInicial() }}>Cancelar</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
