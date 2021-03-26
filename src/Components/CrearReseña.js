@@ -32,19 +32,20 @@ class CrearReseña extends React.Component {
         event.preventDefault()
         const user = auth.currentUser;
         if (user) {
+            //revisa malas palabras
             if (this.state.comentario.includes('puta') || this.state.comentario.includes('maldito') || this.state.comentario.includes('puta') || this.state.comentario.includes('cabron') || this.state.comentario.includes('pija') || this.state.comentario.includes('mierda')) {
                 swal({
                     text: "Su Comentario incluye palabras ofensivas",
                     icon: "warning",
                     button: "Aceptar"
                 });
-            } else if (this.state.rating === 0) {
+            } else if (this.state.rating === 0) {//no ha indicado las estrellas
                 swal({
                     text: "Ops parece que no indicaste cuántas estrellas nos dabas",
                     icon: "warning",
                     button: "Aceptar"
                 });
-            } else if (this.state.comentario.length < 5) {
+            } else if (this.state.comentario.length < 5) { //comentario muy corto
                 swal({
                     text: "Su comentario es muy corto",
                     icon: "warning",
@@ -83,7 +84,7 @@ class CrearReseña extends React.Component {
                 })
 
             }
-        } else {
+        } else {//no tiene una sesion iniciada
             swal({
                 text: "Debes iniciar sesión para hacer una reseña",
                 icon: "warning",
@@ -94,12 +95,13 @@ class CrearReseña extends React.Component {
 
     render() {
         return (
-            <div >
+            <div >{/*zona donde ingresan comentarios*/}
                 <div className="flex justify-center">
                     <div className="flex justify-center shadow-lg py-4 mx-8 mb-1 ">
                         <form className="w-full max-w-xl justify-center  bg-gray-200 rounded-lg px-4 pt-1 border-gray-600 border-1">
                             <div className="flex flex-wrap justify-center -mx-3 mb-10">
                                 <h2 className="px-4 -pt-1 pb-2 text-blue text-lg">Tu opinión es importante</h2>
+                                {/*se llama el componente que pone las estrellas*/}
                                 <ReactStarRating
                                     numberOfStar={5} numberOfSelectedStar={this.state.rating} colorFilledStar="yellow"
                                     colorEmptyStar="blue" starSize="20px" spaceBetweenStar="8px"

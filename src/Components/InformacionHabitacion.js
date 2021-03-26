@@ -300,13 +300,13 @@ export default function InfoHabitacion({ location, history }) {
             {reseñas !== undefined ? (
               reseñas.map((reseña, index) => {
                 if (reseña.visualizar) {
-                  return (
+                  return (//manda los props a resena
                     <Reseña key={index} resena={reseña} id={id}  nombre={nombre} getReseñas={getReseñas} />
                   )
                 }
                 return <></>
               })) : (<></>)
-            }
+            }{/*manda props a crear resena*/ }
             <CrearReseña nombre={nombre} id={id} getReseñas={getReseñas} />
           </div>
         </div>
