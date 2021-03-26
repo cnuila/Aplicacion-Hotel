@@ -138,67 +138,76 @@ export default function InfoHabitacion({ location, history }) {
   //función asíncrona que reserva una habitación y redirige a página de mis reservas
   const reservar = async () => {
     const user = auth.currentUser;
-    if (user) {
-      if (selectedDayRange.to === null && selectedDayRange.from === null) {
-        swal({
-          text: "Debes seleccionar una fecha primero",
-          icon: "warning",
-          button: "Aceptar"
-        });
-      } else {
-        if (selectedDayRange.to === null && selectedDayRange.from !== null) {
+
+    if (administrador && nombreCliente != "") {
+      if (user) {
+        if (selectedDayRange.to === null && selectedDayRange.from === null) {
           swal({
-            text: "Debes seleccionar una fecha final o darle click de nuevo al día si solo quieres reservar un día",
+            text: "Debes seleccionar una fecha primero",
             icon: "warning",
             button: "Aceptar"
           });
         } else {
-          let idCliente = ""
-          await db.collection("Usuarios").where("Email", "==", user.email).get().then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-              idCliente = doc.id;
-            })
-          })
-          if (idCliente === "") {
+          if (selectedDayRange.to === null && selectedDayRange.from !== null) {
             swal({
-              text: "No tenemos registrado tu ID, elimina tu cuenta, y asegúrate de terminar el proceso de registro",
+              text: "Debes seleccionar una fecha final o darle click de nuevo al día si solo quieres reservar un día",
               icon: "warning",
               button: "Aceptar"
             });
           } else {
-            const { to, from } = selectedDayRange
-            let emailCliente = user.email
-            let fechaFinal = new Date(to.year, to.month - 1, to.day)
-            let fechaInicial = new Date(from.year, from.month - 1, from.day)
-            let moment1 = moment(fechaInicial)
-            let moment2 = moment(fechaFinal)
-            let diferenciaDias = moment2.diff(moment1, 'days') + 1
-            let precioPagar = precio * diferenciaDias
-            db.collection("Reservas").add({
-              administrador: administrador,
-              nombreCliente: nombreCliente,
-              idHabitacion: id,
-              idCliente,
-              emailCliente,
-              fechaFinal,
-              fechaInicial,
-              precioPagar,
-              pagada: false,
-            }).then(() => {
-              swal({
-                text: "Reservaste con éxito",
-                icon: "success",
-                button: "Aceptar"
-              }).then(() => {
-                history.push("/misReservas");
-              });
+            let idCliente = ""
+            await db.collection("Usuarios").where("Email", "==", user.email).get().then(querySnapshot => {
+              querySnapshot.forEach(doc => {
+                idCliente = doc.id;
+              })
             })
+            if (idCliente === "") {
+              swal({
+                text: "No tenemos registrado tu ID, elimina tu cuenta, y asegúrate de terminar el proceso de registro",
+                icon: "warning",
+                button: "Aceptar"
+              });
+            } else {
+              const { to, from } = selectedDayRange
+              let emailCliente = user.email
+              let fechaFinal = new Date(to.year, to.month - 1, to.day)
+              let fechaInicial = new Date(from.year, from.month - 1, from.day)
+              let moment1 = moment(fechaInicial)
+              let moment2 = moment(fechaFinal)
+              let diferenciaDias = moment2.diff(moment1, 'days') + 1
+              let precioPagar = precio * diferenciaDias
+              db.collection("Reservas").add({
+                administrador: administrador,
+                nombreCliente: nombreCliente,
+                idHabitacion: id,
+                idCliente,
+                emailCliente,
+                fechaFinal,
+                fechaInicial,
+                precioPagar,
+                pagada: false,
+              }).then(() => {
+                swal({
+                  text: "Reservaste con éxito",
+                  icon: "success",
+                  button: "Aceptar"
+                }).then(() => {
+                  history.push("/misReservas");
+                });
+              })
+            }
           }
         }
+      } else {
+        swal({
+          text: "Debes iniciar sesión para hacer una reseña",
+          icon: "warning",
+          button: "Aceptar"
+        });
       }
-    } else {
+    }else{
       swal({
-        text: "Debes iniciar sesión para hacer una reseña",
+        text: "Indica el nombre del cliente",
         icon: "warning",
         button: "Aceptar"
       });
@@ -257,7 +266,7 @@ export default function InfoHabitacion({ location, history }) {
                     ?
                     <div>
                       <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Nombre del Cliente</label>
-                      <input onChange={event => setNombreCliente(event.target.value)} type="text" name="nombre" placeholder="Carlos Alberto" className="block w-80 p-3 mt-2 text-black bg-white appearance-none focus:outline-none focus:shadow-inner" required />
+                      <input onChange={event => setNombreCliente(event.target.value)} type="text" name="nombre" placeholder="Carlos Martinez" className="block w-80 p-3 mt-2 text-black bg-white appearance-none focus:outline-none focus:shadow-inner" required />
                     </div>
                     :
                     <></>
@@ -301,7 +310,7 @@ export default function InfoHabitacion({ location, history }) {
               reseñas.map((reseña, index) => {
                 if (reseña.visualizar) {
                   return (
-                    <Reseña key={index} resena={reseña} id={id}  nombre={nombre} getReseñas={getReseñas} />
+                    <Reseña key={index} resena={reseña} id={id} nombre={nombre} getReseñas={getReseñas} />
                   )
                 }
                 return <></>
