@@ -19,6 +19,7 @@ function ModificarMenu(props) {
         return []
     })
     const [open, setOpen] = useState(false);
+    const [urlElimadas, setUrlEliminadas] = useState([]);
 
     const {
         getRootProps,
@@ -122,10 +123,18 @@ function ModificarMenu(props) {
         let dirFotos = [];
         let uploadTask = null;
 
+        urlElimadas.map(f => {
+            let deleteRef
+            deleteRef = storage.refFromURL(f)
+            deleteRef.delete()
+        })
+
         url.map(ur => {
             dirFotos.push(ur)
         })
+
         setShowModal(prev => !prev);
+
         if (files.length >= 0) {
             for (var i = 0; i < files.length; i++) {
                 const nombreFoto = files[i].name;
@@ -150,7 +159,8 @@ function ModificarMenu(props) {
             setShowModal(prev => !prev);
             alertaSuccess()
             props.mostrarInicial()
-        }).catch(() => {
+        }).catch((err) => {
+            console.log(err)
             setShowModal(prev => !prev);
         })
 
@@ -166,6 +176,7 @@ function ModificarMenu(props) {
                     setTodos(doc.data().Detalles)
                     setUrl(doc.data().Url)
                     setTempVisible(doc.data().Visible)
+                    setVisible(doc.data().Visible)
                 });
             })
             .catch((error) => {
@@ -245,9 +256,9 @@ function ModificarMenu(props) {
             }
         }
 
-        let deleteRef
-        deleteRef = storage.refFromURL(element)
-        deleteRef.delete()
+        const temp1 = [];
+        temp1.push(element);
+        setUrlEliminadas(temp1)
 
         const temp = [...url];
         temp.splice(index, 1);
