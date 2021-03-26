@@ -221,7 +221,7 @@ export default function ListaHabitaciones() {
                         mostrarAgregar
                             ? (<AgregarHabitaciones mostrarInicial={mostrarInicial} habitaciones={habitaciones} />)
                             : mostrarModificar
-                                ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} mostrarInicial={mostrarInicial} habitaciones={habitaciones} />
+                                ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} id={id} mostrarInicial={mostrarInicial} habitaciones={habitaciones} />
                                 : mostrarModificarReseñas
                                     ? <ReseñasVisibles reseña={check} id={id} mostrarInicial={mostrarInicial} nombre={habitacionSeleccionada.Nombre} />
                                     : (
