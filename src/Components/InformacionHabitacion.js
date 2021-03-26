@@ -8,6 +8,7 @@ import moment from 'moment'
 import CrearReseña from './CrearReseña';
 import Navbar from './Navbar';
 import Reseña from './Reseña';
+import emailjs from 'emailjs-com';
 
 export default function InfoHabitacion({ location, history }) {
 
@@ -187,8 +188,22 @@ export default function InfoHabitacion({ location, history }) {
                 precioPagar,
                 pagada: false,
               }).then(() => {
+
+                var templateParams = {
+                  name: nombreCliente,
+                  subject: 'Tu habitacion se reservo con exito',
+                  email: user.email
+                };
+
+                emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
+                  .then(function (response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                  }, function (error) {
+                    console.log('FAILED...', error);
+                  });
+
                 swal({
-                  text: "Reservaste con éxito",
+                  text: "Reservaste con éxito, revisa tu correo!",
                   icon: "success",
                   button: "Aceptar"
                 }).then(() => {
@@ -205,7 +220,7 @@ export default function InfoHabitacion({ location, history }) {
           button: "Aceptar"
         });
       }
-    }else{
+    } else {
       swal({
         text: "Indica el nombre del cliente",
         icon: "warning",
