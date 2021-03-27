@@ -130,44 +130,31 @@ export default function ListaHabitaciones() {
     }
 
     const handleEliminarHabitacion = async (id, fotos) => {
-        let habitacion = db.collection("Habitaciones").doc(id)
-        swal({
-            title: "Esta seguro?",
-            text: "La habitacion sera borrada permanentemente!",
-            icon: "warning",
-            buttons: {
-                cancel: true,
-                confirm: true,
-            }
-        }).then(async result => {
-            if (result) {
-                await habitacion.delete().then(() => {
-                    if (fotos !== undefined) {
-                        let deleteRef
-                        for (let i = 0; i < fotos.length; i++) {
-                            deleteRef = storage.refFromURL(fotos[i])
-                            deleteRef.delete()
-                        }
-                    }
-                }).then(() => {
-                    swal({
-                        text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
-                        icon: "success",
-                        button: "Aceptar"
-                    });
-                    setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
-                    getHabitaciones()
-                }).catch(function (error) {
-                    swal({
-                        icon: "error",
-                        title: "Error al Eliminar",
-                        text: "Error: " + error
-                    })
-                });
-            } else {
-                swal("Cancelado", "La habitacion no se borro");
-            }
-        });
+        let flag = true
+        await db.collection("Reservas").get().then(querySnapshot => {
+            querySnapshot.forEach((doc) => {
+                let idHabitacion = doc.get("idHabitacion")
+                console.log(idHabitacion + " " + id + " " + flag)
+                if (idHabitacion === id) {
+                    flag = false
+                    console.log("Hay reservas")
+                }
+            });
+        })
+        if (flag === true) {
+            swal({
+                title: "Borrada",
+                icon: "info",
+                button: "Aceptar"
+            });
+        } else {
+            swal({
+                title: "Reservas activas",
+                text: "La Habitacion no se puede eliminar ya que tiene reservas activas en este momento.",
+                icon: "info",
+                button: "Aceptar"
+            });
+        }
     }
 
     const mostrarInicial = () => {
