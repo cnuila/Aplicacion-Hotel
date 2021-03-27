@@ -65,7 +65,7 @@ export default function ListaHabitaciones() {
                     let dia = moment1.format('D')
                     let mes = moment1.format('MM')
                     let año = moment1.format('YYYY')
-                    if (dia === fecha[2] && mes === fecha[1] && año === fecha[0]){
+                    if (dia === fecha[2] && mes === fecha[1] && año === fecha[0]) {
                         cantReservas++;
                     }
                     //incrementar un dia
@@ -73,14 +73,14 @@ export default function ListaHabitaciones() {
                 }
             })
         })
-        if (cantReservas === 0){
+        if (cantReservas === 0) {
             swal({
                 title: "Cantidad de Habitaciones Reservadas",
                 text: "En el " + fechaBuscar + " no hay habitaciones reservadas aún.",
                 icon: "info",
                 button: "Aceptar"
-            });    
-        } else if (cantReservas === 1){
+            });
+        } else if (cantReservas === 1) {
             swal({
                 title: "Cantidad de Habitaciones Reservadas",
                 text: "En el " + fechaBuscar + " hay 1 habitación reservada.",
@@ -90,11 +90,11 @@ export default function ListaHabitaciones() {
         } else {
             swal({
                 title: "Cantidad de Habitaciones Reservadas",
-                text: "En el " + fechaBuscar + " hay "+ cantReservas + " habitaciones reservadas.",
+                text: "En el " + fechaBuscar + " hay " + cantReservas + " habitaciones reservadas.",
                 icon: "info",
                 button: "Aceptar"
             });
-        }        
+        }
     }
 
     //función que se ejecuta cada vez que cambia el input de fecha asignando el nuevo input
@@ -179,10 +179,12 @@ export default function ListaHabitaciones() {
         getHabitaciones()
     }
 
+    //función que prepara la interfaz para poder modificar una habitación
     const handleOnClickModificar = () => {
         setMostrarModificar(true)
     }
 
+    //función que prepara la interfaz para poder modificar una reseña
     const handleOnClickModificarReseña = () => {
         setMostrarModificarReseñas(true)
     }
@@ -271,6 +273,23 @@ export default function ListaHabitaciones() {
                                                 <h2 className="text-blue-500 font-semibold cursor-default">Cantidad de Habitacones</h2>
                                                 <h2 className="text-black pl-4">{Cantidad}</h2>
                                             </div>
+                                            {
+                                                Nombre !== "Nombre de la Habitación" ?
+                                                    (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Cantidad Reservadas</h2>
+                                                        <div className="grid grid-cols-4">
+                                                            <div className="col-span-3 flex flex-row my-2 mx-2">
+                                                                <h2 className="pr-2">Fecha:</h2>
+                                                                <input type="date" name="fechaBuscar" className="bg-gray-200 rounded-md font-semibold pl-3 focus:outline-none"
+                                                                    value={fechaBuscar} min={moment(new Date()).format("YYYY-MM-DD")} onChange={handleOnChange}>
+                                                                </input>
+                                                            </div>
+                                                            <div className="col-span-1 bg-blue-400 grid place-items-center place-self-end my-1 px-4 py-1 rounded-md hover:bg-blue-500 cursor-pointer" onClick={() => calcularCantReservas(id)}>
+                                                                Calcular
+                                                            </div>
+                                                        </div>
+                                                    </div>) : <></>
+                                            }
                                             <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                                 <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
                                                 {
@@ -297,23 +316,6 @@ export default function ListaHabitaciones() {
                                                     </div>
                                                 </div>)
                                                 : <></>}
-                                            {
-                                                Nombre !== "Nombre de la Habitación" ?
-                                                    (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Cantidad Reservadas</h2>
-                                                        <div className="grid grid-cols-4">
-                                                            <div className="col-span-3 flex flex-row my-2 mx-2">
-                                                                <h2 className="pr-2">Fecha:</h2>
-                                                                <input type="date" name="fechaBuscar" className="bg-gray-200 rounded-md font-semibold pl-3 focus:outline-none"
-                                                                    value={fechaBuscar} min={moment(new Date()).format("YYYY-MM-DD")} onChange={handleOnChange}>
-                                                                </input>
-                                                            </div>
-                                                            <div className="col-span-1 bg-blue-400 grid place-items-center place-self-end my-1 px-4 py-1 rounded-md hover:bg-blue-500 cursor-pointer" onClick={() => calcularCantReservas(id)}>
-                                                                Calcular
-                                                            </div>
-                                                        </div>
-                                                    </div>) : <></>
-                                            }
                                             {reseñas !== undefined && reseñas.length !== 0
                                                 ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                                     <h2 className="text-blue-500 font-semibold cursor-default mb-2">Reseñas</h2>

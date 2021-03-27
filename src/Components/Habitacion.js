@@ -48,7 +48,6 @@ export default function Habitacion(props) {
                         </ul>
                     </div>
                 </div>
-
                 <div className="col-start-1 row-start-3 space-y-3 px-4 mt-2 md:mt-1 bg-none">
                     <Link to={{
                         pathname: `/habitaciones/${props.nombre}`,
