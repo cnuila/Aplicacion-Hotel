@@ -69,6 +69,9 @@ class Dropdown extends Component {
     componentDidMount() {
         this.setDisplayName()
         this.revisarAdmin();
+        setTimeout(() => {  this.setDisplayName(); }, 2500);
+        setTimeout(() => {  this.revisarAdmin(); }, 2500);
+
     }
 
     //cerrar sesión en firebase. Cuando se llama se refresca la página
