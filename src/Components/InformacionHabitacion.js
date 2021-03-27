@@ -191,6 +191,8 @@ export default function InfoHabitacion({ location, history }) {
       } else {
         return true
       }
+    } else {
+      return true
     }
   }
 
@@ -235,6 +237,7 @@ export default function InfoHabitacion({ location, history }) {
                   });
                 } else {
                   const { to, from } = selectedDayRange
+                  console.log("hola")
                   if (validacionCantidad(from, to)) {
                     let emailCliente = user.email
                     let fechaFinal = new Date(to.year, to.month - 1, to.day)
@@ -339,7 +342,7 @@ export default function InfoHabitacion({ location, history }) {
                   button: "Aceptar"
                 });
               } else {
-                const { to, from } = selectedDayRange
+                const { to, from } = selectedDayRange                
                 if (validacionCantidad(from, to)) {
                   let emailCliente = user.email
                   let fechaFinal = new Date(to.year, to.month - 1, to.day)
