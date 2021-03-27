@@ -15,15 +15,6 @@ class Navbar extends Component {
                     <div class="flex-1 flex justify-between items-center">
                         <Link to="/">Hotel Posada del Ángel</Link>
                     </div>
-                    
-                    <label for="menu-toggle" class="cursor-pointer lg:hidden block">
-                        <img src={menuIcon} class="fill-current text-white w-10 h-10" alt="Menu"></img>
-                    </label>                
-                    <input type="checkbox" class="hidden" id="menu-toggle" />
-                    <Link to="/habitaciones" className="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200">Habitaciones</Link>
-                    <Link to="/servicios" className="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200">Servicios</Link>
-                    <Link to="/restaurante" className="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200">Restaurante</Link>
-                    <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="menu">
                         <nav>                            
                             <ul class="lg:flex items-center justify-between text-base text-white pt-4 lg:pt-0">
                                 <li>
@@ -31,7 +22,6 @@ class Navbar extends Component {
                                 </li>
                             </ul>
                         </nav>
-                    </div>
                 </header>
             </>
         )
