@@ -4,11 +4,13 @@ import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
 
 const Items = ({ todos, completeTodo, removeTodo, updateTodo }) => {
+  //variables
   const [edit, setEdit] = useState({
     id: null,
     value: ''
   });
 
+  //lleva los atributos al form.js
   const submitUpdate = value => {
     updateTodo(edit.id, value);
     setEdit({
@@ -17,10 +19,12 @@ const Items = ({ todos, completeTodo, removeTodo, updateTodo }) => {
     });
   };
 
+  //si esta en modo editar manda sus props
   if (edit.id) {
     return <Form edit={edit} onSubmit={submitUpdate} />;
   }
 
+  //mapea todo los detalles
   return todos.map((todo, index) => (
     <div
       class="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"

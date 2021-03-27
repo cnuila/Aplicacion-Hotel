@@ -3,16 +3,18 @@ import firebase from "../../firebase"
 import imagen from "./loginImagen.jpg"
 
 function RecuperarContra() {
-
+    //variables
     const [id, setId] = useState("")
     const [error, setError] = useState(false)
     const [correcto, setCorrecto] = useState(false)
 
+    //recibe el correo y lo revisa si es valido o no en firebase autheticator
     const recoverPass = (e) => {
         e.preventDefault()
         var auth = firebase.auth()
         auth.sendPasswordResetEmail(id)
             .then(() => {
+                //este para mostrar el mensaje de que se envio a su correo
                 if (error) {
                     setError(prevError => !prevError)
                 }
@@ -22,6 +24,7 @@ function RecuperarContra() {
                 }
 
             }).catch(() => {
+                //error no encontro el mail en firebase
                 if (correcto) {
                     setCorrecto(prevCorrecto => !prevCorrecto)
                 }
@@ -48,8 +51,8 @@ function RecuperarContra() {
                                 <input type="text" placeholder="john.doe@company.com" onChange={event => setId(event.target.value)} className="block w-full p-2 border rounded border-gray-500 mt-2"></input>
 
                             </div><br />
-
-                            {
+                            
+                            {//muestra los mensajes correctos dependiendo si esta bien el correo ingresado o no
                                 error
                                     ?
                                     <a className="text-base text-red-600">El Correo ingresado es incorrecto</a>

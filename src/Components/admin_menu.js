@@ -13,6 +13,7 @@ import ListaMenu from './Administración/ListaMenu'
 import ListaReservas from './Administración/ListaReservas'
 import Navbar from './Navbar'
 
+//menu del admin
 const AdminMenu = function () {
   const [isClosed, setClosed] = React.useState(false)
 
@@ -20,6 +21,7 @@ const AdminMenu = function () {
     query: '(min-width: 640px)',
   })
 
+  //muestra el menu del admin con la navbar y los demas componentes
   return (
     <div>
       <Navbar />
@@ -57,7 +59,8 @@ const AdminMenu = function () {
           )}
 
           <main className="flex-grow flex flex-col min-h-screen">
-
+            {//rutas de la pagina del admin
+            }
             <Switch>
               <Route path="/administracion/Clientes">
                 <Clientes />
@@ -82,6 +85,7 @@ const AdminMenu = function () {
   )
 }
 
+//llama la funcion correcta para mostrar en la pagina del admin
 function Clientes() {
   return (
     <ListaClientes />

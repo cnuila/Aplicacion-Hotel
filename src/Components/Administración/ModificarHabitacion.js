@@ -8,6 +8,7 @@ import Loading from './Loading'
 
 function ModificarHabitacion(props) {
 
+    //variables utilizadas
     const [todos, setTodos] = useState([]);
     const [nombre, setNombre] = useState("");
     const [precio, setPrecio] = useState("");
@@ -23,6 +24,7 @@ function ModificarHabitacion(props) {
     })
     const [open, setOpen] = useState(false);
 
+    //carga lo que puede aceptar el drag n drop
     const {
         getRootProps,
         getInputProps,
@@ -37,6 +39,7 @@ function ModificarHabitacion(props) {
         }
     })
 
+    //estilos del drag n drop
     const baseStyle = {
         flex: 1,
         display: 'flex',
@@ -107,6 +110,7 @@ function ModificarHabitacion(props) {
         isDragAccept
     ]);
 
+    //una muestra de las fotos
     const thumbs = files.map(file => (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>
@@ -118,7 +122,8 @@ function ModificarHabitacion(props) {
             </div>
         </div>
     ));
-
+    
+    //carga la habitacion selecionda a modificar antes de que renderice y agrega los datos a las variables
     useEffect(() => {
         setNombre(props.nombre)
         db.collection("Habitaciones").where("Nombre", "==", props.nombre)
@@ -155,15 +160,16 @@ function ModificarHabitacion(props) {
         setDetallesDrop(lista2)
     }, [])
 
-
+    //alerta de aceptacion
     const alertaSuccess = () => {
         swal({
             text: "La Habitacion se modifico exitosamente",
             icon: "success",
             button: "Aceptar"
         });
-    }
+    }   
 
+    //agrega detalles
     const addTodo = todo => {
         if (!todo.text || /^\s*$/.test(todo.text)) {
             return;
@@ -174,6 +180,7 @@ function ModificarHabitacion(props) {
         setTodos(newTodos);
     };
 
+    //modifica detalles
     const updateTodo = (todoId, newValue) => {
         if (!newValue.text || /^\s*$/.test(newValue.text)) {
             return;
@@ -182,12 +189,14 @@ function ModificarHabitacion(props) {
         setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item)));
     };
 
+    //elimina detalles
     const removeTodo = id => {
         const removedArr = [...todos].filter(todo => todo.id !== id);
 
         setTodos(removedArr);
     };
 
+    //agregar  los detalles completos
     const completeTodo = id => {
         let updatedTodos = todos.map(todo => {
             if (todo.id === id) {
@@ -198,6 +207,8 @@ function ModificarHabitacion(props) {
         setTodos(updatedTodos);
     };
 
+    /*al modificar fotos, si elimina una del cuadro de fotos esta se quita de ahi y se agrega a una lista donde luego  
+    estaas fotos son eliminadas del firestore storage y se renderiza la pagina*/
     const handleModificarFotos = (event) => {
         event.preventDefault()
         var element
@@ -218,24 +229,30 @@ function ModificarHabitacion(props) {
         setUrl(temp);
     }
 
+    // maneja la actualizacion de datos en la base de datos
     const handleUpload = async (event) => {
         event.preventDefault()
 
+        //variables
         let dirFotos = [];
         let uploadTask = null;
 
+        //elimina todas las fotos de firebase storage que el usuario selecciono que no queria
         urlElimadas.map(foto => {
             let deleteRef
             deleteRef = storage.refFromURL(foto)
             deleteRef.delete()
         })
 
+        //agrega las fotos a otra lista
         url.map(ur => {
             dirFotos.push(ur)
         })
 
+        //modal se carga como muesta de que el backend esta trabajando
         setShowModal(prev => !prev);
 
+        //si agrego mas fotos en drag n drop se suben al firebase storage
         if (files.length >= 0) {
             for (var i = 0; i < files.length; i++) {
                 const nombreFoto = files[i].name;
@@ -251,6 +268,7 @@ function ModificarHabitacion(props) {
             }
         }
 
+        //se actializa la habitacion con los nuevos datos
         db.collection("Habitaciones").doc(props.id).set({
             Nombre: nombre,
             Precio: precio,
@@ -267,6 +285,7 @@ function ModificarHabitacion(props) {
         })
     }
 
+    //dropdown de si el usuario quiere que la habitacion se muestre en la pagina de habitaciones
     const habitacionVisible = (e) => {
         if (e.target.value === "Si") {
             setVisible(false)
@@ -284,6 +303,7 @@ function ModificarHabitacion(props) {
         setOpen(prevOpen => !prevOpen)
     }
 
+    //decide si muesta el modal o html para poder modificar los datos
     return (
         <>
             {
@@ -316,7 +336,7 @@ function ModificarHabitacion(props) {
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
                                     <input value={precio} onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Cantidad</label>
-                                    <input value={cantidad} onChange={event => setPrecio(event.target.value)} type="number" name="cantidad" placeholder="5" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                    <input value={cantidad} onChange={event => setCantidad(event.target.value)} type="number" name="cantidad" placeholder="5" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
 
                                     <div class="relative group inline-block">
