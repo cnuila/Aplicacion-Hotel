@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 function Form(props) {
+  //variables donde revisa si esta en modo editar o no
   const [input, setInput] = useState(props.edit ? props.edit.value : '');
 
   const handleChange = e => {
     setInput(e.target.value);
   };
 
+  //maneja y crea detalles
   const handleSubmit = e => {
     e.preventDefault();
 
@@ -17,6 +19,7 @@ function Form(props) {
     setInput('');
   };
 
+  //si esta en modo editar cambia si html
   return (
     <form onSubmit={handleSubmit}>
       {props.edit ? (

@@ -10,6 +10,7 @@ import Loading from './Loading'
 
 function AgregarServicios(props) {
 
+    //Todas las variables utilizadas
     const [Nombre, setNombre] = useState("");
     const [Precio, setPrecio] = useState("");
     const [files, setFiles] = useState([]);
@@ -22,8 +23,7 @@ function AgregarServicios(props) {
     const [visible, setVisible] = useState(true);
     const [num, setNum] = useState(0);
 
-
-
+    //Donde se agregan las fotos se especifica que tipos y cuantos aceptaba el drag n drop
     const {
         getRootProps,
         getInputProps,
@@ -38,6 +38,7 @@ function AgregarServicios(props) {
         }
     })
 
+    //Estilos del drag n drop
     const baseStyle = {
         flex: 1,
         display: 'flex',
@@ -108,6 +109,7 @@ function AgregarServicios(props) {
         isDragAccept
     ]);
 
+    //alertas, se corren cuando se agrea una habitacion correctamente, cuando no se puede agregar o cuando el drag n drop no tiene imagenes
     const alertaSuccess = () => {
         swal({
             text: "El Servicio " + Nombre + " fue agregado exitosamente",
@@ -132,16 +134,26 @@ function AgregarServicios(props) {
         });
     }
 
+    //maneja y sube las fotos al Firebase Storage y Firestore
     const handleUpload = async (event) => {
         event.preventDefault()
+
+        //variables
         let dirFotos = [];
         let uploadTask = null;
+
+        //revisa si no hay fotos en el drag n drop
         if (files.length !== 0) {
+
+            //se muestra un modal de carga, para simular de que hay algo trabajando en el backend
             setShowModal(prev => !prev);
+
+            //recorre todas las fotos del drag n drop y las va subiendo una por una en el Firebase Storage
             for (var i = 0; i < files.length; i++) {
                 const nombreFoto = files[i].name;
                 uploadTask = await storage.ref(`servicios/${nombreFoto}`).put(files[i]);
 
+                //trae los links de descarga
                 let Links = await storage
                     .ref("servicios")
                     .child(nombreFoto)
@@ -151,6 +163,7 @@ function AgregarServicios(props) {
                     });
             }
 
+            //se crea una collection de servicios donde se agrega toda la info de servicios
             db.collection("Servicios").doc(Nombre).set({
                 Nombre: Nombre,
                 Precio: Precio,
@@ -158,11 +171,13 @@ function AgregarServicios(props) {
                 Url: dirFotos,
                 Visible: visible
             }).then(() => {
+                //si se agrega bien, se quita el modal, y se regresa a la lista de todas las habitaciones
                 setShowModal(prev => !prev);
                 alertaSuccess()
                 setNum(prevNum => prevNum - 1)
                 props.mostrarInicial()
             }).catch(() => {
+                //si falla se quita el modal y muesta una alerta de falla
                 setShowModal(prev => !prev);
                 alertaFail()
             })
@@ -170,8 +185,8 @@ function AgregarServicios(props) {
             alertaFotos()
         }
     };
-    //<progress value={progress} max="100" />
 
+    //muesta de las fotos agregadas en el drag n drop
     const thumbs = files.map(file => (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>
@@ -184,6 +199,7 @@ function AgregarServicios(props) {
         </div>
     ));
 
+    //antes de que renderise esta pagina, carga los detalles antiguas habitaciones
     useEffect(() => {
         if (num === 0) {
             const lista = []
@@ -205,7 +221,7 @@ function AgregarServicios(props) {
         }
     }, []);
 
-
+    //agrega detalles nuevos
     const addTodo = todo => {
         if (!todo.text || /^\s*$/.test(todo.text)) {
             return;
@@ -216,6 +232,7 @@ function AgregarServicios(props) {
         setTodos(newTodos);
     };
 
+    //modifica detalles
     const updateTodo = (todoId, newValue) => {
         if (!newValue.text || /^\s*$/.test(newValue.text)) {
             return;
@@ -224,12 +241,14 @@ function AgregarServicios(props) {
         setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item)));
     };
 
+    //elimina detalles
     const removeTodo = id => {
         const removedArr = [...todos].filter(todo => todo.id !== id);
 
         setTodos(removedArr);
     };
 
+    //agrega a la lista todos los detalles
     const completeTodo = id => {
         let updatedTodos = todos.map(todo => {
             if (todo.id === id) {
@@ -244,12 +263,14 @@ function AgregarServicios(props) {
         setOpen(prevOpen => !prevOpen)
     }
 
+    //crea y manda a agrear un detalle
     const agregarDelDrop = (e) => {
         console.log(e.target.name)
         const t = { id: Math.floor(Math.random() * 10000), text: e.target.name }
         addTodo(t)
     }
 
+    //revisa si esta el modal esta en verdadero asi se muesta el modal o el form para agregar un servicio
     return (
 
         <>
@@ -277,7 +298,7 @@ function AgregarServicios(props) {
                                         {
                                             detallesDrop.map((text) => {
                                                 return (
-                                                    <a onClick={agregarDelDrop} name={text} class="block px-12 text-sm text-black border-b-2 border-transparent hover:border-blue-800">{text}</a>
+                                                    <a onClick={agregarDelDrop} name={text} class="block px-12 flex text-sm text-black border-b-2 border-transparent hover:border-blue-800">{text}</a>
                                                 )
                                             })
                                         }

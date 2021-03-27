@@ -7,7 +7,7 @@ import swal from 'sweetalert'
 import Loading from './Loading'
 
 function ModificarMenu(props) {
-
+    //variables utilizadas
     const [todos, setTodos] = useState([]);
     const [nombre, setNombre] = useState("");
     const [url, setUrl] = useState([]);
@@ -21,6 +21,7 @@ function ModificarMenu(props) {
     const [open, setOpen] = useState(false);
     const [urlElimadas, setUrlEliminadas] = useState([]);
 
+    //carga lo que puede aceptar el drag n drop
     const {
         getRootProps,
         getInputProps,
@@ -35,6 +36,7 @@ function ModificarMenu(props) {
         }
     })
 
+    //estilos del drag n drop
     const baseStyle = {
         flex: 1,
         display: 'flex',
@@ -105,6 +107,7 @@ function ModificarMenu(props) {
         isDragAccept
     ]);
 
+    //una muestra de las fotos
     const thumbs = files.map(file => (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>
@@ -116,25 +119,31 @@ function ModificarMenu(props) {
             </div>
         </div>
     ));
-
+    
+    // maneja la actualizacion de datos en la base de datos
     const handleUpload = async (event) => {
         event.preventDefault()
 
+        //variables
         let dirFotos = [];
         let uploadTask = null;
 
+        //elimina todas las fotos de firebase storage que el usuario selecciono que no queria
         urlElimadas.map(f => {
             let deleteRef
             deleteRef = storage.refFromURL(f)
             deleteRef.delete()
         })
 
+        //agrega las fotos a otra lista
         url.map(ur => {
             dirFotos.push(ur)
         })
 
+        //modal se carga como muesta de que el backend esta trabajando
         setShowModal(prev => !prev);
 
+        //si agrego mas fotos en drag n drop se suben al firebase storage
         if (files.length >= 0) {
             for (var i = 0; i < files.length; i++) {
                 const nombreFoto = files[i].name;
@@ -150,6 +159,7 @@ function ModificarMenu(props) {
             }
         }
 
+        //se actializa el menu con los nuevos datos
         db.collection("Menu").doc(nombre).set({
             Nombre: nombre,
             Detalles: todos,
@@ -166,6 +176,7 @@ function ModificarMenu(props) {
 
     }
 
+    //carga el menu seleciondo a modificar antes de que renderice y agrega los datos a las variable
     useEffect(() => {
         setNombre(props.nombre)
         db.collection("Menu").where("Nombre", "==", props.nombre)
@@ -200,7 +211,7 @@ function ModificarMenu(props) {
         setDetallesDrop(lista2)
     }, [])
 
-
+    //alerta de aceptacion
     const alertaSuccess = () => {
         swal({
             text: "El Menu se modifico exitosamente",
@@ -209,8 +220,7 @@ function ModificarMenu(props) {
         });
     }
 
-    //<progress value={progress} max="100" />
-
+    //agrega detalles
     const addTodo = todo => {
         if (!todo.text || /^\s*$/.test(todo.text)) {
             return;
@@ -221,6 +231,7 @@ function ModificarMenu(props) {
         setTodos(newTodos);
     };
 
+    //modifica detalles
     const updateTodo = (todoId, newValue) => {
         if (!newValue.text || /^\s*$/.test(newValue.text)) {
             return;
@@ -229,12 +240,14 @@ function ModificarMenu(props) {
         setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item)));
     };
 
+    //elimina detalles
     const removeTodo = id => {
         const removedArr = [...todos].filter(todo => todo.id !== id);
 
         setTodos(removedArr);
     };
 
+    //agregar  los detalles completos
     const completeTodo = id => {
         let updatedTodos = todos.map(todo => {
             if (todo.id === id) {
@@ -245,6 +258,8 @@ function ModificarMenu(props) {
         setTodos(updatedTodos);
     };
 
+    /*al modificar fotos, si elimina una del cuadro de fotos esta se quita de ahi y se agrega a una lista donde luego  
+    estaas fotos son eliminadas del firestore storage y se renderiza la pagina*/
     const handleModificarFotos = (event) => {
         event.preventDefault()
         var element
@@ -274,6 +289,7 @@ function ModificarMenu(props) {
         setOpen(prevOpen => !prevOpen)
     }
 
+    //dropdown de si el usuario quiere que el menu se muestre en la pagina de restaurantes
     const habitacionVisible = (e) => {
         if (e.target.value === "Si") {
             setVisible(false)
@@ -282,6 +298,7 @@ function ModificarMenu(props) {
         }
     }
 
+    //decide si muesta el modal o html para poder modificar los datos
     return (
         <>
             {

@@ -7,7 +7,7 @@ import swal from 'sweetalert'
 import Loading from './Loading'
 
 function ModificarServicios(props) {
-
+    //variables utilizadas
     const [todos, setTodos] = useState([]);
     const [nombre, setNombre] = useState("");
     const [precio, setPrecio] = useState("");
@@ -20,7 +20,9 @@ function ModificarServicios(props) {
         return []
     })
     const [open, setOpen] = useState(false);
+    const [urlElimadas, setUrlEliminadas] = useState([]);
 
+    //carga lo que puede aceptar el drag n drop
     const {
         getRootProps,
         getInputProps,
@@ -35,6 +37,7 @@ function ModificarServicios(props) {
         }
     })
 
+    //estilos del drag n drop
     const baseStyle = {
         flex: 1,
         display: 'flex',
@@ -105,6 +108,7 @@ function ModificarServicios(props) {
         isDragAccept
     ]);
 
+    //una muestra de las fotos
     const thumbs = files.map(file => (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>
@@ -116,17 +120,31 @@ function ModificarServicios(props) {
             </div>
         </div>
     ));
-
+    
+    // maneja la actualizacion de datos en la base de datos
     const handleUpload = async (event) => {
         event.preventDefault()
 
+        //variables
         let dirFotos = [];
         let uploadTask = null;
 
+        //elimina todas las fotos de firebase storage que el usuario selecciono que no queria
+        urlElimadas.map(f => {
+            let deleteRef
+            deleteRef = storage.refFromURL(f)
+            deleteRef.delete()
+        })
+
+        //agrega las fotos a otra lista
         url.map(ur => {
             dirFotos.push(ur)
         })
+
+        //modal se carga como muesta de que el backend esta trabajando
         setShowModal(prev => !prev);
+        
+        //si agrego mas fotos en drag n drop se suben al firebase storage
         if (files.length >= 0) {
             for (var i = 0; i < files.length; i++) {
                 const nombreFoto = files[i].name;
@@ -142,6 +160,7 @@ function ModificarServicios(props) {
             }
         }
 
+        //se actializa el servico con los nuevos datos
         db.collection("Servicios").doc(nombre).set({
             Nombre: nombre,
             Precio: precio,
@@ -158,6 +177,7 @@ function ModificarServicios(props) {
 
     }
 
+    //carga el servicio seleciondo a modificar antes de que renderice y agrega los datos a las variable
     useEffect(() => {
         setNombre(props.nombre)
         db.collection("Servicios").where("Nombre", "==", props.nombre)
@@ -193,7 +213,7 @@ function ModificarServicios(props) {
         setDetallesDrop(lista2)
     }, [])
 
-
+    //alerta de aceptacion
     const alertaSuccess = () => {
         swal({
             text: "El Servicio se modifico exitosamente",
@@ -202,8 +222,7 @@ function ModificarServicios(props) {
         });
     }
 
-    //<progress value={progress} max="100" />
-
+    //agrega detalles
     const addTodo = todo => {
         if (!todo.text || /^\s*$/.test(todo.text)) {
             return;
@@ -214,6 +233,7 @@ function ModificarServicios(props) {
         setTodos(newTodos);
     };
 
+    //modifica detalles
     const updateTodo = (todoId, newValue) => {
         if (!newValue.text || /^\s*$/.test(newValue.text)) {
             return;
@@ -222,12 +242,14 @@ function ModificarServicios(props) {
         setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item)));
     };
 
+    //elimina detalles
     const removeTodo = id => {
         const removedArr = [...todos].filter(todo => todo.id !== id);
 
         setTodos(removedArr);
     };
 
+    //agregar  los detalles completos
     const completeTodo = id => {
         let updatedTodos = todos.map(todo => {
             if (todo.id === id) {
@@ -238,6 +260,8 @@ function ModificarServicios(props) {
         setTodos(updatedTodos);
     };
 
+    /*al modificar fotos, si elimina una del cuadro de fotos esta se quita de ahi y se agrega a una lista donde luego  
+    estaas fotos son eliminadas del firestore storage y se renderiza la pagina*/
     const handleModificarFotos = (event) => {
         event.preventDefault()
         var element
@@ -249,9 +273,9 @@ function ModificarServicios(props) {
             }
         }
 
-        let deleteRef
-        deleteRef = storage.refFromURL(element)
-        deleteRef.delete()
+        const temp1 = [];
+        temp1.push(element);
+        setUrlEliminadas(temp1)
 
         const temp = [...url];
         temp.splice(index, 1);
@@ -267,6 +291,7 @@ function ModificarServicios(props) {
         setOpen(prevOpen => !prevOpen)
     }
 
+    //dropdown de si el usuario quiere que el menu se muestre en la pagina de restaurantes
     const habitacionVisible = (e) => {
         if (e.target.value === "Si") {
             setVisible(false)
@@ -275,6 +300,7 @@ function ModificarServicios(props) {
         }
     }
 
+    //decide si muesta el modal o html para poder modificar los datos
     return (
         <>
             {
