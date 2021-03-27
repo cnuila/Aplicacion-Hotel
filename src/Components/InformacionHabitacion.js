@@ -440,9 +440,9 @@ export default function InfoHabitacion({ location, history }) {
                       ?
                       <div>
                         <label className="block mt-2 text-xs font-semibold text-blue-900 uppercase">Nombre del Cliente</label>
-                        <input onChange={event => setNombreCliente(event.target.value)} type="text" name="nombre" placeholder="Carlos Martinez" className="block w-80 p-3 mt-2 text-black bg-white appearance-none focus:outline-none focus:shadow-inner" required />
+                        <input onChange={event => setNombreCliente(event.target.value)} type="text" name="nombre" placeholder="Carlos Martinez" className="block w-80 p-3 mt-2 text-black rounded-lg bg-white appearance-none focus:outline-none focus:shadow-inner" required />
                         <label className="block mt-2 text-xs font-semibold text-blue-900 uppercase">Correo del Cliente</label>
-                        <input onChange={event => setMailCliente(event.target.value)} type="text" name="nombre" placeholder="ejemplo@gmail.com" className="block w-80 p-3 mt-2 text-black bg-white appearance-none focus:outline-none focus:shadow-inner" required />
+                        <input onChange={event => setMailCliente(event.target.value)} type="text" name="nombre" placeholder="ejemplo@gmail.com" className="block w-80 p-3 mt-2 text-black rounded-lg bg-white appearance-none focus:outline-none focus:shadow-inner" required />
                       </div>
                       :
                       <></>
