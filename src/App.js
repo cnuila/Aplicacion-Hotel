@@ -16,14 +16,14 @@ import Menu from "./Components/RestaurantePrincipal"
 
 function App() {
   //todas las rutas disponibles en la pagina
-  //"PrivateRoute" son las rutas que solo se pueden acceder con usuario registrado
+  //"PrivateRoute" son las rutas que solo se pueden acceder con un usuario registrado
   return (
     <AuthProvider>
       <Router>
         <Switch>
           <Route path="/" exact component={LandingPage} />
           <Route path="/signup" component={SignIn} />
-          <Route path="/login" component={LogIn} />
+          <Route path="/login" exact component={LogIn} />
           <PrivateRoute path="/administracion" component={Administracion} />
           <Route path="/recuperarContra" component={RecuperarContraseña} />
           <Route path="/servicios" component={Servicos} />

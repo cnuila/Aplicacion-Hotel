@@ -53,12 +53,6 @@ export default function LogIn({ history }) {
 
     );
 
-    const currentUser = useContext(AuthContext);
-
-    if (currentUser) {
-        return <Redirect to="/" />;
-    }
-
     return (
         <>
             <body background={imagen} >

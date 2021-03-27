@@ -132,6 +132,7 @@ export default function ListaHabitaciones() {
     const handleEliminarHabitacion = async (id, fotos) => {
         //Aqui se valida si la habitacion contiene reservas activas al momento de eliminar
         let flag = true
+        let reservasViejas = []
         await db.collection("Reservas").get().then(querySnapshot => {
             let fechaActual = moment(new Date())
             querySnapshot.forEach((doc) => {
@@ -144,6 +145,9 @@ export default function ListaHabitaciones() {
                     if (diferenciaDias > 0) {
                         flag = false
                         console.log("Hay reservas")
+                    } else {
+                        //se guarda el id de las reservas viejas en un arreglo
+                        reservasViejas.push(doc.id)
                     }
                 }
             });
@@ -162,6 +166,7 @@ export default function ListaHabitaciones() {
                 }
             }).then(async result => {
                 if (result) {
+                    //se borra la habitacion y sus fotos
                     await habitacion.delete().then(() => {
                         if (fotos !== undefined) {
                             let deleteRef
@@ -171,11 +176,11 @@ export default function ListaHabitaciones() {
                             }
                         }
                     }).then(() => {
-                        let reservas = db.collection("Reservas").where("idHabitacion", "==", id)
-                        reservas.get().then( querySnapshot => {
-                            querySnapshot.forEach(doc => {
-                                doc.delete()
-                            })
+                        //se recorre el arreglo de las reservas viejas para que sean borradas
+                        reservasViejas.map((id, index) => {
+                            let ref = db.collection("Reservas").doc(id)
+                            ref.delete()
+                            console.log(id)
                         })
                     }).then(() => {
                         swal({
