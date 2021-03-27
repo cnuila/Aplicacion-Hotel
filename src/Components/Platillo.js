@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
 import { storage } from '../firebase';
 
 export default function Platillo(props) {
@@ -20,26 +19,29 @@ export default function Platillo(props) {
         descargarFotos()
     }, [props.url])
     return (
-        <div class="bg-gray-800">
-            <div class=" sm:w-3/4 md:w-3/4 container  lg:w-1/3 mx-auto flex flex-col  pb-2">
-                <div v-for="card in cards" class=" flex flex-row md:flex-row overflow-hidden bg-white rounded-lg shadow-xl  mt-4 w-100 mx-2">
-                    <div class="object-cover w-auto h-5/6">
+        <div>
+            <div class="sm:w-3/4 md:w-3/4 container mx-auto flex flex-col pb-5">
+                <div class="grid md:grid-cols-2 sm:grid-cols-1 overflow-hidden bg-gray-100 rounded-lg shadow-lg mt-4 w-100 mx-2">
+                    <div class="m-5 w-auto">
                         <img src={fotos[0]} alt="foto" className="object-contain h-48 w-full content-center rounded-lg bg-gray-100" />
                     </div>
-                    <div class="pl-8 w-full py-4 px-6 text-gray-800 flex flex-col justify-between">
-                        <h3 class="font-semibold text-lg leading-tight truncate">{props.nombre}</h3>{/* Nombre*/}
-                        <p class="mt-2">
+                    <div class="w-full py-4 px-6 text-black flex flex-col justify-between">
+                        <h3 class="font-semibold text-center text-2xl text-yellow-600 leading-tight truncate">{props.nombre}</h3>{/* Nombre*/}
+                        <p class="mt-2 font-medium text-lg underline">
                             Detalles
-                    {props.detalles.map(d => {
-                            return (
-                                <div>
-                                    <li>{d.text}</li>
-                                </div>
-                            )
-                        })}
                         </p>
-                        <p className="text-md text-yellow-700 uppercase font-semibold mt-2">
-                            Para más información llamar al hotel
+                        <p>
+                            {props.detalles.map(d => {
+                                return (
+                                    <div>
+                                        <li>{d.text}</li>
+                                    </div>
+                                )
+                            })}
+                        </p>
+                    
+                        <p className="text-md text-center text-yellow-700 uppercase font-semibold mt-2">
+                            Para más información ponte en contacto con nuestro personal
                         </p>
                     </div>
                 </div>

@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from 'react'
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
+import moment from 'moment'
 import AgregarHabitaciones from './AgregarHabitaciones'
 import ModificarHabitacion from './ModificarHabitacion'
+import ReseñasVisibles from './ReseñasVisibles'
+
 
 export default function ListaHabitaciones() {
 
     const estadoInicial = {
         Nombre: "Nombre de la Habitación",
-        Precio: 1000,
-        Complementos: [{ id: 100, text: "Camas Dobles" }, { id: 200, text: "TV 55 pulgadas" }],
+        Precio: 0,
+        Complementos: [{ text: "Complemento 1" }, { text: "Complemento 2" }],
         Url: undefined,
-        Cantidad: 5,
-        Visible: "Si"
+        Cantidad: 0,
+        Visible: false,
     }
 
     const [habitaciones, setHabitaciones] = useState([])
     const [habitacionSeleccionada, setHabitacionSeleccionada] = useState({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+    const [fechaBuscar, setFechaBuscar] = useState(moment(new Date()).format("YYYY-MM-DD"))
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
     const [mostrarModificar, setMostrarModificar] = useState(false)
+    const [mostrarModificarReseñas, setMostrarModificarReseñas] = useState(false)
+    const [check, setCheck] = useState()
 
+    /*función que prepara todas las habitaciones para ser mostradas en la lista del panel izquierdo
+        por cada habitación se hace el query para solicitar las reseñas que tiene esa habitación
+    */
     const getHabitaciones = () => {
         db.collection("Habitaciones").onSnapshot((querySnapshot) => {
             const listaHabitaciones = []
@@ -27,23 +37,77 @@ export default function ListaHabitaciones() {
                 const listaReseñas = []
                 db.collection("Habitaciones").doc(doc.id).collection("Reseñas").onSnapshot((querySnapshot2) => {
                     querySnapshot2.forEach((doc2) => {
-                        console.log("entro")
                         listaReseñas.push({ ...doc2.data(), id: doc2.id })
-                    })                    
+                    })
                 })
                 listaHabitaciones.push({ ...doc.data(), id: doc.id, reseñas: listaReseñas })
             });
             setHabitaciones(listaHabitaciones)
         })
     }
-
     useEffect(() => {
         getHabitaciones()
     }, [])
 
+    //función asíncrona que lee todas las reservas y busca la cantidad de un día en especifico
+    const calcularCantReservas = async (id) => {
+        const fecha = fechaBuscar.split("-")
+        let cantReservas = 0
+        await db.collection("Reservas").where("idHabitacion", "==", id).get().then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                //se revisan las fechas entre los límites y se incrementa si es la misma fecha
+                let fechaFinal = new Date(doc.data().fechaFinal.seconds * 1000)
+                let fechaInicial = new Date(doc.data().fechaInicial.seconds * 1000)
+                let moment1 = moment(fechaInicial)
+                let moment2 = moment(fechaFinal)
+                let diferenciaDias = moment2.diff(moment1, 'days') + 1
+                for (let i = 0; i < diferenciaDias; i++) {
+                    let dia = moment1.format('D')
+                    let mes = moment1.format('MM')
+                    let año = moment1.format('YYYY')
+                    if (dia === fecha[2] && mes === fecha[1] && año === fecha[0]){
+                        cantReservas++;
+                    }
+                    //incrementar un dia
+                    moment1.add(1, 'days')
+                }
+            })
+        })
+        if (cantReservas === 0){
+            swal({
+                title: "Cantidad de Habitaciones Reservadas",
+                text: "En el " + fechaBuscar + " no hay habitaciones reservadas aún.",
+                icon: "info",
+                button: "Aceptar"
+            });    
+        } else if (cantReservas === 1){
+            swal({
+                title: "Cantidad de Habitaciones Reservadas",
+                text: "En el " + fechaBuscar + " hay 1 habitación reservada.",
+                icon: "info",
+                button: "Aceptar"
+            });
+        } else {
+            swal({
+                title: "Cantidad de Habitaciones Reservadas",
+                text: "En el " + fechaBuscar + " hay "+ cantReservas + " habitaciones reservadas.",
+                icon: "info",
+                button: "Aceptar"
+            });
+        }        
+    }
+
+    //función que se ejecuta cada vez que cambia el input de fecha asignando el nuevo input
+    const handleOnChange = ({ target }) => {
+        const { value } = target
+        setFechaBuscar(value)
+    }
+
+    //funcion que recibe una habitacion y preparas sus datos para ser mostrados en el panel derecho
     const handleHabitacion = habitacion => {
-        const { Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacion
+        const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacion
         setHabitacionSeleccionada({
+            id,
             Nombre,
             Precio,
             Complementos,
@@ -52,10 +116,14 @@ export default function ListaHabitaciones() {
             Cantidad,
             Visible
         })
+        setCheck(reseñas)
+        setFechaBuscar(moment(new Date()).format("YYYY-MM-DD"))
         setMostrarAgregar(false)
         setMostrarModificar(false)
+        setMostrarModificarReseñas(false)
     }
 
+    //función que prepara la interfaz para poder agregar una habitación
     const handleOnClickAgregar = () => {
         setMostrarAgregar(true)
         setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
@@ -72,7 +140,6 @@ export default function ListaHabitaciones() {
                 confirm: true,
             }
         }).then(async result => {
-            console.log(result)
             if (result) {
                 await habitacion.delete().then(() => {
                     if (fotos !== undefined) {
@@ -106,6 +173,8 @@ export default function ListaHabitaciones() {
     const mostrarInicial = () => {
         setMostrarAgregar(false)
         setMostrarModificar(false)
+        setMostrarModificarReseñas(false)
+        setFechaBuscar(moment(new Date()).format("YYYY-MM-DD"))
         setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
         getHabitaciones()
     }
@@ -114,8 +183,12 @@ export default function ListaHabitaciones() {
         setMostrarModificar(true)
     }
 
-    const { Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacionSeleccionada
-    console.log(habitacionSeleccionada.reseñas)
+    const handleOnClickModificarReseña = () => {
+        setMostrarModificarReseñas(true)
+    }
+
+    const { id, Nombre, Precio, Complementos, Url, reseñas, Cantidad, Visible } = habitacionSeleccionada
+
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
             <div className="grid grid-cols-3 bg-gray-100 max-h-screen min-h-screen">
@@ -144,116 +217,139 @@ export default function ListaHabitaciones() {
                     })}
                 </div>
                 <div className="flex col-span-2 max-h-screen min-h-screen overflow-y-auto rounded-r-sm justify-center">
-                    {mostrarAgregar
-                        ? (<AgregarHabitaciones mostrarInicial={mostrarInicial} habitaciones={habitaciones} />)
-                        : mostrarModificar
-                            ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} mostrarInicial={mostrarInicial} habitaciones={habitaciones} />
-                            : (
-                                <div className="h-full w-10/12 px-20 py-8">
-                                    <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+                    {//se decide que renderizar de acuerdo a los estados mostrarAgregar, mostrarModificar,mostrarModificarReseñas
+                        mostrarAgregar
+                            ? (<AgregarHabitaciones mostrarInicial={mostrarInicial} habitaciones={habitaciones} />)
+                            : mostrarModificar
+                                ? <ModificarHabitacion nombre={habitacionSeleccionada.Nombre} id={id} mostrarInicial={mostrarInicial} habitaciones={habitaciones} />
+                                : mostrarModificarReseñas
+                                    ? <ReseñasVisibles reseña={check} id={id} mostrarInicial={mostrarInicial} nombre={habitacionSeleccionada.Nombre} />
+                                    : (
+                                        <div className="h-full w-10/12 px-20 py-8">
+                                            <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
 
-                                    {Visible
-                                        ?
-                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                            <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
-                                            <h2 className="text-black pl-4">Si</h2>
-                                        </div>
+                                            {Nombre !== "Nombre de la Habitación" ? (
+                                                <div class="grid grid-cols-6 gap-x-2">
+                                                    <div className="col-span-2">
+                                                        <button className="bg-red-600 text-sm text-white h-10 w-full rounded-md" onClick={() => handleEliminarHabitacion(id, Url)}>
+                                                            Eliminar Habitacion
+                                                </button>
+                                                    </div>
+                                                    <div className="col-span-2">
+                                                        <button className="bg-blue-700 text-sm text-white h-10 w-full rounded-md" onClick={handleOnClickModificar}>
+                                                            Modificar Habitacion
+                                                </button>
+                                                    </div>
+                                                    <div className="col-span-2">
+                                                        <button className="bg-blue-700 text-sm text-white h-10 w-full rounded-md" onClick={handleOnClickModificarReseña}>
+                                                            Modificar Reseñas
+                                                </button>
+                                                    </div>
+                                                </div>) : (<></>)
+                                            }
 
-                                        :
+                                            {Visible
+                                                ?
+                                                <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                                    <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
+                                                    <h2 className="text-black pl-4">Si</h2>
+                                                </div>
 
-                                        <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                            <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
-                                            <h2 className="text-black pl-4">No</h2>
-                                        </div>
-                                    }
+                                                :
 
-                                    <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
-                                        <h2 className="text-black pl-4">Lps.{Precio}.00</h2>
-                                    </div>
-                                    <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default">Cantidad de Habitacones</h2>
-                                        <h2 className="text-black pl-4">{Cantidad}</h2>
-                                    </div>
-                                    <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                        <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
-                                        {
-                                            Complementos.map(complemento => {
-                                                const { text } = complemento
-                                                return <h2 className="text-black pl-4">{text}</h2>
-                                            })
-                                        }
-                                    </div>
-                                    {Url !== undefined
-                                        ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                            <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
-                                            <div className="grid grid-cols-2 place-items-center">
+                                                <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                                    <h2 className="text-blue-500 font-semibold cursor-default">Visible</h2>
+                                                    <h2 className="text-black pl-4">No</h2>
+                                                </div>
+                                            }
+
+                                            <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                                <h2 className="text-blue-500 font-semibold cursor-default">Precio</h2>
+                                                <h2 className="text-black pl-4">Lps.{Precio}.00</h2>
+                                            </div>
+                                            <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
+                                                <h2 className="text-blue-500 font-semibold cursor-default">Cantidad de Habitacones</h2>
+                                                <h2 className="text-black pl-4">{Cantidad}</h2>
+                                            </div>
+                                            <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                                <h2 className="text-blue-500 font-semibold cursor-default">Complementos</h2>
                                                 {
-                                                    Url.map((foto, index) => {
-                                                        return (
-                                                            <img key={index}
-                                                                className="h-40 w-40 p-2 object-cover rounded-xl"
-                                                                alt="Habitacion"
-                                                                src={foto}
-                                                            />)
+                                                    Complementos.map(complemento => {
+                                                        const { text } = complemento
+                                                        return <h2 className="text-black pl-4">{text}</h2>
                                                     })
                                                 }
                                             </div>
-                                        </div>)
-                                        : <></>}
-                                    {reseñas !== undefined && reseñas.length !== 0
-                                        ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
-                                            <h2 className="text-blue-500 font-semibold cursor-default mb-2">Reseñas</h2>
-                                            <div className="grid">
-                                                {
-                                                    reseñas.map(reseña => {
-                                                        const { usuario, rating, visualizar, comentario } = reseña
-                                                        let text = "No"
-                                                        if (visualizar) {
-                                                            text = "Sí"
+                                            {Url !== undefined
+                                                ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                                    <h2 className="text-blue-500 font-semibold cursor-default mb-2">Fotos</h2>
+                                                    <div className="grid grid-cols-2 place-items-center">
+                                                        {
+                                                            Url.map((foto, index) => {
+                                                                return (
+                                                                    <img key={index}
+                                                                        className="h-40 w-40 p-2 object-cover rounded-xl"
+                                                                        alt="Habitacion"
+                                                                        src={foto}
+                                                                    />)
+                                                            })
                                                         }
-                                                        return (<div className="ml-4 bg-gray-200 p-3 rounded-md my-1 overflow-x-auto">
-                                                            <div className="flex flex-row">
-                                                                <h2 className="font-bold">Visible:</h2>
-                                                                <h2 className="pl-1"> {text}</h2>
+                                                    </div>
+                                                </div>)
+                                                : <></>}
+                                            {
+                                                Nombre !== "Nombre de la Habitación" ?
+                                                    (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                                        <h2 className="text-blue-500 font-semibold cursor-default mb-2">Cantidad Reservadas</h2>
+                                                        <div className="grid grid-cols-4">
+                                                            <div className="col-span-3 flex flex-row my-2 mx-2">
+                                                                <h2 className="pr-2">Fecha:</h2>
+                                                                <input type="date" name="fechaBuscar" className="bg-gray-200 rounded-md font-semibold pl-3 focus:outline-none"
+                                                                    value={fechaBuscar} min={moment(new Date()).format("YYYY-MM-DD")} onChange={handleOnChange}>
+                                                                </input>
                                                             </div>
-                                                            <div className="flex flex-row">
-                                                                <h2 className="font-bold">Rating:</h2>
-                                                                <h2 className="px-1"> {rating}</h2>
-                                                                <h2>de 5 estrellas</h2>
+                                                            <div className="col-span-1 bg-blue-400 grid place-items-center place-self-end my-1 px-4 py-1 rounded-md hover:bg-blue-500 cursor-pointer" onClick={() => calcularCantReservas(id)}>
+                                                                Calcular
                                                             </div>
-                                                            <div className="flex flex-row">
-                                                                <h2 className="font-bold">Comentario:</h2>
-                                                                <h2 className="pl-1"> {comentario}</h2>
-                                                            </div>
-                                                            <div className="flex flex-row">
-                                                                <h2 className="font-bold">Usuario:</h2>
-                                                                <h2 className="pl-1"> {usuario}</h2>
-                                                            </div>
-                                                        </div>)
-                                                    })
-                                                }
-                                            </div>
+                                                        </div>
+                                                    </div>) : <></>
+                                            }
+                                            {reseñas !== undefined && reseñas.length !== 0
+                                                ? (<div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
+                                                    <h2 className="text-blue-500 font-semibold cursor-default mb-2">Reseñas</h2>
+                                                    <div className="grid">
+                                                        {
+                                                            check.map(reseña => {
+                                                                let text = "No"
+                                                                if (reseña.visualizar) {
+                                                                    text = "Sí"
+                                                                }
+                                                                return (
+                                                                    <div className="ml-4 bg-gray-200 p-3 rounded-md my-1 overflow-x-auto" id={reseña.id}>
+                                                                        <div className="flex flex-row">
+                                                                            <h2 className="font-bold">Visible:</h2>
+                                                                            <h2 className="px-1"> {text}</h2>
+                                                                        </div>
+                                                                        <div className="flex flex-row">
+                                                                            <h2 className="font-bold">Rating:</h2>
+                                                                            <h2 className="px-1"> {reseña.rating}</h2>
+                                                                            <h2>de 5 estrellas</h2>
+                                                                        </div>
+                                                                        <div className="flex flex-row">
+                                                                            <h2 className="font-bold">Comentario:</h2>
+                                                                            <h2 className="pl-1"> {reseña.comentario}</h2>
+                                                                        </div>
+                                                                        <div className="flex flex-row">
+                                                                            <h2 className="font-bold">Usuario:</h2>
+                                                                            <h2 className="pl-1"> {reseña.usuario}</h2>
+                                                                        </div>
+                                                                    </div>)
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>)
+                                                : <></>}
                                         </div>)
-                                        : <></>}
-                                    {Nombre !== "Nombre de la Habitación" ? (
-                                        <div class="grid grid-cols-2">
-                                            <div>
-                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarHabitacion(Nombre, Url)}>
-                                                    Eliminar
-                                                </button>
-                                            </div>
-                                            <div>
-                                                <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
-                                                    Modificar
-                                                </button>
-                                            </div>
-                                        </div>) : (
-                                            <div>
-                                            </div>
-                                        )
-                                    }
-                                </div>)
                     }
                 </div>
             </div>

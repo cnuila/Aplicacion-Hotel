@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import AgregarMenu from './AgregarMenu'
-import ModificarMenu from './ModificarMenu'
 import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
+import AgregarMenu from './AgregarMenu'
+import ModificarMenu from './ModificarMenu'
 
 export default function ListaMenu() {
 
@@ -100,7 +100,7 @@ export default function ListaMenu() {
         setMostrarModificar(true)
     }
 
-    const { Nombre, Precio, Detalles, Url } = platilloSeleccionado
+    const { Nombre, Detalles, Url } = platilloSeleccionado
 
     return (
         <div className="max-h-screen transform scale-0 sm:scale-100">
@@ -133,10 +133,29 @@ export default function ListaMenu() {
                     {mostrarAgregar
                         ? (<AgregarMenu mostrarInicial={mostrarInicial} menu={menu} />)
                         : mostrarModificar
-                            ? <ModificarMenu nombre={platilloSeleccionado.Nombre} mostrarInicial={mostrarInicial} menu={menu}/>
+                            ? <ModificarMenu nombre={platilloSeleccionado.Nombre} mostrarInicial={mostrarInicial} menu={menu} />
                             : (
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
+
+                                    {Nombre !== "Platillo" ? (
+                                        <div class="grid grid-cols-6 gap-x-2">
+                                            <div className="col-span-3">
+                                                <button className="bg-red-600 text-sm text-white h-10 w-full rounded-md" onClick={() => handleEliminarMenu(Nombre, Url)}>
+                                                    Eliminar Menu
+                                            </button>
+                                            </div>
+                                            <div className="col-span-3">
+                                                <button className="bg-blue-700 text-sm text-white h-10 w-full rounded-md" onClick={handleOnClickModificar}>
+                                                    Modificar Menu
+                                            </button>
+                                            </div>
+                                        </div>) : (
+                                        <div>
+                                        </div>
+                                    )
+                                    }
+
                                     <div className="bg-gray-300 my-4 py-4 px-6 rounded-md">
                                         <h2 className="text-blue-500 font-semibold cursor-default">Detalles</h2>
                                         {
@@ -162,23 +181,7 @@ export default function ListaMenu() {
                                             </div>
                                         </div>)
                                         : <></>}
-                                    {Nombre !== "Platillo" ? (
-                                        <div class="grid grid-cols-2">
-                                            <div>
-                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarMenu(Nombre, Url)}>
-                                                    Eliminar
-                                            </button>
-                                            </div>
-                                            <div>
-                                                <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
-                                                    Modificar
-                                            </button>
-                                            </div>
-                                        </div>) : (
-                                            <div>
-                                            </div>
-                                        )
-                                    }
+
                                 </div>)
                     }
                 </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import AgregarServicios from './AgregarServicios'
 import { db, storage } from '../../firebase'
 import swal from 'sweetalert'
+import AgregarServicios from './AgregarServicios'
 import ModificarServicios from './ModificarServicios'
 
 export default function ListaServicios() {
@@ -18,6 +18,7 @@ export default function ListaServicios() {
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
     const [mostrarModificar, setMostrarModificar] = useState(false)
 
+    //función asíncrona que recupera los servicios de la db y los prepara para mostrarlos en la lista del panel izquierdo
     const getServicios = async () => {
         await db.collection("Servicios").orderBy("Nombre").get().then(querySnapshot => {
             const serviciosAgregar = []
@@ -32,6 +33,7 @@ export default function ListaServicios() {
         getServicios()
     }, [])
 
+    //función que recibe un servicio y lo prepara para ser mostrado en el panel derecho
     const handleServicio = servicio => {
         const { Nombre, Precio, Detalles, Url, Visible } = servicio
         setServicioSeleccionado({
@@ -45,6 +47,7 @@ export default function ListaServicios() {
         setMostrarModificar(false)
     }
 
+    //función que prepara la interfaz para poder agregar un servicio
     const handleOnClickAgregar = () => {
         setMostrarAgregar(true)
         setServicioSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
@@ -141,6 +144,24 @@ export default function ListaServicios() {
                                 <div className="h-full w-10/12 px-20 py-8">
                                     <h1 className="font-bold text-center text-2xl mb-5 text-black m-3"> {Nombre} </h1>
 
+                                    {Nombre !== "Nombre del Servicio" ? (
+                                        <div class="grid grid-cols-6 gap-x-2">
+                                            <div className="col-span-3">
+                                                <button className="bg-red-600 text-sm text-white h-10 w-full rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
+                                                    Eliminar Servicio
+                                            </button>
+                                            </div>
+                                            <div className="col-span-3">
+                                                <button className="bg-blue-700 text-sm text-white h-10 w-full rounded-md" onClick={handleOnClickModificar}>
+                                                    Modificar Servicio
+                                            </button>
+                                            </div>
+                                        </div>) : (
+                                        <div>
+                                        </div>
+                                    )
+                                    }
+
                                     {Visible
                                         ?
                                         <div className="bg-gray-300 h-20 my-4 py-4 px-6 rounded-md">
@@ -183,23 +204,7 @@ export default function ListaServicios() {
                                             </div>
                                         </div>)
                                         : <></>}
-                                    {Nombre !== "Nombre del Servicio" ? (
-                                        <div class="grid grid-cols-2">
-                                            <div>
-                                                <button className="bg-red-300 h-10 w-24 rounded-md" onClick={() => handleEliminarServicio(Nombre, Url)}>
-                                                    Eliminar
-                                            </button>
-                                            </div>
-                                            <div>
-                                                <button className="bg-blue-300 h-10 w-24 rounded-md" onClick={handleOnClickModificar}>
-                                                    Modificar
-                                            </button>
-                                            </div>
-                                        </div>) : (
-                                            <div>
-                                            </div>
-                                        )
-                                    }
+
                                 </div>)
                     }
                 </div>

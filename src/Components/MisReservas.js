@@ -2,35 +2,39 @@ import React, { useState, useEffect } from 'react'
 import { db, auth } from '../firebase'
 import moment from 'moment'
 import swal from 'sweetalert'
-import Navbar from './Navbar'
 import PaypalButton from './PaypalButton'
+import Navbar from './Navbar'
 
 export default function MisReservas() {
 
     const [misReservas, setMisReservas] = useState([])
 
-    useEffect(() => {        
+    useEffect(() => {
         setTimeout(() => {
             getMisReservas()
         }, 1000)
     }, [])
 
-
-
-    const enviarPagoAlServidor = (respuesta) => {
+    const enviarPagoAlServidor = (respuesta, id) => {
         // There's no server-side component of these samples. No transactions are
         // processed and no money exchanged hands. Instantaneous transactions are not
         // realistic. Add a 2 second delay to make it seem more real.
         window.setTimeout(
             respuesta.complete('success').then(
                 swal({
+                    title: "Objeto que se envia al servidor de pago",
                     text: instrumentToJsonString(respuesta),
                     icon: "info",
                     button: "Aceptar"
                 })
             ).catch(error => {
                 console.log(error)
-            }), 3000);
+            }), 3000
+        );
+        const resRef = db.collection("Reservas").doc(id)
+        return resRef.update({
+            pagada: true
+        }).then(() => getMisReservas())
     }
     function instrumentToJsonString(instrument) {
         let details = instrument.details;
@@ -65,15 +69,15 @@ export default function MisReservas() {
         };
         return new PaymentRequest(methodData, details);
     }
-    const clickPago = (requestPago) => {
+    const clickPago = (requestPago, id) => {
         requestPago.show().then(respuesta => {
-            enviarPagoAlServidor(respuesta);
+            enviarPagoAlServidor(respuesta, id);
         }).catch(error => {
             console.log(error)
         })
     }
 
-
+    //función que consulta las reservas del usuario actual y las prepara para la variable mostrarReservas
     const getMisReservas = async () => {
         let user = auth.currentUser;
         if (user) {
@@ -89,11 +93,12 @@ export default function MisReservas() {
                 })
                 setTimeout(() => {
                     setMisReservas(listaReserva)
-                }, 1000)                
+                }, 1000)
             })
         }
     }
 
+    //función que cancela una reserva y una vez cancelada se vuelven a leer las reservas del usuario
     const cancelarReserva = (idReservacion) => {
         swal({
             title: "¿Seguro quieres cancelar tu reservación?",
@@ -103,7 +108,6 @@ export default function MisReservas() {
             dangerMode: true,
         }).then((seElimina) => {
             if (seElimina) {
-                console.log(idReservacion)
                 db.collection("Reservas").doc(idReservacion).delete().then(() => {
                     getMisReservas()
                     swal({
@@ -116,8 +120,9 @@ export default function MisReservas() {
         });
     }
 
+    //variable que prepara las reserva leidas y las formatea para ser mostradas en pantalla
     const mostrarReservas = misReservas.map((reserva, index) => {
-        const { nombreHabitacion, fechaInicial, fechaFinal, pagada, precioPagar, id } = reserva
+        const { administrador, nombreCliente, nombreHabitacion, fechaInicial, fechaFinal, pagada, precioPagar, id } = reserva
         let fechaActual = moment(new Date())
         let fechaInicialMoment = moment(new Date(fechaInicial.seconds * 1000))
         let fechaFinalMoment = moment(new Date(fechaFinal.seconds * 1000))
@@ -125,16 +130,30 @@ export default function MisReservas() {
         let diasReserva = fechaFinalMoment.diff(fechaInicialMoment, "days") + 1
         let diferenciaDias = fechaInicialMoment.diff(fechaActual, 'days') + 1
 
+        //si existe una diferencia mayor a 3 días la reserva se puede cancelar si no, no
         let fechaMaxCancelar = ""
         if (diferenciaDias > 3) {
             fechaMaxCancelar = moment(new Date(fechaInicial.seconds * 1000)).subtract(3, "days").format('DD/MM/YYYY')
         }
 
+        //con la librería moment se formatea la fecha
         let fechaInicialFormat = fechaInicialMoment.format('DD/MM/YYYY')
         let fechaFinalFormat = fechaFinalMoment.format("DD/MM/YYYY")
         return (
             <div key={index} className="bg-gray-900 mx-3 mb-3 p-8 rounded-sm">
                 <h2 className="text-xl font-bold mb-3 text-white">{nombreHabitacion}</h2>
+
+                {
+                    administrador
+                        ?
+                        <div className="flex flex-row text-white">
+                            <h2 className="font-semibold">Nombre del cliente:</h2>
+                            <h2 className="px-1">{nombreCliente}</h2>
+                        </div>
+                        :
+                        <></>
+                }
+
                 <div className="flex flex-row text-white">
                     <h2>Lps.</h2>
                     <h2 className="pl-0.5">{precioPagar}</h2>
@@ -165,24 +184,24 @@ export default function MisReservas() {
                         </div>
                     )
                 }
-                <div className="flex flex-row justify-left mt-6">
+                <div className="mt-6">
                     {pagada
                         ? <></>
                         : (
-                            <div className="">
-                                <div className="py-1 px-3 bg-green-400 hover:bg-green-500 rounded-sm cursor-pointer text-gray-900 font-medium" onClick={() => clickPago(iniciarPago(reserva))}>
-                                    Pagar con Tarjeta
-                                </div>
-                                <div className="pt-4">
-                                    <PaypalButton total={precioPagar} />
-                                </div>
+                            <div className="flex justify-center">
+                                <button type="button" className="bg-blue-400 h-6 w-36 hover:bg-blue-500 ml-4 mr-4 rounded-lg font-small" onClick={() => clickPago(iniciarPago(reserva), id)}>
+                                    Pagar con TC
+                                </button>
+                                <PaypalButton total={precioPagar} idRes={id} misReservas={() => getMisReservas()} />
                             </div>
                         )
                     }
                     {fechaMaxCancelar !== ""
                         ? (
-                            <div className="py-1 px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-medium h-9" onClick={() => cancelarReserva(id)}>
-                                Cancelar
+                            <div className="flex justify-center">
+                                <button type="button" className=" px-3 mx-3 bg-red-400 hover:bg-red-500 rounded-sm cursor-pointer text-gray-900 font-small h-6 w-40" onClick={() => cancelarReserva(id)}>
+                                    Cancelar
+                            </button>
                             </div>
                         )
                         : <></>}
