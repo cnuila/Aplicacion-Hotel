@@ -9,7 +9,7 @@ export default function ListaMenu() {
     const estadoInicial = {
         Nombre: "Platillo",
         Precio: 1500,
-        Detalles: [{ id: 1, text: "Langosta" }],
+        Detalles: [{ text: "Langosta" }],
     }
 
     const [menu, setMenu] = useState([])
@@ -17,6 +17,7 @@ export default function ListaMenu() {
     const [mostrarAgregar, setMostrarAgregar] = useState(false)
     const [mostrarModificar, setMostrarModificar] = useState(false)
 
+    //función que prepara todos las platillos para ser mostradas en la lista del panel izquierdo
     const getMenu = async () => {
         await db.collection("Menu").orderBy("Nombre").get().then(querySnapshot => {
             const menuAgregar = []
@@ -31,6 +32,7 @@ export default function ListaMenu() {
         getMenu()
     }, [])
 
+    //funcion que recibe un platillo y prepara sus datos para ser mostrados en el panel derecho
     const handlePlatillo = platillo => {
         const { Nombre, Detalles, Url } = platillo
         setPlatilloSeleccionado({
@@ -42,6 +44,7 @@ export default function ListaMenu() {
         setMostrarModificar(false)
     }
 
+    //función que prepara la interfaz para poder agregar un platillo
     const handleOnClickAgregar = () => {
         setMostrarAgregar(true)
         setPlatilloSeleccionado({ ...estadoInicial, Detalles: [...estadoInicial.Detalles] })
@@ -88,7 +91,7 @@ export default function ListaMenu() {
         })
 
     }
-
+    
     const mostrarInicial = () => {
         setMostrarAgregar(false)
         setMostrarModificar(false)
@@ -96,6 +99,7 @@ export default function ListaMenu() {
         getMenu()
     }
 
+    //función que prepara la interfaz para poder agregar un platillo
     const handleOnClickModificar = () => {
         setMostrarModificar(true)
     }

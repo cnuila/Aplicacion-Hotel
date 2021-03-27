@@ -166,8 +166,8 @@ export default function MisReservas() {
                 <div className="flex flex-row text-white">
                     <h2 className="font-semibold">Dias reservados:</h2>
                     {diasReserva > 1
-                        ? <h2 className="px-1">{diasReserva} días</h2>
-                        : <h2 className="px-1">1 día</h2>
+                        ? <h2 className="px-1">{diasReserva} días {diasReserva - 1} noches</h2>
+                        : <h2 className="px-1">1 noche</h2>
                     }
 
                 </div>
