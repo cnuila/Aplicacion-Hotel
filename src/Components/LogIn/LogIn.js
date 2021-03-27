@@ -35,6 +35,8 @@ export default function LogIn({ history }) {
             })
         }
     }
+    //Funcion que realiza el signin dentro de la página. 
+    //De existir el usuario, lo redirige a a pagina principal, de lo contrario lanza error. 
 
     const handleEmailLogin = useCallback(
         async event => {
