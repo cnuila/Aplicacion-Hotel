@@ -237,7 +237,6 @@ export default function InfoHabitacion({ location, history }) {
                   });
                 } else {
                   const { to, from } = selectedDayRange
-                  console.log("hola")
                   if (validacionCantidad(from, to)) {
                     let emailCliente = user.email
                     let fechaFinal = new Date(to.year, to.month - 1, to.day)
