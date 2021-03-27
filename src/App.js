@@ -16,23 +16,26 @@ import Menu from "./Components/RestaurantePrincipal"
 
 function App() {
   //todas las rutas disponibles en la pagina
+  //"PrivateRoute" son las rutas que solo se pueden acceder con usuario registrado
   return (
-    <Router>
-      <Switch>
-        <Route path="/" exact component={LandingPage} />
-        <Route path="/signup" component={SignIn} />
-        <Route path="/login" component={LogIn} />
-        <Route path="/administracion" component={Administracion} />
-        <Route path="/recuperarContra" component={RecuperarContraseña} />
-        <Route path="/servicios" component={Servicos} />
-        <Route path="/miInfo" exact component={ListarUsuario} />
-        <Route path="/habitaciones" exact component={Habitaciones} />
-        <Route path="/restaurante" component={Restaurante} />
-        <Route path="/habitaciones/:nombre" component={InfoHabitacion} />
-        <Route path="/menu" component={Menu} />
-        <Route path="/misReservas" component={MisReservas}/>
-      </Switch>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Switch>
+          <Route path="/" exact component={LandingPage} />
+          <Route path="/signup" component={SignIn} />
+          <Route path="/login" component={LogIn} />
+          <PrivateRoute path="/administracion" component={Administracion} />
+          <Route path="/recuperarContra" component={RecuperarContraseña} />
+          <Route path="/servicios" component={Servicos} />
+          <PrivateRoute path="/miInfo" exact component={ListarUsuario} />
+          <Route path="/habitaciones" exact component={Habitaciones} />
+          <Route path="/restaurante" component={Restaurante} />
+          <Route path="/habitaciones/:nombre" component={InfoHabitacion} />
+          <Route path="/menu" component={Menu} />
+          <PrivateRoute path="/misReservas" component={MisReservas} />
+        </Switch>
+      </Router>
+    </AuthProvider>
   );
 }
 

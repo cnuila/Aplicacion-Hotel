@@ -202,6 +202,8 @@ export default function InfoHabitacion({ location, history }) {
       } else {
         return true
       }
+    } else {
+      return true
     }
   }
 
@@ -253,44 +255,60 @@ export default function InfoHabitacion({ location, history }) {
                     let moment1 = moment(fechaInicial)
                     let moment2 = moment(fechaFinal)
                     let diferenciaDias = moment2.diff(moment1, 'days') + 1
-                    let precioPagar = precio * diferenciaDias - 1
+                    let precioPagar = precio * (diferenciaDias - 1)
                     let fechaInicialFormat = moment1.format('DD/MM/YYYY')
                     let fechaFinalFormat = moment2.format('DD/MM/YYYY')
-                    db.collection("Reservas").add({
-                      administrador: administrador,
-                      nombreCliente: nombreCliente,
-                      idHabitacion: id,
-                      idCliente,
-                      emailCliente,
-                      fechaFinal,
-                      fechaInicial,
-                      precioPagar,
-                      pagada: false,
-                    }).then(() => {
+                    for (let i = 0; i < cantidad; i++) {
+                      if (i === 0) {
+                        db.collection("Reservas").add({
+                          administrador: administrador,
+                          nombreCliente: nombreCliente,
+                          idHabitacion: id,
+                          idCliente,
+                          emailCliente,
+                          fechaFinal,
+                          fechaInicial,
+                          precioPagar,
+                          pagada: false,
+                        }).then(() => {
 
-                      swal({
-                        text: "Reservaste con éxito, revisa tu correo!",
-                        icon: "success",
-                        button: "Aceptar"
-                      }).then(() => {
-                        history.push("/misReservas");
-                      });
+                          swal({
+                            text: "Reservaste con éxito, revisa tu correo!",
+                            icon: "success",
+                            button: "Aceptar"
+                          }).then(() => {
+                            history.push("/misReservas");
+                          });
 
-                      var templateParams = {
-                        name: nombreCliente,
-                        subject: 'Reservación Hotel Posada del Angel',
-                        email: mailCliente,
-                        dia: fechaInicialFormat,
-                        final: fechaFinalFormat
-                      };
+                          var templateParams = {
+                            name: nombreCliente,
+                            subject: 'Reservación Hotel Posada del Angel',
+                            email: mailCliente,
+                            dia: fechaInicialFormat,
+                            final: fechaFinalFormat
+                          };
 
-                      emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
-                        .then(function (response) {
-                          console.log('SUCCESS!', response.status, response.text);
-                        }, function (error) {
-                          console.log('FAILED...', error);
-                        });
-                    })
+                          emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
+                            .then(function (response) {
+                              console.log('SUCCESS!', response.status, response.text);
+                            }, function (error) {
+                              console.log('FAILED...', error);
+                            });
+                        })
+                      } else {
+                        db.collection("Reservas").add({
+                          administrador: administrador,
+                          nombreCliente: nombreCliente,
+                          idHabitacion: id,
+                          idCliente,
+                          emailCliente,
+                          fechaFinal,
+                          fechaInicial,
+                          precioPagar,
+                          pagada: false,
+                        })
+                      }
+                    }
                   }
                 }
               }
@@ -346,44 +364,60 @@ export default function InfoHabitacion({ location, history }) {
                   let moment1 = moment(fechaInicial)
                   let moment2 = moment(fechaFinal)
                   let diferenciaDias = moment2.diff(moment1, 'days') + 1
-                  let precioPagar = precio * diferenciaDias - 1
+                  let precioPagar = precio * (diferenciaDias - 1)
                   let fechaInicialFormat = moment1.format('DD/MM/YYYY')
                   let fechaFinalFormat = moment2.format('DD/MM/YYYY')
-                  db.collection("Reservas").add({
-                    administrador: administrador,
-                    nombreCliente: nombreCliente,
-                    idHabitacion: id,
-                    idCliente,
-                    emailCliente,
-                    fechaFinal,
-                    fechaInicial,
-                    precioPagar,
-                    pagada: false,
-                  }).then(() => {
+                  for (let i = 0; i < cantidad; i++) {
+                    if (i === 0) {
+                      db.collection("Reservas").add({
+                        administrador: administrador,
+                        nombreCliente: nombreCliente,
+                        idHabitacion: id,
+                        idCliente,
+                        emailCliente,
+                        fechaFinal,
+                        fechaInicial,
+                        precioPagar,
+                        pagada: false,
+                      }).then(() => {
 
-                    swal({
-                      text: "Reservaste con éxito, revisa tu correo!",
-                      icon: "success",
-                      button: "Aceptar"
-                    }).then(() => {
-                      history.push("/misReservas");
-                    });
+                        swal({
+                          text: "Reservaste con éxito, revisa tu correo!",
+                          icon: "success",
+                          button: "Aceptar"
+                        }).then(() => {
+                          history.push("/misReservas");
+                        });
 
-                    var templateParams = {
-                      name: nameCliente,
-                      subject: 'Reservación Hotel Posada del Angel',
-                      email: user.email,
-                      dia: fechaInicialFormat,
-                      final:fechaFinalFormat
-                    };
+                        var templateParams = {
+                          name: nameCliente,
+                          subject: 'Reservación Hotel Posada del Angel',
+                          email: user.email,
+                          dia: fechaInicialFormat,
+                          final:fechaFinalFormat
+                        };
 
-                    emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
-                      .then(function (response) {
-                        console.log('SUCCESS!', response.status, response.text);
-                      }, function (error) {
-                        console.log('FAILED...', error);
-                      });
-                  })
+                        emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
+                          .then(function (response) {
+                            console.log('SUCCESS!', response.status, response.text);
+                          }, function (error) {
+                            console.log('FAILED...', error);
+                          });
+                      })
+                    } else {
+                      db.collection("Reservas").add({
+                        administrador: administrador,
+                        nombreCliente: nombreCliente,
+                        idHabitacion: id,
+                        idCliente,
+                        emailCliente,
+                        fechaFinal,
+                        fechaInicial,
+                        precioPagar,
+                        pagada: false,
+                      })
+                    }
+                  }
                 }
               }
             }

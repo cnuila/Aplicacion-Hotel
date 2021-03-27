@@ -16,5 +16,4 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
         />
     );
 };
-{/* Cambiar el redirect to*/}
 export default PrivateRoute
