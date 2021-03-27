@@ -18,6 +18,7 @@ import Platillo from './Platillo';
 export default function RestaurantePrincipal(){
     const [platillos, setPlatillos] = useState([])
 
+    //Función que recupera los platillos de la base de datos y los prepara para mostrarlos usando la función en Platillo.js  
     useEffect(() => {
         db.collection("Menu").onSnapshot((querySnapshot) => {
             const listaPlatillos = []

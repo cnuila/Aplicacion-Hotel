@@ -3,6 +3,8 @@ import { storage } from '../firebase';
 
 export default function Platillo(props) {
     const [fotos, setFotos] = useState([])
+
+    //Función asíncrona que descarga las fotos que están en el storage de la base de datos y que pertenecen a los platillos 
     useEffect(() => {
         async function descargarFotos() {
             let arreglofotos = []

@@ -12,7 +12,7 @@ import MisReservas from './Components/MisReservas'
 import { AuthProvider } from './Components/Rutas Privadas/Auth';
 import PrivateRoute from "./Components/Rutas Privadas/RutaPrivada"
 import InfoHabitacion from "./Components/InformacionHabitacion"
-import Menu from "./Components/MenuRestaurante"
+import Menu from "./Components/RestaurantePrincipal"
 
 function App() {
   return (

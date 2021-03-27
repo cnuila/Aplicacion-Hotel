@@ -23,6 +23,7 @@ import img_facebook from '../imagenes/facebook.png';
 import { Link } from 'react-router-dom';
 
 export default function Landing(){
+    //Se renderiza toda la página principal y se crean lo bótones para redireccionar al usuario
     return (
         <div>
             <div>

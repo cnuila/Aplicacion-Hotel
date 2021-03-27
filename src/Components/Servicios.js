@@ -10,6 +10,7 @@ export default function Servicios() {
         getServicios()
     }, [])
 
+    //función asíncrona que recupera los servicios de la base de datos y los prepara para mostrarlos
     const getServicios = async () => {
         await db.collection("Servicios").orderBy("Nombre").get().then(querySnapshot => {
             const serviciosAgregar = []
