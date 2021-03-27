@@ -69,6 +69,9 @@ class Dropdown extends Component {
     componentDidMount() {
         this.setDisplayName()
         this.revisarAdmin();
+        setTimeout(() => {  this.setDisplayName(); }, 2500);
+        setTimeout(() => {  this.revisarAdmin(); }, 2500);
+
     }
 
     //cerrar sesión en firebase. Cuando se llama se refresca la página
@@ -99,11 +102,11 @@ class Dropdown extends Component {
                             </svg>
                         </button>
                     </div>
-                    <div class={(this.state.open ? "origin-top-right z-40 absolute lg:right-0 mt-2 lg:mt-0 w-48 rounded-md shadow-lg bg-blue-900 ring-1 ring-black ring-opacity-5" : "hidden")}>
+                    <div class={(this.state.open ? "origin-top-right z-40 absolute right-0 mt-0 w-48 rounded-md shadow-lg bg-blue-900 ring-1 ring-black ring-opacity-5" : "hidden")}>
                         <div class="py-1">
                             <Link to="/administracion" class={this.state.admin ? "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" : "hidden"} role="menuitem">Admin</Link>
                             <Link to="/login" className={(auth.currentUser ? "hidden" : "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200")}>Iniciar Sesión</Link>                       
-                            <Link to="/miInfo" class={(auth.currentUser ? "hidden" : "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200")} role="menuitem">Mi Perfil</Link>
+                            <Link to="/miInfo" class={(auth.currentUser ? "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" :"hidden")} role="menuitem">Mi Perfil</Link>
                             <Link to="/misReservas" class="block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" role="menuitem">Mis Reservas</Link>
                             <Link to="/" class={(auth.currentUser ? "block px-4 py-2 text-sm text-white border-b-2 border-transparent hover:border-yellow-200" : "hidden")} role="menuitem" onClick={this.cerrarSesion}>Cerrar Sesión</Link>
                         </div>
