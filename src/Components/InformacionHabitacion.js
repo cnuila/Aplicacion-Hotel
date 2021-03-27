@@ -53,9 +53,9 @@ export default function InfoHabitacion({ location, history }) {
     const email = auth.currentUser.email;
     const query = await db.collection("Usuarios").where("Email", "==", email).get();
     query.forEach(doc => {
-        setNameCliente(doc.data().Nombre)
+      setNameCliente(doc.data().Nombre)
     })
-}
+  }
 
   //función que recupera todas las reseñas de la habitación actual
   const getReseñas = () => {
@@ -147,9 +147,6 @@ export default function InfoHabitacion({ location, history }) {
     });
   };
 
-<<<<<<< HEAD
-  //función asíncrona que reserva una habitación y redirige a página de mis reservas, cuando la reserva fue exitosa manda un correo al cliente y al admin
-=======
   //funcion que valida que en cada fecha seleccionada haya disponible la cantidad de habitaciones seleccionada
   //retorna true si es valido, si no false
   const validacionCantidad = (from, to) => {
@@ -209,7 +206,6 @@ export default function InfoHabitacion({ location, history }) {
   }
 
   //función asíncrona que reserva una habitación y redirige a página de mis reservas
->>>>>>> 5c59cc6b05f77ccd274a2f2fd389ec2e07618c10
   const reservar = async () => {
     const user = auth.currentUser;
     if (cantidad <= 0 || cantidad > cantidadHabitaciones) {
@@ -236,30 +232,6 @@ export default function InfoHabitacion({ location, history }) {
                   button: "Aceptar"
                 });
               } else {
-<<<<<<< HEAD
-                const { to, from } = selectedDayRange
-                let emailCliente = user.email
-                let fechaFinal = new Date(to.year, to.month - 1, to.day)
-                let fechaInicial = new Date(from.year, from.month - 1, from.day)
-                let moment1 = moment(fechaInicial)
-                let moment2 = moment(fechaFinal)
-                let diferenciaDias = moment2.diff(moment1, 'days') + 1
-                let precioPagar = precio * diferenciaDias
-                let fechaInicialFormat = moment1.format('DD/MM/YYYY')
-                let fechaFinalFormat = moment2.format('DD/MM/YYYY')
-                db.collection("Reservas").add({
-                  administrador: administrador,
-                  nombreCliente: nombreCliente,
-                  idHabitacion: id,
-                  idCliente,
-                  emailCliente,
-                  fechaFinal,
-                  fechaInicial,
-                  precioPagar,
-                  pagada: false,
-                }).then(() => {
-
-=======
                 let idCliente = ""
                 await db.collection("Usuarios").where("Email", "==", user.email).get().then(querySnapshot => {
                   querySnapshot.forEach(doc => {
@@ -267,7 +239,6 @@ export default function InfoHabitacion({ location, history }) {
                   })
                 })
                 if (idCliente === "") {
->>>>>>> 5c59cc6b05f77ccd274a2f2fd389ec2e07618c10
                   swal({
                     text: "No tenemos registrado tu ID, elimina tu cuenta, y asegúrate de terminar el proceso de registro",
                     icon: "warning",
@@ -283,6 +254,8 @@ export default function InfoHabitacion({ location, history }) {
                     let moment2 = moment(fechaFinal)
                     let diferenciaDias = moment2.diff(moment1, 'days') + 1
                     let precioPagar = precio * diferenciaDias - 1
+                    let fechaInicialFormat = moment1.format('DD/MM/YYYY')
+                    let fechaFinalFormat = moment2.format('DD/MM/YYYY')
                     db.collection("Reservas").add({
                       administrador: administrador,
                       nombreCliente: nombreCliente,
@@ -295,15 +268,6 @@ export default function InfoHabitacion({ location, history }) {
                       pagada: false,
                     }).then(() => {
 
-<<<<<<< HEAD
-                  var templateParams = {
-                    name: nombreCliente,
-                    subject: 'Reservación Hotel Posada del Angel',
-                    email: mailCliente,
-                    dia: fechaInicialFormat,
-                    final: fechaFinalFormat
-                  };
-=======
                       swal({
                         text: "Reservaste con éxito, revisa tu correo!",
                         icon: "success",
@@ -311,12 +275,13 @@ export default function InfoHabitacion({ location, history }) {
                       }).then(() => {
                         history.push("/misReservas");
                       });
->>>>>>> 5c59cc6b05f77ccd274a2f2fd389ec2e07618c10
 
                       var templateParams = {
                         name: nombreCliente,
-                        subject: 'Tu habitacion se reservo con exito',
-                        email: mailCliente
+                        subject: 'Reservación Hotel Posada del Angel',
+                        email: mailCliente,
+                        dia: fechaInicialFormat,
+                        final: fechaFinalFormat
                       };
 
                       emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
@@ -360,30 +325,6 @@ export default function InfoHabitacion({ location, history }) {
                 button: "Aceptar"
               });
             } else {
-<<<<<<< HEAD
-              const { to, from } = selectedDayRange
-              let emailCliente = user.email
-              let fechaFinal = new Date(to.year, to.month - 1, to.day)
-              let fechaInicial = new Date(from.year, from.month - 1, from.day)
-              let moment1 = moment(fechaInicial)
-              let moment2 = moment(fechaFinal)
-              let diferenciaDias = moment2.diff(moment1, 'days') + 1
-              let precioPagar = precio * diferenciaDias
-              let fechaInicialFormat = moment1.format('DD/MM/YYYY')
-              let fechaFinalFormat = moment2.format('DD/MM/YYYY')
-              db.collection("Reservas").add({
-                administrador: administrador,
-                nombreCliente: nombreCliente,
-                idHabitacion: id,
-                idCliente,
-                emailCliente,
-                fechaFinal,
-                fechaInicial,
-                precioPagar,
-                pagada: false,
-              }).then(() => {
-
-=======
               let idCliente = ""
               await db.collection("Usuarios").where("Email", "==", user.email).get().then(querySnapshot => {
                 querySnapshot.forEach(doc => {
@@ -391,22 +332,11 @@ export default function InfoHabitacion({ location, history }) {
                 })
               })
               if (idCliente === "") {
->>>>>>> 5c59cc6b05f77ccd274a2f2fd389ec2e07618c10
                 swal({
                   text: "No tenemos registrado tu ID, elimina tu cuenta, y asegúrate de terminar el proceso de registro",
                   icon: "warning",
                   button: "Aceptar"
                 });
-<<<<<<< HEAD
-                
-                var templateParams = {
-                  name: nameCliente,
-                  subject: 'Reservación Hotel Posada del Angel',
-                  email: user.email,
-                  dia: fechaInicialFormat,
-                  final:fechaFinalFormat
-                };
-=======
               } else {
                 const { to, from } = selectedDayRange
                 if (validacionCantidad(from, to)) {
@@ -417,6 +347,8 @@ export default function InfoHabitacion({ location, history }) {
                   let moment2 = moment(fechaFinal)
                   let diferenciaDias = moment2.diff(moment1, 'days') + 1
                   let precioPagar = precio * diferenciaDias - 1
+                  let fechaInicialFormat = moment1.format('DD/MM/YYYY')
+                  let fechaFinalFormat = moment2.format('DD/MM/YYYY')
                   db.collection("Reservas").add({
                     administrador: administrador,
                     nombreCliente: nombreCliente,
@@ -436,12 +368,13 @@ export default function InfoHabitacion({ location, history }) {
                     }).then(() => {
                       history.push("/misReservas");
                     });
->>>>>>> 5c59cc6b05f77ccd274a2f2fd389ec2e07618c10
 
                     var templateParams = {
-                      name: "",
-                      subject: 'Tu habitacion se reservo con exito',
-                      email: user.email
+                      name: nameCliente,
+                      subject: 'Reservación Hotel Posada del Angel',
+                      email: user.email,
+                      dia: fechaInicialFormat,
+                      final:fechaFinalFormat
                     };
 
                     emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
