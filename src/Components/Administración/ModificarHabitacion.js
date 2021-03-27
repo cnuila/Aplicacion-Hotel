@@ -336,7 +336,7 @@ function ModificarHabitacion(props) {
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Precio</label>
                                     <input value={precio} onChange={event => setPrecio(event.target.value)} type="number" name="precio" placeholder="800" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Cantidad</label>
-                                    <input value={cantidad} onChange={event => setPrecio(event.target.value)} type="number" name="cantidad" placeholder="5" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
+                                    <input value={cantidad} onChange={event => setCantidad(event.target.value)} type="number" name="cantidad" placeholder="5" className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner" required />
                                     <label className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Detalles</label>
 
                                     <div class="relative group inline-block">

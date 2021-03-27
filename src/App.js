@@ -15,6 +15,7 @@ import InfoHabitacion from "./Components/InformacionHabitacion"
 import Menu from "./Components/RestaurantePrincipal"
 
 function App() {
+  //todas las rutas disponibles en la pagina
   return (
     <Router>
       <Switch>
