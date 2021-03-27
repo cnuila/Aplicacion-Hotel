@@ -130,22 +130,71 @@ export default function ListaHabitaciones() {
     }
 
     const handleEliminarHabitacion = async (id, fotos) => {
+        //Aqui se valida si la habitacion contiene reservas activas al momento de eliminar
         let flag = true
         await db.collection("Reservas").get().then(querySnapshot => {
+            let fechaActual = moment(new Date())
             querySnapshot.forEach((doc) => {
                 let idHabitacion = doc.get("idHabitacion")
                 console.log(idHabitacion + " " + id + " " + flag)
                 if (idHabitacion === id) {
-                    flag = false
-                    console.log("Hay reservas")
+                    const { fechaFinal } = doc.data()
+                    let fechaFinalMoment = moment(new Date(fechaFinal.seconds * 1000))
+                    let diferenciaDias = fechaFinalMoment.diff(fechaActual, 'days') + 1
+                    if (diferenciaDias > 0) {
+                        flag = false
+                        console.log("Hay reservas")
+                    }
                 }
             });
         })
+        //si el flag es verdadero borra la habitacion y las reservas que tiene esa habitacion
         if (flag === true) {
+
+            let habitacion = db.collection("Habitaciones").doc(id)
             swal({
-                title: "Borrada",
-                icon: "info",
-                button: "Aceptar"
+                title: "Esta seguro?",
+                text: "La habitacion sera borrada permanentemente junto a sus reservas pasadas!",
+                icon: "warning",
+                buttons: {
+                    cancel: true,
+                    confirm: true,
+                }
+            }).then(async result => {
+                if (result) {
+                    await habitacion.delete().then(() => {
+                        if (fotos !== undefined) {
+                            let deleteRef
+                            for (let i = 0; i < fotos.length; i++) {
+                                deleteRef = storage.refFromURL(fotos[i])
+                                deleteRef.delete()
+                            }
+                        }
+                    }).then(() => {
+                        let reservas = db.collection("Reservas").where("idHabitacion", "==", id)
+                        reservas.get().then( querySnapshot => {
+                            querySnapshot.forEach(doc => {
+                                doc.delete()
+                            })
+                        })
+                    }).then(() => {
+                        swal({
+                            text: "La Habitacion " + Nombre + " fue eliminada exitosamente",
+                            icon: "success",
+                            button: "Aceptar"
+                        });
+                        setHabitacionSeleccionada({ ...estadoInicial, Complementos: [...estadoInicial.Complementos] })
+                        getHabitaciones()
+                    }).catch(function (error) {
+                        swal({
+                            icon: "error",
+                            title: "Error al Eliminar",
+                            text: "Error: " + error
+                        })
+                    });
+                } else {
+                    swal("Cancelado", "La habitacion no se borro");
+                }
             });
         } else {
             swal({
