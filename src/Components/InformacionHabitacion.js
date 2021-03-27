@@ -26,10 +26,12 @@ export default function InfoHabitacion({ location, history }) {
   const [administrador, setAdministrador] = useState(false)
   const [nombreCliente, setNombreCliente] = useState("")
   const [mailCliente, setMailCliente] = useState("")
+  const [nameCliente, setNameCliente] = useState("")
 
   useEffect(() => {
     getReservas()
     getReseñas()
+    infoUsuario()
 
     if (auth.currentUser) {
       var docRef = db.collection("Admin").doc(auth.currentUser.email);
@@ -42,6 +44,15 @@ export default function InfoHabitacion({ location, history }) {
     }
 
   }, [])
+
+  //trae info del usuario actual
+  const infoUsuario = async () => {
+    const email = auth.currentUser.email;
+    const query = await db.collection("Usuarios").where("Email", "==", email).get();
+    query.forEach(doc => {
+        setNameCliente(doc.data().Nombre)
+    })
+}
 
   //función que recupera todas las reseñas de la habitación actual
   const getReseñas = () => {
@@ -137,7 +148,7 @@ export default function InfoHabitacion({ location, history }) {
     });
   };
 
-  //función asíncrona que reserva una habitación y redirige a página de mis reservas
+  //función asíncrona que reserva una habitación y redirige a página de mis reservas, cuando la reserva fue exitosa manda un correo al cliente y al admin
   const reservar = async () => {
     const user = auth.currentUser;
 
@@ -179,6 +190,8 @@ export default function InfoHabitacion({ location, history }) {
                 let moment2 = moment(fechaFinal)
                 let diferenciaDias = moment2.diff(moment1, 'days') + 1
                 let precioPagar = precio * diferenciaDias
+                let fechaInicialFormat = moment1.format('DD/MM/YYYY')
+                let fechaFinalFormat = moment2.format('DD/MM/YYYY')
                 db.collection("Reservas").add({
                   administrador: administrador,
                   nombreCliente: nombreCliente,
@@ -201,8 +214,10 @@ export default function InfoHabitacion({ location, history }) {
 
                   var templateParams = {
                     name: nombreCliente,
-                    subject: 'Tu habitacion se reservo con exito',
-                    email: mailCliente
+                    subject: 'Reservación Hotel Posada del Angel',
+                    email: mailCliente,
+                    dia: fechaInicialFormat,
+                    final: fechaFinalFormat
                   };
 
                   emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
@@ -266,6 +281,8 @@ export default function InfoHabitacion({ location, history }) {
               let moment2 = moment(fechaFinal)
               let diferenciaDias = moment2.diff(moment1, 'days') + 1
               let precioPagar = precio * diferenciaDias
+              let fechaInicialFormat = moment1.format('DD/MM/YYYY')
+              let fechaFinalFormat = moment2.format('DD/MM/YYYY')
               db.collection("Reservas").add({
                 administrador: administrador,
                 nombreCliente: nombreCliente,
@@ -285,11 +302,13 @@ export default function InfoHabitacion({ location, history }) {
                 }).then(() => {
                   history.push("/misReservas");
                 });
-
+                
                 var templateParams = {
-                  name: "",
-                  subject: 'Tu habitacion se reservo con exito',
-                  email: user.email
+                  name: nameCliente,
+                  subject: 'Reservación Hotel Posada del Angel',
+                  email: user.email,
+                  dia: fechaInicialFormat,
+                  final:fechaFinalFormat
                 };
 
                 emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
