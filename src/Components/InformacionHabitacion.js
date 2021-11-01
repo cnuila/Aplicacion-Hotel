@@ -288,7 +288,7 @@ export default function InfoHabitacion({ location, history }) {
                             final: fechaFinalFormat
                           };
 
-                          emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
+                          emailjs.send('service_qvj4hnv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
                             .then(function (response) {
                               console.log('SUCCESS!', response.status, response.text);
                             }, function (error) {
@@ -394,7 +394,7 @@ export default function InfoHabitacion({ location, history }) {
                           subject: 'Reservación Hotel Posada del Angel',
                           email: user.email,
                           dia: fechaInicialFormat,
-                          final:fechaFinalFormat
+                          final: fechaFinalFormat
                         };
 
                         emailjs.send('service_kq0urtv', 'template_si8lrwe', templateParams, 'user_IlfmLUQnITF5aqsX4gKMh')
@@ -439,6 +439,11 @@ export default function InfoHabitacion({ location, history }) {
     setCantidad(value);
   }
 
+  //maneja solo letras
+  const KeyPress = (event) => {
+    event.target.value = event.target.value.replace(/[^a-zA-z ]/ig, '')
+    setNombreCliente(event.target.value)
+  }
 
   return (
     <div>
@@ -493,9 +498,9 @@ export default function InfoHabitacion({ location, history }) {
                       ?
                       <div>
                         <label className="block mt-2 text-xs font-semibold text-blue-900 uppercase">Nombre del Cliente</label>
-                        <input onChange={event => setNombreCliente(event.target.value)} type="text" name="nombre" placeholder="Nombre Completo" className="block w-80 p-3 mt-2 text-black rounded-lg bg-white appearance-none focus:outline-none focus:shadow-inner" required />
+                        <input onChange={KeyPress} type="text" name="nombre" placeholder="Nombre Completo" className="block w-80 p-3 mt-2 text-black rounded-lg bg-white appearance-none focus:outline-none focus:shadow-inner" required />
                         <label className="block mt-2 text-xs font-semibold text-blue-900 uppercase">Correo del Cliente</label>
-                        <input onChange={event => setMailCliente(event.target.value)} type="text" name="nombre" placeholder="ejemplo@gmail.com" className="block w-80 p-3 mt-2 text-black rounded-lg bg-white appearance-none focus:outline-none focus:shadow-inner" required />
+                        <input onChange={event => setMailCliente(event.target.value)} type="email" name="nombre" placeholder="ejemplo@gmail.com" className="block w-80 p-3 mt-2 text-black rounded-lg bg-white appearance-none focus:outline-none focus:shadow-inner" required />
                       </div>
                       :
                       <></>
@@ -503,7 +508,7 @@ export default function InfoHabitacion({ location, history }) {
                   <div className="my-4 grid place-items-center">
                     <button type="button" class="h-14 px-6 py-25 font-semibold rounded-xl bg-blue-900 hover:bg-blue-800 text-white outline-none focus:outline-none" onClick={() => reservar()}>
                       Confirmar Reserva
-                      </button>
+                    </button>
                   </div>
                 </div>
                 <div className="grid place-items-center">
