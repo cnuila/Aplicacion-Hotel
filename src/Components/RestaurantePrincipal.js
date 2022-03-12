@@ -33,7 +33,7 @@ export default function RestaurantePrincipal(){
         <div>
             <Navbar />
             <div>
-                <div class="bg-gray-900">
+                <div class="bg-gray-900 pt-4">
                     <div class="container mx-auto pb-5">
                         <h1 class="text-yellow-500 text-4xl sm:text-md text-center font-semibold">Restaurante</h1>
                         <h1 class="text-yellow-500 text-2xl sm:text-md text-center font-medium">Conoce, disfruta y prueba</h1>

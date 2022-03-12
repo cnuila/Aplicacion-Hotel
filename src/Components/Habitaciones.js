@@ -25,12 +25,10 @@ export default function Habitaciones() {
     }, [])
     
     return (
-        <div className="bg-gray-100 h-screen">
+        <div className="bg-gray-100 pb-2">
             <Navbar />
             <div class="space-y-4">
-                <div className="text-4xl  text-center font-bold  mt-5">
-                    Habitaciones
-                </div>
+
                 {habitaciones.map((habitacion, index) => {
                     if (habitacion.Visible) {
                         return (

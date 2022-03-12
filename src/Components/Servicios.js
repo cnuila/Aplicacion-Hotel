@@ -22,9 +22,8 @@ export default function Servicios() {
     }
 
     return (
-        <div>
+        <div className='bg-gray-100 pb-2'>
             <Navbar />
-            <div class="bg-white text text-2xl md:text-3xl text-center mt-5 mb-3 font-bold">Servicios</div>
             {servicios.map((servicio, index) => {
                 const { Nombre, Precio, Detalles, Url } = servicio
                 let foto1 = undefined
@@ -40,7 +39,7 @@ export default function Servicios() {
 
                 if (servicio.Visible) {
                     return (
-                        <div key={index} class="bg-gray-300 mx-0 my-10 lg:mx-10 rounded-xl flex flex-col md:flex-row border-b-2 border-gray-300 py-5 lg:py-4 px-2 items-center md:items-start md:justify-center space-x-0 md:space-x-10 space-y-2 md:space-y-0">
+                        <div key={index} class="bg-white mx-0 my-10 lg:mx-10 rounded-xl flex flex-col md:flex-row border-b-2 border-gray-300 py-5 lg:py-4 px-2 items-center md:items-start md:justify-center space-x-0 md:space-x-10 space-y-2 md:space-y-0">
 
                             {foto1 !== undefined
                                 ? (<img src={foto1} class="bg-blue-100 w-72 h-72 rounded" alt="Sala de conferencia1"></img>)

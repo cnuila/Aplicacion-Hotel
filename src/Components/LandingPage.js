@@ -4,6 +4,7 @@ import { Carousel } from 'react-responsive-carousel';
 import Iframe from 'react-iframe';
 import Navbar from './Navbar';
 
+
 import img_carousel_1 from '../imagenes/hotel01.jpg';
 import img_carousel_2 from '../imagenes/hotel02.jpg'; 
 import img_carousel_3 from '../imagenes/hotel03.jpg';
@@ -18,7 +19,6 @@ import img_cuartos from '../imagenes/cuartos.png';
 import img_servicios from '../imagenes/servicios.png';
 import img_comida_1 from '../imagenes/restaurante1.jpg';
 import img_comida_2 from '../imagenes/restaurante2.jpg';
-import img_logo from '../imagenes/hotel_posada.jpg';
 import img_facebook from '../imagenes/facebook.png';
 import { Link } from 'react-router-dom';
 
@@ -49,7 +49,8 @@ export default function Landing(){
                     <img src={img_carousel_6} alt="Sexta imagen"/>
                 </div>
             </Carousel>
-            <div class="container mx-auto p-2">
+
+            <div class="container mx-auto p-14">
                 <h1 class="text-red-900 text-4xl text-center font-semibold">Hotel Posada del Ángel</h1>
                 <div class="grid md:grid-cols-4 gap-4 sm:grid-col-2 ">
                     <div class="mt-5">
@@ -78,12 +79,12 @@ export default function Landing(){
                     </div>
                 </div>
             </div>
-            <div class="mt-2 container mx-auto p-2 bg-gray-900">
+            <div class="mt-2 container mx-auto p-8 bg-gray-900">
                 <h1 class="mt-1 text-yellow-300 text-xl text-center font-semibold">Ofrecemos</h1>
-                <h1 class="text-white text-4xl text-center font-semibold">Habitaciones sencillas, dobles o triples</h1>
-                <img class="mt-2" src={img_cuartos} alt="Imagen cuartos" />
+                <h1 class="text-white mt-2 text-4xl text-center font-semibold">Habitaciones sencillas, dobles o triples</h1>
+                <img class="mt-5" src={img_cuartos} alt="Imagen cuartos" />
                 <div class="grid grid-cols-1">
-                    <button class="mt-2 justify-self-center bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-4 rounded">
+                    <button class="mt-5 justify-self-center bg-yellow-600 hover:bg-yellow-500 text-white text-xl font-bold p-4 rounded">
                         <Link to="/habitaciones">MÁS INFORMACIÓN</Link>
                     </button>
                 </div>
@@ -139,7 +140,7 @@ export default function Landing(){
                 <div class="container">
                     <div class="flex flex-wrap overflow-hidden sm:-mx-1 md:-mx-px lg:-mx-2 xl:-mx-2">
                         <div class="w-full overflow-hidden sm:my-1 sm:px-1 sm:w-1/2 md:my-px md:px-px md:w-1/2 lg:my-2 lg:px-2 lg:w-1/4 xl:my-2 xl:px-2 xl:w-1/4 pb-6">
-                            <img class="mt-10 mb-1" src={img_logo}  alt="Logo" />
+                            
                         </div>
                         <div class="w-full overflow-hidden sm:my-1 sm:px-1 sm:w-1/2 md:my-px md:px-px md:w-1/2 lg:my-2 lg:px-2 lg:w-1/4 xl:my-2 xl:px-2 xl:w-1/4 pb-6">
                             <h4 class="text-white text-center mt-2">Contáctanos</h4>
